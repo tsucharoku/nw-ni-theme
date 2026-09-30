@@ -19,7 +19,6 @@ get_header();
 
   <!-- Page head（id="js-fv": 通過後にハンバーガーへ白い箱） -->
   <div class="page-head" id="js-fv">
-    <img class="page-head__ni" src="<?php echo ni_img( 'lower/pagehead_ni.png' ); ?>" alt="" width="988" height="936">
     <nav aria-label="パンくずリスト"><ol class="breadcrumb"><li><a href="<?php echo ni_url( '/' ); ?>">TOP</a></li><li aria-current="page">制度・環境</li></ol></nav>
     <div class="page-head__txt">
       <p class="page-head__en">Work<br class="u-sp"> Environment<br> &amp; Benefits</p>

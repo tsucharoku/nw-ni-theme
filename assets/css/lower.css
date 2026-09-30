@@ -13,20 +13,30 @@
 .page-head {
   position: relative;
   padding: 85px var(--side-margin) 64px;  /* SP のヘッダー実高 85（4 + 45 + 10 + 26）。パンくずの上 16 は .breadcrumb 側 */
-  overflow: hidden;
 }
 
-/* Figma: ni-logo-only（白地の動画ポスター）を重ねたもの。白を透過にした PNG（988×936）で置く。
-   SP 254×241（右 -32 / 上 32）、PC 878×832（右 -116 / 上 -255）。はみ出しは .page-head の overflow で切る */
-.page-head__ni {
+/* ページ頭の背景のガラスの NI ロゴ。.page-head の中ではなく、header.php が <main> の前に 1 回だけ出す
+   （出さないページ・SP だけ出すページは inc/page.php の ni_logo）。
+   Figma: ni-logo-only（白地の動画ポスター）を重ねたもの。白を透過にした PNG（988×936）で置く。
+   SP 254×241（右 -32 / 上 32）、PC 878×832（右 -116 / 上 -255）。位置の基準は本文の枠（PC は最大 1440px で中央寄せ）の右上。
+   横のはみ出しだけ画面の端で切り、縦は切らない（ページ頭が短いページでは本文の背後まで見える。Figma の ni 枠は高さ 655） */
+.page-ni {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  overflow-x: clip;
+  pointer-events: none;
+}
+
+.page-ni__img {
   position: absolute;
   top: 32px;
   right: -32px;
-  z-index: -1;
   width: 254px;
   max-width: none;
   height: auto;
-  pointer-events: none;
 }
 
 .breadcrumb {
@@ -126,12 +136,18 @@
 
 @media (min-width: 768px) {
   .page-head {
+    max-width: 1440px;   /* 本文（.lower-sec）と同じ枠 */
+    margin-inline: auto;
     padding: var(--header-h) var(--side-margin) 80px;
   }
 
-  .page-head__ni {
+  .page-ni--sp {
+    display: none;   /* SP だけロゴを出すページ（社員インタビュー詳細・座談会詳細） */
+  }
+
+  .page-ni__img {
     top: -255px;
-    right: -116px;
+    right: calc(max(0px, (100% - 1440px) / 2) - 116px);   /* 1440px より広い画面でも、本文の枠の右端から 116px 外 */
     width: 878px;
   }
 
@@ -439,7 +455,7 @@
     font-size: clamp(56px, 5.56vw, 80px);
   }
 
-  .page-head__ni {
+  .page-ni__img {
     top: -17.7vw;
     right: -8.06vw;
     width: 60.97vw;

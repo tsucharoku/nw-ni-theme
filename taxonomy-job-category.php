@@ -19,7 +19,6 @@ get_header();
 
   <!-- Page head（このページはパンくずだけ。見出しは本文側の h1。id="js-fv": 通過後にハンバーガーへ白い箱） -->
   <div class="page-head" id="js-fv">
-    <img class="page-head__ni" src="<?php echo ni_img( 'lower/pagehead_ni.png' ); ?>" alt="" width="988" height="936">
     <nav aria-label="パンくずリスト"><ol class="breadcrumb"><li><a href="<?php echo ni_url( '/' ); ?>">TOP</a></li><li><a href="<?php echo ni_url( '/job-opening/' ); ?>">募集中の職種一覧</a></li><li aria-current="page">アルバイトの募集一覧</li></ol></nav>
   </div>
 

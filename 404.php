@@ -18,8 +18,7 @@ get_header();
 <main class="page-main">
 
   <!-- Page head（id="js-fv": 通過後にハンバーガーへ白い箱） -->
-  <div class="page-head page-head--bare" id="js-fv">
-    <img class="page-head__ni" src="<?php echo ni_img( 'lower/pagehead_ni.png' ); ?>" alt="" width="988" height="936">
+  <div class="page-head" id="js-fv">
     <nav aria-label="パンくずリスト"><ol class="breadcrumb"><li><a href="<?php echo ni_url( '/' ); ?>">TOP</a></li><li aria-current="page">お探しのページは見つかりません</li></ol></nav>
   </div>
 

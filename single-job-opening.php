@@ -19,7 +19,6 @@ get_header();
 
   <!-- Page head（id="js-fv": 通過後にハンバーガーへ白い箱） -->
   <div class="page-head page-head--job" id="js-fv">
-    <img class="page-head__ni" src="<?php echo ni_img( 'lower/pagehead_ni.png' ); ?>" alt="" width="988" height="936">
     <nav aria-label="パンくずリスト"><ol class="breadcrumb"><li><a href="<?php echo ni_url( '/' ); ?>">TOP</a></li><li><a href="<?php echo ni_url( '/job-opening/' ); ?>">募集中の職種一覧</a></li><li><a href="<?php echo ni_url( '/job-opening/category/' ); ?>">中途採用(未経験)の募集一覧</a></li><li aria-current="page">プランナー</li></ol></nav>
     <!-- カテゴリ名 + 職種名（565:17166。共通 .page-head の英字タイトルの代わり） -->
     <div class="page-head__txt">

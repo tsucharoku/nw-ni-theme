@@ -6,6 +6,7 @@
  *   - 新卒 TOP・中途 TOP: <body data-sweep="off">、FV の青いフレーム、ヘッダー左の「誰向けか」の表記
  *   - 新卒 TOP: ヘッダーに CTA ボタン 2 つ（header--cta）
  *   - ヘッダーのリンク: 新卒 TOP・中途 TOP は自分へのリンクを出さない
+ *   - 下層: ページ頭の背景のガラスの NI ロゴ（ni_logo が false のページは出さない。'sp' のページは SP だけ）
  */
 
 $ni_type   = ni_page()['type'];
@@ -48,6 +49,11 @@ if ( $ni_has_fv ) {
 	get_template_part( 'template-parts/fv-frame' );
 }
 ?>
+<?php if ( 'lower' === $ni_type && ni_page()['ni_logo'] ) : ?>
+
+<!-- 下層: ページ頭の背景のガラスの NI ロゴ（出すページは inc/page.php の ni_logo、位置は lower.css の .page-ni） -->
+<div class="page-ni<?php echo 'sp' === ni_page()['ni_logo'] ? ' page-ni--sp' : ''; ?>" aria-hidden="true"><img class="page-ni__img" src="<?php echo ni_img( 'lower/pagehead_ni.png' ); ?>" alt="" width="988" height="936"></div>
+<?php endif; ?>
 
 <!-- ===== Header ===== -->
 <header class="header<?php echo 'beginner' === $ni_type ? ' header--cta' : ''; ?> js-header">

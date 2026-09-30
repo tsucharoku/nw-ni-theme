@@ -37,7 +37,9 @@ function ni_page_key() {
    body:    <body> に付ける page-○○ の ○○（下層のみ。固定ページは省略するとスラッグ）
    css:     assets/css/○○.css（共通ぶんの後に、この順で読む）
    js:      assets/js/○○.js（共通ぶんの後に、この順で読む）
-   modules: assets/js/○○.js を <script type="module"> で読む（FV の WebGL 演出） */
+   modules: assets/js/○○.js を <script type="module"> で読む（FV の WebGL 演出）
+   ni_logo: 下層のページ頭の背景のガラスの NI ロゴを出すか。省略 = 出す / false = 出さない / 'sp' = SP だけ出す
+            （Figma の見出し部品 H2 の中の ni-logo-only が非表示のページに合わせる。2026-10-01 に全ページ PC / SP を確認） */
 function ni_page_map() {
 	return array(
 		'top'                 => array(
@@ -68,12 +70,12 @@ function ni_page_map() {
 
 		/* ----- 下層: カスタム投稿（登録は inc/post-types.php） ----- */
 		'interview:archive'   => array( 'body' => 'interview', 'css' => array( 'interview' ), 'js' => array( 'interview' ) ),
-		'interview:single'    => array( 'body' => 'interview-detail', 'css' => array( 'interview' ) ),
+		'interview:single'    => array( 'body' => 'interview-detail', 'css' => array( 'interview' ), 'ni_logo' => 'sp' ),
 		'cross-talk:archive'  => array( 'body' => 'cross-talk', 'css' => array( 'cross-talk' ) ),
-		'cross-talk:single'   => array( 'body' => 'cross-talk-detail', 'css' => array( 'cross-talk' ) ),
+		'cross-talk:single'   => array( 'body' => 'cross-talk-detail', 'css' => array( 'cross-talk' ), 'ni_logo' => 'sp' ),
 		'job-opening:archive' => array( 'body' => 'job-opening' ),
-		'job-opening:term'    => array( 'body' => 'job-category', 'css' => array( 'job-opening' ), 'js' => array( 'job-opening' ) ),
-		'job-opening:single'  => array( 'body' => 'job-detail', 'css' => array( 'job-opening', 'editor-style', 'form' ), 'js' => array( 'job-opening', 'form' ) ),
+		'job-opening:term'    => array( 'body' => 'job-category', 'css' => array( 'job-opening' ), 'js' => array( 'job-opening' ), 'ni_logo' => false ),
+		'job-opening:single'  => array( 'body' => 'job-detail', 'css' => array( 'job-opening', 'editor-style', 'form' ), 'js' => array( 'job-opening', 'form' ), 'ni_logo' => false ),
 	);
 }
 
@@ -91,6 +93,7 @@ function ni_page() {
 				'css'     => array(),
 				'js'      => array(),
 				'modules' => array(),
+				'ni_logo' => true,
 			)
 		);
 	}
