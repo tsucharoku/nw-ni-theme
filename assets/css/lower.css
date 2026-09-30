@@ -440,11 +440,11 @@
 @media (min-width: 768px) and (max-width: 1439px) {
   .page-head,
   .lower-sec {
-    padding-inline: clamp(24px, 6.67vw, 96px);
+    padding-inline: var(--side-margin-fluid);
   }
 
   .anchor-nav {
-    padding-inline: clamp(24px, 5.56vw, 80px);
+    padding-inline: calc(var(--side-margin-fluid) * 80 / 96);   /* 本文の左右の余白に比例（1440px で 80） */
   }
 
   .page-head__txt {

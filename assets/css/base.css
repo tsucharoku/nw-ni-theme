@@ -78,6 +78,13 @@
   }
 }
 
+/* 中間幅（768〜1439px）の左右の余白: 1440px で 96、768px で 25.6（従来の 6.67vw = 51.2 の半分）になるよう直線で縮める */
+@media (min-width: 768px) and (max-width: 1439px) {
+  :root {
+    --side-margin-fluid: clamp(24px, calc(10.476vw - 54.86px), 96px);
+  }
+}
+
 /* ---------- Reset ---------- */
 *,
 *::before,

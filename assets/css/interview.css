@@ -789,11 +789,11 @@
   }
 
   .interview-mv {
-    padding-left: clamp(24px, 6.67vw, 96px);
+    padding-left: var(--side-margin-fluid);
   }
 
   .interview-mv__img {
-    right: clamp(24px, 6.67vw, 96px);
+    right: var(--side-margin-fluid);
   }
 
   .interview-mv__txt {
@@ -803,7 +803,7 @@
   .interview-body {
     gap: clamp(32px, 6.67vw, 96px);
     padding-top: clamp(80px, 10.56vw, 152px);
-    padding-right: clamp(24px, 6.67vw, 96px);
+    padding-right: var(--side-margin-fluid);
   }
 
   .interview-body__side {

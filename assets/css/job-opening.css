@@ -322,7 +322,7 @@
 
   .job-other {
     margin-inline: clamp(0px, 1.67vw, 24px);
-    padding-inline: clamp(24px, 6.67vw, 96px);
+    padding-inline: var(--side-margin-fluid);
     gap: clamp(32px, 5vw, 72px);
   }
 

@@ -707,7 +707,7 @@
    ========================================================================== */
 @media (min-width: 768px) and (max-width: 1439px) {
   .form-sec {
-    padding-inline: clamp(24px, 6.67vw, 96px);
+    padding-inline: var(--side-margin-fluid);
   }
 
   .form-panel {
@@ -720,7 +720,7 @@
 
   .msg {
     padding-left: clamp(24px, 8.89vw, 128px);
-    padding-right: clamp(24px, 6.67vw, 96px);
+    padding-right: var(--side-margin-fluid);
   }
 }
 

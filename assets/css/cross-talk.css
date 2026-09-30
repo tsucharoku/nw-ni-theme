@@ -825,12 +825,12 @@
   }
 
   .ct-hero__img {
-    right: clamp(24px, 6.67vw, 96px);
+    right: var(--side-margin-fluid);
   }
 
   .ct-hero__txt {
-    width: calc(539px + clamp(24px, 6.67vw, 96px));
-    padding-left: clamp(24px, 6.67vw, 96px);
+    width: calc(539px + var(--side-margin-fluid));
+    padding-left: var(--side-margin-fluid);
   }
 
   .ct-hero__title {
