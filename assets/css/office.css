@@ -1,0 +1,757 @@
+/* ==========================================================================
+   office.css — オフィス紹介（/office/）
+   Figma: PC 562:14690（Container 562:14693）/ SP 1137:10922（Container 1140:15247）
+   office-hero（写真 + 流れる英字 + 数字）/ office-sec（余白と見出しの上書き）/ office-split / office-tags /
+   office-item（写真 + 見出し + 文。Frame 2087 562:15452）/ office-note / office-data / 各セクションの写真の散らし
+   写真は Figma の枠どおりにトリミング済みの JPG（3:2 が基本）
+   ========================================================================== */
+
+/* ==========================================================================
+   Hero（562:15278 / SP 1140:15250）
+   ========================================================================== */
+.office-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;               /* SP: 写真 236 → 文 260 */
+}
+
+.office-hero__photo {
+  width: calc(100% - 20px);   /* SP 355 / 375。左端から、右だけ角丸 8 */
+  aspect-ratio: 355 / 236;
+  border-radius: 0 8px 8px 0;
+  overflow: hidden;
+  background: var(--c-gray);
+}
+
+.office-hero__photo img,
+.office-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 流れる英字（Autocarouse 570:18657）: 写真の下端に重ねる。同じ文を 4 回並べ、1 回ぶん流してループ */
+.office-hero__marquee {
+  position: absolute;
+  top: 164px;              /* SP 1140:15266: y 164.3 */
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  color: #e9f1f7;
+  font-size: 62px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.office-hero__marquee-track {
+  display: inline-flex;
+  animation: office-marquee 40s linear infinite;
+}
+
+.office-hero__marquee-track span {
+  padding-right: 40px;
+}
+
+@keyframes office-marquee {
+  to { transform: translateX(-25%); }
+}
+
+.office-hero__body {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-inline: var(--side-margin);
+}
+
+.office-hero__lead {
+  font-size: var(--fs-body-s);
+  line-height: 1.65;
+}
+
+.office-stats {
+  display: flex;
+  gap: 4px;
+}
+
+.office-stats__item {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 吹き出し（Frame 1676 deep-s 608:9134）: 紺のピル + 左下の尻尾 */
+.office-stats__label {
+  position: relative;
+  padding-bottom: 8.5px;
+}
+
+.office-stats__label span {
+  display: block;
+  padding: 12px 16px;
+  border-radius: 32px;
+  background: var(--c-navy);
+  color: var(--c-white);
+  font-size: var(--fs-tight-2xs);
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.office-stats__label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 71px;
+  height: 8.5px;
+  background: url("../img/office/pill_tail.svg") center / 100% 100% no-repeat;
+}
+
+.office-stats__num {
+  display: flex;
+  align-items: flex-end;
+  color: var(--c-navy);
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.office-stats__num--jp {
+  font-size: 45px;
+  letter-spacing: 0.04em;
+}
+
+.office-stats__unit {
+  width: 28.25px;
+  height: 16.24px;
+  margin: 0 0 13px 1px;    /* SP 1140:15260: x 95 / y 23.7（数字 94 幅の右、下端から 13） */
+}
+
+@media (min-width: 768px) {
+  .office-hero {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-right: var(--side-margin);
+  }
+
+  .office-hero__photo {
+    flex: none;
+    width: 672px;
+    aspect-ratio: 672 / 447.66;
+  }
+
+  .office-hero__marquee {
+    top: 300px;            /* 570:18657: y 300.3（写真の下端 447.66 − 146 − 1.36） */
+    font-size: 146px;
+  }
+
+  .office-hero__marquee-track {
+    animation-duration: 60s;
+  }
+
+  .office-hero__body {
+    position: relative;
+    flex: none;
+    width: 465px;
+    padding-inline: 0;
+  }
+
+  .office-hero__lead {
+    white-space: nowrap;
+  }
+
+  .office-stats {
+    gap: 20px;
+  }
+
+  .office-stats__item {
+    flex: none;
+    gap: 16px;
+  }
+
+  .office-stats__label span {
+    padding: 12px 24px;
+    font-size: var(--fs-tight-xs);
+  }
+
+  .office-stats__num {
+    font-size: 56px;
+  }
+
+  .office-stats__num--jp {
+    font-size: 56px;
+  }
+
+  .office-stats__unit {
+    width: 48px;
+    height: 27.6px;
+    margin: 0 0 11px 0;    /* 562:15266: x 108 / y 23.7、箱の高さ 63 */
+  }
+}
+
+/* ==========================================================================
+   Section（SP: 上 80。PC: 上 160）と見出しの上書き
+   ========================================================================== */
+.office-sec {
+  padding-top: var(--section-margin-l);
+}
+
+.office-sec--flat {
+  padding-top: 0;          /* 直前のセクションの下余白に続く */
+}
+
+.page-office .sec-head__title {
+  line-height: 1.5;
+}
+
+.page-office .sec-head__title--cap {
+  gap: 6px;
+}
+
+.office-text {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.office-photo {
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--c-gray);
+}
+
+@media (min-width: 768px) {
+  .page-office .sec-head__title--cap {
+    align-items: center;
+    gap: 8px;
+  }
+
+  .page-office .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 0;
+  }
+}
+
+/* ハッシュタグ（htag pale 562:15329） */
+.office-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.office-tags__item {
+  padding: 8px 16px;
+  border-radius: 100px;
+  background: var(--c-back);
+  color: var(--c-blue);
+  font-size: var(--fs-tight-2xs);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* 写真 + 見出し + 文（Frame 2087 562:15452 / SP は写真の下 16） */
+.office-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.office-item__photo {
+  aspect-ratio: 576 / 384;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--c-gray);
+}
+
+.office-item__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.office-item__title {
+  margin-top: 16px;
+  font-size: 18px;         /* SP 562:15430: 1 行 25 → 18px（PC は 20） */
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.office-item__body {
+  margin-top: 4px;
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .office-item__title {
+    margin-top: 24px;
+    font-size: var(--fs-tight-s);
+  }
+}
+
+/* ==========================================================================
+   Lounge（562:15297 / SP 1140:15268）
+   ========================================================================== */
+.office-split {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.office-split__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.office-split__photo {
+  aspect-ratio: 576 / 384;
+}
+
+/* 小さい写真 3 枚の散らし。SP: 205×137（左）/ 110×73.5（右、80 下げ）/ 221×148（左から 57、さらに下） */
+.office-lounge__subs {
+  position: relative;
+  height: 349px;           /* 1140:15282〜15283: 48 + 137 … 955.8 + 147.7 − 754.3 */
+  margin-top: 48px;
+}
+
+.office-lounge__sub {
+  position: absolute;
+}
+
+.office-lounge__sub--1 { top: 0; left: 0; width: 205px; aspect-ratio: 205 / 137; }
+.office-lounge__sub--2 { top: 80px; right: 0; width: 110px; aspect-ratio: 110 / 73.5; }
+.office-lounge__sub--3 { top: 201.5px; left: 57px; width: 221px; aspect-ratio: 221 / 147.7; }
+
+@media (min-width: 768px) {
+  .office-split {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 112px;
+  }
+
+  .office-split__txt {
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 24px;
+  }
+
+  .office-split__txt .office-tags {
+    margin-top: -8px;      /* 文とタグの間は 16 */
+  }
+
+  .office-split__photo {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  /* PC 562:15372: 372×248（x 114）/ 212×141（x 566、160 下げ）/ 276×184（x 858、56 下げ） */
+  .office-lounge__subs {
+    height: 301px;
+    margin-top: 32px;
+  }
+
+  .office-lounge__sub--1 { top: 0; left: 9.135%; width: 29.81%; aspect-ratio: 372 / 248; }
+  .office-lounge__sub--2 { top: 160px; right: auto; left: 45.35%; width: 16.99%; aspect-ratio: 212 / 141; }
+  .office-lounge__sub--3 { top: 56px; left: 68.75%; width: 22.12%; aspect-ratio: 276 / 184.44; }
+}
+
+/* ==========================================================================
+   Work Space（562:15383 / SP 1140:15292）
+   ========================================================================== */
+.office-work {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-bottom: var(--section-margin-l);
+}
+
+.office-work__col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .office-work {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 112px;
+  }
+
+  .office-work__col {
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 56px;
+  }
+}
+
+/* ==========================================================================
+   In-house Library（562:15478 / SP 1140:15297）
+   ========================================================================== */
+.office-library {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-inline: var(--side-margin);
+  padding-bottom: var(--section-margin-l);
+}
+
+.office-library__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.office-library__txt .office-tags {
+  margin-top: -8px;
+}
+
+.office-library__photo {
+  aspect-ratio: 576 / 384;
+}
+
+@media (min-width: 768px) {
+  .office-library {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 112px;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-right: 0;      /* 写真は右端まで（562:15537: x 529.85 〜 1440） */
+  }
+
+  .office-library__txt {
+    flex: none;
+    width: 322px;          /* 562:15517: 見出しの幅 321.85 */
+  }
+
+  .office-library__photo {
+    flex: 1 1 0;
+    min-width: 0;
+    aspect-ratio: 910.15 / 606.77;
+  }
+}
+
+/* ==========================================================================
+   Snack Station（562:15539 / SP 1140:15310）
+   ========================================================================== */
+.office-snack {
+  display: flex;
+  flex-direction: column-reverse;   /* SP は文 → 写真、PC は写真が左 */
+  gap: 40px;
+}
+
+.office-snack__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.office-snack__photos {
+  position: relative;
+  height: 193px;           /* SP 1140:15311 */
+}
+
+.office-snack__photo {
+  position: absolute;
+}
+
+.office-snack__photo--1 { top: 0; left: 0; width: 220px; aspect-ratio: 426 / 284; }
+.office-snack__photo--2 { top: 56px; right: 0; width: 91px; aspect-ratio: 112 / 168; }
+
+.office-note {
+  display: flex;
+  align-items: center;
+  gap: var(--item-gap);
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  background: rgba(199, 219, 236, 0.4);
+}
+
+.office-note__txt {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.office-note__title {
+  color: var(--c-navy);
+  font-size: var(--fs-tight-xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.office-note__body {
+  font-size: var(--fs-body-2xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.office-note__icon {
+  flex: none;
+  width: 50px;
+  height: 42.5px;
+}
+
+@media (min-width: 768px) {
+  .office-snack {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 112px;
+  }
+
+  .office-snack__photos {
+    flex: none;
+    width: 578px;
+    height: 352px;
+  }
+
+  .office-snack__photo--1 { width: 426px; }
+  .office-snack__photo--2 { top: 184px; width: 112px; }
+
+  .office-snack__txt {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+/* ==========================================================================
+   Meeting Space（562:15583 / SP 1140:15328）
+   ========================================================================== */
+.office-meeting {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-bottom: var(--section-margin-l);
+}
+
+.office-meeting__list {
+  display: grid;
+  gap: 40px;
+}
+
+@media (min-width: 768px) {
+  .office-meeting__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ==========================================================================
+   Branch Office（562:15703 / SP 1140:15334）
+   PC: 文（左）+ 写真 724×482（右端まで）。下の 2 枚は写真の下端から 80 食い込んで左に散らす
+   ========================================================================== */
+.office-branch {
+  display: grid;
+  gap: 40px;
+  padding-left: var(--side-margin);
+  padding-bottom: var(--section-margin-l);
+}
+
+.office-branch__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;               /* SP 1140:15336: 見出し 66 → 文 82 → 表 202 */
+  padding-right: var(--side-margin);
+}
+
+.office-data {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  background: rgba(199, 219, 236, 0.4);
+  font-size: var(--fs-tight-xs);
+  line-height: 1.4;
+}
+
+.office-data__row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.office-data__row:last-child {
+  min-height: 32px;        /* 562:15751 */
+}
+
+.office-data__row dt {
+  flex: none;
+  font-weight: 400;
+}
+
+.office-data__row dd {
+  font-weight: 300;
+}
+
+.office-branch__photo {
+  aspect-ratio: 355 / 236.67;
+}
+
+/* SP 1140:15352: 175×117（左）/ 136×91（右端、64 下げ） */
+.office-branch__subs {
+  position: relative;
+  height: 155px;
+  margin-right: var(--side-margin);
+}
+
+.office-branch__sub {
+  position: absolute;
+}
+
+.office-branch__sub--1 { top: 0; left: 0; width: 175px; aspect-ratio: 392 / 262; }
+.office-branch__sub--2 { top: 64px; right: 0; width: 136px; aspect-ratio: 212 / 141; }
+
+@media (min-width: 768px) {
+  .office-branch {
+    grid-template-columns: minmax(0, 1fr) 724px;
+    grid-template-areas:
+      "txt photo"
+      "subs photo"
+      "subs .";
+    grid-template-rows: auto 1fr auto;
+    column-gap: 112px;
+    row-gap: 0;
+    max-width: 1440px;
+    margin-inline: auto;
+  }
+
+  .office-branch__txt {
+    grid-area: txt;
+    gap: 24px;
+    padding-right: 0;
+    min-height: 402px;     /* 下の写真は上から 402（写真 482 − 80） */
+    padding-bottom: 24px;
+  }
+
+  .office-branch__photo {
+    grid-area: photo;
+    aspect-ratio: 724 / 482;
+  }
+
+  .office-branch__subs {
+    grid-area: subs;
+    width: 684px;          /* 392 + 80 + 212。右の写真の列に食い込む */
+    height: 381px;
+    margin-right: 0;
+  }
+
+  .office-branch__sub--1 { width: 392px; }
+  .office-branch__sub--2 { top: 240px; width: 212px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .office-hero__marquee-track {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .office-hero {
+    padding-right: clamp(24px, 6.67vw, 96px);
+    gap: clamp(24px, 4vw, 40px);
+  }
+
+  .office-hero__photo {
+    flex: 0 1 672px;
+    width: 46.67vw;
+  }
+
+  .office-hero__marquee {
+    top: calc(46.67vw * 447.66 / 672 - clamp(80px, 10.14vw, 146px) - 1px);   /* 写真の下端に合わせる */
+    font-size: clamp(80px, 10.14vw, 146px);
+  }
+
+  .office-hero__body {
+    flex: 0 1 465px;
+    width: auto;
+    min-width: 0;
+  }
+
+  .office-hero__lead {
+    white-space: normal;
+  }
+
+  .office-stats {
+    flex-wrap: wrap;
+  }
+
+  .office-sec {
+    padding-top: clamp(96px, 11.1vw, 160px);
+  }
+
+  .office-sec--flat {
+    padding-top: 0;
+  }
+
+  .office-work,
+  .office-library,
+  .office-meeting,
+  .office-branch {
+    padding-bottom: clamp(96px, 11.1vw, 160px);
+  }
+
+  .office-split,
+  .office-work,
+  .office-library,
+  .office-snack {
+    gap: clamp(32px, 7.78vw, 112px);
+  }
+
+  .office-library {
+    padding-left: clamp(24px, 6.67vw, 96px);
+  }
+
+  .office-library__txt {
+    width: clamp(260px, 22.4vw, 322px);
+  }
+
+  .office-snack__photos {
+    width: 40.14vw;
+    height: 24.44vw;
+  }
+
+  .office-snack__photo--1 { width: 29.58vw; }
+  .office-snack__photo--2 { top: 12.78vw; width: 7.78vw; }
+
+  .office-meeting__list {
+    gap: clamp(20px, 2.78vw, 40px);
+  }
+
+  .office-branch {
+    grid-template-columns: minmax(0, 1fr) 50.28vw;
+    column-gap: clamp(32px, 7.78vw, 112px);
+    padding-left: clamp(24px, 6.67vw, 96px);
+  }
+
+  .office-branch__txt {
+    min-height: calc(50.28vw * 482 / 724 - 80px);
+  }
+
+  .office-branch__subs {
+    width: 47.5vw;
+    height: 26.46vw;
+  }
+
+  .office-branch__sub--1 { width: 27.22vw; }
+  .office-branch__sub--2 { top: 16.67vw; width: 14.72vw; }
+}

@@ -1,0 +1,7 @@
+<svg width="290" height="290" viewBox="0 0 290 290" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+<!-- Figma SP: 直径290の円（線幅1）から中央の帯 y=67〜224 を引いた上下の弧 -->
+<defs>
+<clipPath id="caps"><rect x="0" y="0" width="290" height="67"/><rect x="0" y="224" width="290" height="66"/></clipPath>
+</defs>
+<circle cx="145" cy="145" r="144.5" stroke="#fff" stroke-opacity="0.35" stroke-width="1" clip-path="url(#caps)"/>
+</svg>

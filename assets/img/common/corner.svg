@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="corner">
+<path id="Rectangle 13" d="M4 28V4H28" stroke="url(#paint0_linear_0_235)" stroke-opacity="0.7" stroke-width="8"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_235" x1="4" y1="16" x2="28" y2="16" gradientUnits="userSpaceOnUse">
+<stop stop-color="#4851C9"/>
+<stop offset="1" stop-color="#007ACC"/>
+</linearGradient>
+</defs>
+</svg>

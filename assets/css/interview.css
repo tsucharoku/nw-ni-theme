@@ -1,0 +1,835 @@
+/* ==========================================================================
+   interview.css — 社員インタビュー 一覧 / 詳細
+   一覧: Figma PC 855:23617 / SP 1140:19171
+   詳細: Figma PC 855:25990 / SP 1140:19627
+   interview-card（474:5606 の PCs / SP-l）は親に依存しない単体ブロック。more-btn は lower.css
+   ========================================================================== */
+
+/* ==========================================================================
+   Interview card（Figma: interview-card PCs 567:18138 / SP-l 1145:25523）
+   TOP の .voice-card とは別物（写真がほぼ正方形・氏名あり・矢印なし・PC の引用文は 16px Light）。
+   <a class="interview-card"> 単体で使える。幅は親（グリッドなど）が決める
+   ========================================================================== */
+.interview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;              /* SP-l: 写真 335 → 16 → 本文 */
+  min-width: 0;
+}
+
+/* 写真: 384×472 の素材（背景色 + スウッシュ込み）を上寄せで切り抜く。SP は正方形、PC は 289:291 */
+.interview-card__img {
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius);
+  background: #c9d7e8;
+}
+
+.interview-card__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 0;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.interview-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.interview-card__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* SP: 18px Regular × 2 行（高さ 59） */
+.interview-card__quote {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+/* Figma の SP-l バリアントには氏名が無い */
+.interview-card__name {
+  display: none;
+  font-size: var(--fs-tight-xs);
+  line-height: 1.4;
+}
+
+.interview-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.interview-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.interview-card__chips li {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  padding: 1px 12px 0;
+  border-radius: 100px;
+  background: var(--c-back);
+  font-size: var(--fs-tight-2xs);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.interview-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--c-blue);
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+@media (hover: hover) {
+  .interview-card:hover .interview-card__img img {
+    transform: scale(1.04);
+  }
+}
+
+@media (min-width: 768px) {
+  .interview-card {
+    gap: 24px;
+  }
+
+  /* PCs: 289:291。中の 384:472 相当の枠が上に 1.37% はみ出す → 上から約 6% の位置で切る */
+  .interview-card__img {
+    aspect-ratio: 289 / 291;
+  }
+
+  .interview-card__img img {
+    object-position: 50% 6%;
+  }
+
+  .interview-card__quote {
+    font-size: var(--fs-body-xs);
+    font-weight: 300;
+  }
+
+  .interview-card__name {
+    display: block;
+  }
+
+  .interview-card__chips li {
+    color: var(--c-blue);
+  }
+
+  .interview-card__tags {
+    font-size: var(--fs-tight-2xs);
+  }
+}
+
+/* ==========================================================================
+   一覧: 絞り込み（855:25742 / SP 1140:19173）
+   行 = ラベル（幅 59）+ ピル群。行の間は 16 → 罫線 → 16。SP はラベルの下にピル（8）
+   ========================================================================== */
+.interview-filter {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 40px;
+}
+
+.interview-filter__group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.interview-filter__group + .interview-filter__group {
+  margin-top: 16px;
+  padding-top: 16px;      /* SP 1140:19182: 罫線 1 + 16 */
+  border-top: 1px solid var(--c-border);
+}
+
+.interview-filter__label {
+  flex: none;
+  width: 59px;
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.interview-filter__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Figma: htag（pale 562:15329 / on 855:25914） */
+.interview-filter__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 100px;
+  background: var(--c-back);
+  color: var(--c-blue);
+  font-size: var(--fs-tight-2xs);
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.interview-filter__btn.is-active {
+  background: var(--c-blue);
+  color: var(--c-white);
+}
+
+.interview-filter__count:not(:empty) {
+  margin-left: 0.3em;
+}
+
+@media (hover: hover) {
+  .interview-filter__btn:not(.is-active):hover {
+    background: var(--c-grd-pale);
+  }
+}
+
+.interview-filter__btn:focus-visible {
+  outline: 2px solid var(--c-navy);
+  outline-offset: 2px;
+}
+
+@media (min-width: 768px) {
+  .interview-filter {
+    width: fit-content;   /* Figma: 罫線はいちばん長い行の幅まで */
+    max-width: 100%;
+    padding-bottom: 80px;
+  }
+
+  .interview-filter__group {
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+  }
+}
+
+/* ==========================================================================
+   一覧: カードのグリッド（855:25428: 3 列、列間 48 / 行間 80。SP 1140:19198: 1 列、間 24）
+   ========================================================================== */
+.interview-list {
+  padding-bottom: var(--section-margin-l);
+}
+
+.interview-list__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+
+.interview-list__item[hidden] {
+  display: none;
+}
+
+/* 絞り込み・もっと見るで現れたカード（interview.js が is-enter を付ける） */
+.interview-list__item.is-enter {
+  animation: interview-item-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes interview-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.interview-list__empty {
+  padding: 40px 0;
+  font-weight: 300;
+  text-align: center;
+}
+
+/* 855:25571 / SP 1140:19211: 上 56 / 32。PC は右寄せ、SP は中央 */
+.interview-list__more {
+  display: flex;
+  justify-content: center;
+  padding-top: 32px;
+}
+
+.interview-list__more[hidden] {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .interview-list__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 80px 48px;
+  }
+
+  .interview-list__more {
+    justify-content: flex-end;
+    padding-top: 56px;
+  }
+}
+
+/* ==========================================================================
+   詳細: パンくず（記事タイトルが長いので折り返さず、末尾を … で切る。Figma の H2 は 1 行: SP 高さ 185 / PC 232.7）
+   ========================================================================== */
+.page-interview-detail .breadcrumb {
+  flex-wrap: nowrap;
+}
+
+.page-interview-detail .breadcrumb li:not(:last-child) {
+  flex: none;
+}
+
+/* ==========================================================================
+   詳細: メインビジュアル（855:26428 / SP 1140:19629）
+   写真は左端から右へ（右に 96 / 24 の余白、右側だけ角丸 8）。黒 40% を重ね、文字は左下
+   ========================================================================== */
+.interview-mv {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 488px;
+  padding: 64px 48px 40px var(--side-margin);
+  color: var(--c-white);
+}
+
+.interview-mv__img {
+  position: absolute;
+  inset: 0 24px 0 0;
+  z-index: -1;
+  overflow: hidden;
+  border-radius: 0 8px 8px 0;
+  background: #333;
+}
+
+/* Figma のトリミング（SP: 1041×694 を -435/-98 に置く）を cover + 拡大で再現 */
+.interview-mv__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 75% 50%;
+  transform: scale(1.42);
+  transform-origin: 19% 47.5%;
+}
+
+.interview-mv__img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.interview-mv__txt {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.interview-mv__label {
+  font-size: var(--fs-tight-2xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.interview-mv__title {
+  font-size: 26px;        /* SP 1140:19635: 3 行で高さ 114 */
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.interview-mv__name {
+  font-size: 18px;        /* SP 1140:19636: 高さ 25 */
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.interview-mv__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.interview-mv__chips li {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 1px 16px 0;
+  border: 1px solid var(--c-white);
+  border-radius: 100px;
+  font-size: var(--fs-tight-2xs);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.interview-mv__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: var(--fs-tight-2xs);
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .interview-mv {
+    max-width: 1440px;
+    min-height: 570px;
+    margin-inline: auto;
+    padding: 64px 0 64px var(--side-margin);
+  }
+
+  .interview-mv__img {
+    right: var(--side-margin);
+  }
+
+  /* PC: 1703×1135 を -72/-204 に置く */
+  .interview-mv__img img {
+    object-position: 50% 50%;
+    transform: scale(1.267);
+    transform-origin: 20% 0;
+  }
+
+  .interview-mv__txt {
+    width: 539px;         /* 855:26415: 635 - 左 96 */
+    max-width: 100%;
+  }
+
+  .interview-mv__title {
+    font-size: var(--fs-h1);
+  }
+
+  .interview-mv__name {
+    font-size: var(--fs-tight-s);
+  }
+}
+
+/* ==========================================================================
+   詳細: 本文（855:26764 / SP 1140:19645）
+   PC: 左に写真 568×768（左端から。上 152）、右に本文 680（x=664、上 160）。SP は本文だけ
+   ========================================================================== */
+.interview-body {
+  padding: 80px var(--side-margin) 64px;
+}
+
+.interview-body__side {
+  display: none;
+}
+
+.interview-body__main {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;              /* SP: ブロック間 32、PC: 56 */
+}
+
+/* Q&A（Frame 1449 855:27174） */
+.interview-qa {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;              /* Figma 変数 item-gap/32: SP 24 / PC 32 */
+}
+
+.interview-qa__head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 32px;
+  border-left: 1px solid var(--c-accent);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.interview-qa__num {
+  width: fit-content;
+  font-size: var(--fs-tight-ss);
+}
+
+.interview-qa__q {
+  font-size: 18px;        /* Figma 変数 Tight/S: SP 18 / PC 20 */
+  font-weight: 500;
+}
+
+.interview-qa__a {
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* 本文中の写真（Frame 2219 855:27212: 上下 32、520:347、角丸 8） */
+.interview-body__photo {
+  padding-block: 32px;
+}
+
+.interview-body__photo img {
+  width: 100%;
+  aspect-ratio: 520 / 347;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .interview-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 96px;            /* 568 → 664 */
+    max-width: 1440px;
+    margin-inline: auto;
+    padding: 152px var(--side-margin) 0 0;
+  }
+
+  /* 本文を読む間、写真は画面内に留まる（sticky。JS なし） */
+  .interview-body__side {
+    position: sticky;
+    top: max(24px, calc((100vh - 768px) / 2));
+    display: block;
+    flex: none;
+    overflow: hidden;
+    width: 568px;
+    height: 768px;
+    max-height: calc(100vh - 48px);
+  }
+
+  .interview-body__side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 41% 50%;   /* 855:26765: 1153 幅を -240 に置く */
+  }
+
+  .interview-qa {
+    gap: 32px;
+  }
+
+  .interview-qa__q {
+    font-size: 20px;
+  }
+
+  .interview-body__main {
+    flex: 1 1 0;
+    gap: 56px;
+    min-width: 0;
+    padding-top: 8px;     /* 本文は 160 から */
+  }
+}
+
+/* ==========================================================================
+   詳細: A Day at Work（855:26838 / SP 1140:19657）
+   流れる英字（マーキー）→ 四隅カッコの枠（見出し + タイムライン）。背景に四角の装飾（PC のみ）
+   ========================================================================== */
+.day {
+  position: relative;
+  padding: 0 var(--side-margin);
+  overflow-x: clip;       /* マーキーと装飾の横はみ出しを切る（縦は SP のマーキーが上にはみ出すので切らない） */
+}
+
+/* マーキー: 同じ語を 6 個並べ、1 個ぶん（-100% / 6）左へ動かして無限ループ。
+   SP 62px（枠の上辺をまたぐ: 上 -31）、PC 146px（枠の上 100） */
+.day__marquee {
+  position: absolute;
+  top: -31px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  color: rgba(199, 219, 236, 0.4);   /* grd_pale 40% */
+  font-size: 62px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.day__marquee-track {
+  display: flex;
+  width: max-content;
+  animation: day-marquee 14s linear infinite;
+  will-change: transform;
+}
+
+.day__marquee-item {
+  flex: none;
+  padding-right: 0.27em;  /* 語間（Figma: "A Day at Work. A Day at Work" の空白ぶん） */
+}
+
+@keyframes day-marquee {
+  to {
+    transform: translate3d(calc(-100% / 6), 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day__marquee-track {
+    animation: none;
+  }
+
+  .interview-list__item.is-enter {
+    animation: none;
+  }
+
+  .interview-card__img img {
+    transition: none;
+  }
+}
+
+.day__deco {
+  display: none;
+}
+
+.day__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;              /* SP: 見出し 64 → リスト 116 */
+  padding: 64px 0 40px;   /* SP: 枠 0〜1184、リストの下 40 */
+}
+
+.day__title {
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.day__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  overflow: hidden;       /* 縦線のはみ出しを切る */
+  width: 100%;
+  padding-inline: 16px;   /* SP 1140:19675: x=16、幅 303 */
+}
+
+.day__item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+
+/* 縦線（accent 1px）。丸の中心 x=4 を通す。項目ごとに下の隙間ぶんまで伸ばし、リストの overflow で切る */
+.day__item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 3.5px;
+  width: 1px;
+  height: calc(100% + 32px);
+  background: var(--c-accent);
+}
+
+.day__marker {
+  position: relative;
+  flex: none;
+  width: 41.5px;
+  height: 17px;
+}
+
+.day__txt {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.day__time {
+  color: var(--c-navy);
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.day__desc {
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (max-width: 767px) {
+  /* SP 1140:19676: 線は上 8 から、最後の項目の途中（下 24 手前）まで */
+  .day__item:first-child::before {
+    top: 8px;
+  }
+
+  .day__item:last-child::before {
+    height: calc(100% - 24px);
+  }
+}
+
+@media (min-width: 768px) {
+  /* セクションは画面幅いっぱい（マーキーを端から端まで流す）。中身は 1440 の中央 */
+  .day {
+    padding: 200px max(168px, calc((100% - 1440px) / 2 + 168px)) 0;   /* 855:26838: 上 200、枠は x=168〜1272 */
+  }
+
+  .day__marquee {
+    top: 100px;
+    font-size: 146px;
+  }
+
+  .day__marquee-track {
+    animation-duration: 24s;
+  }
+
+  /* 四角の装飾（892:27317 を左右反転した位置。1440 幅の中央基準、上 344） */
+  .day__deco {
+    position: absolute;
+    top: 344px;
+    left: 50%;
+    display: block;
+    width: 1440px;
+    height: 555px;
+    margin-left: -720px;
+    pointer-events: none;
+  }
+
+  .day__deco span {
+    position: absolute;
+    border-radius: 3px;
+    background: #00aad5;
+    opacity: 0.14;
+  }
+
+  .day__deco span:nth-child(1) { top: 142px; left: 1367px; width: 31px; height: 37px; border-radius: 4px; background: rgba(0, 170, 213, 0.67); }
+  .day__deco span:nth-child(2) { top: 141px; left: 141px; width: 62px; height: 77px; border-radius: 4px; }
+  .day__deco span:nth-child(3) { top: 19px; left: 1375px; width: 72px; height: 90px; border-radius: 4px; background: var(--c-navy); }
+  .day__deco span:nth-child(4) { top: 38px; left: 19px; width: 40px; height: 40px; }
+  .day__deco span:nth-child(5) { top: 54px; left: 155px; width: 20px; height: 20px; background: var(--c-navy); opacity: 0.1; }
+  .day__deco span:nth-child(6) { top: 306px; left: 80px; width: 19px; height: 19px; }
+  .day__deco span:nth-child(7) { top: 343px; left: 1307px; width: 40px; height: 40px; background: var(--c-navy); opacity: 0.1; }
+  .day__deco span:nth-child(8) { top: 182px; left: 1263px; width: 20px; height: 20px; }
+
+  .day__box {
+    gap: 40px;
+    padding: 64px 120px;  /* 角 24 + 40 → 見出し。リストの下 40 + 角 24。左右 120 */
+  }
+
+  /* 2 列: 上から --rows 件で折り返す（892:27261 / 892:27262: 列幅 352.5、両端寄せ） */
+  .day__list {
+    grid-template-rows: repeat(var(--rows, 4), auto);
+    grid-template-columns: repeat(2, 352.5px);
+    grid-auto-flow: column;
+    justify-content: space-between;
+    gap: 32px 0;
+    padding-inline: 0;
+  }
+
+  .day__desc {
+    min-height: 59px;     /* 855:26846 */
+  }
+}
+
+/* ==========================================================================
+   詳細: 関連インタビュー（855:27157 / SP 1140:19698）
+   ========================================================================== */
+.interview-related {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-top: var(--section-margin-l);   /* 枠の下端 → 見出しまで 80 / 160 */
+  padding-bottom: var(--section-margin-l);
+}
+
+.interview-related__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 767px) {
+  .interview-related .sec-head__title {
+    line-height: 1.5;
+  }
+}
+
+@media (min-width: 768px) {
+  .interview-related__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px;
+  }
+
+  .interview-related .sec-head__title--cap {
+    align-items: center;
+    gap: 8px;
+  }
+
+  .interview-related .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 0;
+  }
+
+  /* 855:27158: 248×54、右寄せ */
+  .interview-related__btn {
+    align-self: flex-end;
+    gap: 0;
+    min-width: 248px;
+    line-height: 1.4;
+  }
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .interview-list__grid {
+    gap: clamp(40px, 5.56vw, 80px) clamp(20px, 3.33vw, 48px);
+  }
+
+  .interview-related__list {
+    gap: clamp(20px, 2.78vw, 40px);
+  }
+
+  .interview-mv {
+    padding-left: clamp(24px, 6.67vw, 96px);
+  }
+
+  .interview-mv__img {
+    right: clamp(24px, 6.67vw, 96px);
+  }
+
+  .interview-mv__txt {
+    width: clamp(400px, 37.4vw, 539px);
+  }
+
+  .interview-body {
+    gap: clamp(32px, 6.67vw, 96px);
+    padding-top: clamp(80px, 10.56vw, 152px);
+    padding-right: clamp(24px, 6.67vw, 96px);
+  }
+
+  .interview-body__side {
+    width: clamp(260px, 39.44vw, 568px);
+    height: clamp(352px, 53.33vw, 768px);
+  }
+
+  .day {
+    padding: clamp(120px, 13.9vw, 200px) clamp(24px, 11.67vw, 168px) 0;
+  }
+
+  .day__deco {
+    display: none;        /* 1440 基準の絶対配置なので、狭い幅では本文に重なる */
+  }
+
+  .day__marquee {
+    top: clamp(60px, 6.94vw, 100px);
+    font-size: clamp(88px, 10.14vw, 146px);
+  }
+
+  .day__box {
+    padding-inline: clamp(24px, 8.33vw, 120px);
+  }
+
+  .day__list {
+    grid-template-columns: repeat(2, minmax(0, 352.5px));
+    column-gap: 24px;
+  }
+}

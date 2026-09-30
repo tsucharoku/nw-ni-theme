@@ -1,0 +1,455 @@
+/* ==========================================================================
+   lower.css — 下層ページ共通
+   page-head（ヘッダー下のパンくず + 英字タイトル + 和文 + リード）/ breadcrumb /
+   anchor-nav（ページ内リンクの丸ボタン）/ lower-sec（下層のセクション余白）/ job-cat（募集要項のカテゴリ行）
+   Figma: H2 コンポーネント PC 515:6588 / SP 1137:11043
+   ========================================================================== */
+
+/* ==========================================================================
+   Page head
+   背景のガラスの NI ロゴは Figma では動画ノード（ni-logo-only）を薄く敷いたもの。下層では静止画で置く。
+   id="js-fv" を付けると common.js が通過後に .header へ is-fixed を付ける（ハンバーガーに白い箱）
+   ========================================================================== */
+.page-head {
+  position: relative;
+  padding: 85px var(--side-margin) 64px;  /* SP のヘッダー実高 85（4 + 45 + 10 + 26）。パンくずの上 16 は .breadcrumb 側 */
+  overflow: hidden;
+}
+
+/* Figma: ni-logo-only（白地の動画ポスター）を重ねたもの。白を透過にした PNG（988×936）で置く。
+   SP 254×241（右 -32 / 上 32）、PC 878×832（右 -116 / 上 -255）。はみ出しは .page-head の overflow で切る */
+.page-head__ni {
+  position: absolute;
+  top: 32px;
+  right: -32px;
+  z-index: -1;
+  width: 254px;
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;   /* 折り返さず 1 行。長い記事タイトルは最後の項目を … で省略（Figma の指定どおり） */
+  gap: 10px;
+  padding-top: 16px;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.breadcrumb li {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.breadcrumb li + li::before {
+  content: "";
+  flex: none;
+  width: 7px;               /* 素材は上向きの山（7×4）。90° 回して右向き（見た目 4×7）にし、余った横幅を margin で詰める */
+  height: 4px;
+  margin-inline: -1.5px;
+  background: url("../img/lower/icon_breadcrumb.svg") center / 100% 100% no-repeat;
+  transform: rotate(90deg);
+}
+
+.breadcrumb li:last-child::before {
+  display: inline-block;
+  margin-right: 8.5px;
+  vertical-align: middle;
+}
+
+.breadcrumb li:last-child {
+  display: block;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.page-head__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 24px;
+}
+
+.page-head__en {
+  font-family: var(--ff-en);
+  font-size: 46px;
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.page-head__en,
+.page-head__jp {
+  width: fit-content;
+  background: var(--grd-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.page-head__jp {
+  font-size: var(--fs-tight-xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.page-head__read {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-top: 24px;
+  font-size: var(--fs-body-xs);
+  line-height: 1.65;
+}
+
+.page-head__read::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 10px;
+  background: url("../img/common/icon_dot.svg") center / contain no-repeat;
+}
+
+@media (min-width: 768px) {
+  .page-head {
+    padding: var(--header-h) var(--side-margin) 80px;
+  }
+
+  .page-head__ni {
+    top: -255px;
+    right: -116px;
+    width: 878px;
+  }
+
+  .breadcrumb {
+    padding-top: 24px;
+    font-size: var(--fs-body-2xs);
+  }
+
+  .breadcrumb li + li::before {
+    width: 9px;
+    height: 5px;
+    margin-inline: -2px;
+  }
+
+  .breadcrumb li:last-child::before {
+    margin-right: 8px;
+  }
+
+  .page-head__txt {
+    gap: 16px;
+    padding-top: 104px;
+  }
+
+  .page-head__en {
+    font-size: 80px;
+  }
+
+  .page-head__jp {
+    font-size: var(--fs-tight-s);
+  }
+
+  .page-head__read {
+    gap: 12px;
+    padding-top: 16px;
+  }
+
+  .page-head__read::before {
+    margin-top: 11px;
+  }
+}
+
+/* ==========================================================================
+   Anchor nav（ページ内リンクの丸ボタン。Figma: Frame 1382 anchor / sp anchor）
+   ========================================================================== */
+.anchor-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-inline: var(--side-margin);
+}
+
+.anchor-nav__link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 18px;
+  border-radius: 100px;
+  background: rgba(199, 219, 236, 0.4);
+  font-size: var(--fs-tight-2xs);
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.anchor-nav__link::after {
+  content: "";
+  flex: none;
+  width: 14.66px;
+  height: 14px;
+  background: url("../img/lower/icon_anchor_down_sp.svg") center / 100% 100% no-repeat;
+}
+
+@media (hover: hover) {
+  .anchor-nav__link:hover {
+    background: rgba(199, 219, 236, 0.75);
+  }
+}
+
+@media (min-width: 768px) {
+  .anchor-nav {
+    gap: 16px;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: 80px;   /* Figma: 1280 幅（左右 80） */
+  }
+
+  .anchor-nav__link {
+    gap: 16px;
+    height: 64px;
+    padding: 0 32px;
+    font-size: var(--fs-tight-xs);
+  }
+
+  .anchor-nav__link::after {
+    width: 25.49px;
+    height: 20px;
+    background-image: url("../img/lower/icon_anchor_down.svg");
+  }
+}
+
+/* ==========================================================================
+   More button（Figma: bnr/btn 855:25551。「次の10件をみる — 10 / 24件表示中 ＋」）
+   紺 70% の丸ボタン。開閉は lower.js の .js-more（インタビュー一覧だけは絞り込みと連動するので interview.js）
+   ========================================================================== */
+.more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  max-width: 100%;
+  padding: 14px 24px;
+  border-radius: 100px;
+  background: rgba(17, 24, 76, 0.7);
+  color: var(--c-white);
+  font-size: var(--fs-tight-2xs);
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.more-btn[hidden] {
+  display: none;
+}
+
+.more-btn__txt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.more-btn__line {
+  flex: none;
+  width: 24px;
+  height: 1px;
+  background: var(--c-border);
+}
+
+.more-btn__icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.more-btn:focus-visible {
+  outline: 2px solid var(--c-navy);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .more-btn:hover {
+    background: rgba(17, 24, 76, 0.85);
+  }
+
+  .more-btn:hover .more-btn__icon {
+    transform: rotate(90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .more-btn,
+  .more-btn__icon {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Lower section（下層の本文ブロック。左右 96 / 20）
+   ========================================================================== */
+.lower-sec {
+  padding-inline: var(--side-margin);
+}
+
+@media (min-width: 768px) {
+  .lower-sec {
+    max-width: 1440px;
+    margin-inline: auto;
+  }
+}
+
+/* ==========================================================================
+   Job category rows（募集要項一覧 562:15774 / SP 1140:15670）
+   罫線 → [見出し + 説明 | 職種リスト] を 80px 間隔でくり返す
+   ========================================================================== */
+.job-cats {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;              /* SP 1140:15677: 上 32、罫線と行の間 40、下 80 */
+  padding-top: 32px;
+  padding-bottom: var(--section-margin-l);
+}
+
+.job-cat {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 40px;
+  border-top: 1px solid var(--c-border);
+  scroll-margin-top: 24px;
+}
+
+.job-cat__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--item-gap);
+}
+
+.job-cat__head .sec-head__label {
+  width: fit-content;
+}
+
+.job-cat__desc {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.job-cat__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--item-gap);
+}
+
+@media (max-width: 767px) {
+  .job-cat__head {
+    gap: 24px;
+  }
+
+  .job-cat__head .sec-head__title {
+    line-height: 1.5;
+  }
+
+  .job-cat__head .sec-head__title--cap {
+    gap: 6px;
+  }
+}
+
+@media (min-width: 768px) {
+  .job-cats {
+    gap: 80px;
+    padding-top: 56px;
+  }
+
+  .job-cat {
+    padding-top: 80px;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--section-margin-m);
+  }
+
+  .job-cat__head {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .job-cat__head .sec-head__title--cap {
+    align-items: center;
+    gap: 8px;
+  }
+
+  .job-cat__head .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 0;
+  }
+
+  .job-cat__body {
+    flex: none;
+    align-items: flex-end;
+    width: 660px;
+  }
+
+  .job-cat__body .job__list {
+    width: 100%;
+  }
+
+  .job-cat__body .btn {
+    gap: 0;
+    min-width: 318px;
+    line-height: 1.4;   /* Figma: 高さ 54 */
+  }
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .page-head,
+  .lower-sec {
+    padding-inline: clamp(24px, 6.67vw, 96px);
+  }
+
+  .anchor-nav {
+    padding-inline: clamp(24px, 5.56vw, 80px);
+  }
+
+  .page-head__txt {
+    padding-top: clamp(56px, 7.2vw, 104px);
+  }
+
+  .page-head__en {
+    font-size: clamp(56px, 5.56vw, 80px);
+  }
+
+  .page-head__ni {
+    top: -17.7vw;
+    right: -8.06vw;
+    width: 60.97vw;
+  }
+
+  .job-cat {
+    gap: clamp(32px, 8.33vw, 120px);
+  }
+
+  .job-cat__body {
+    width: clamp(360px, 45.8vw, 660px);
+  }
+}

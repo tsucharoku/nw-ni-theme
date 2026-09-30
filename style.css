@@ -1,0 +1,10 @@
+/*
+Theme Name: NI Recruit
+Description: 日本インフォメーション株式会社 採用情報サイト（https://recruit.n-info.co.jp/）のテーマ。静的 HTML から起こしたもの。
+Version: 0.1.0
+Requires at least: 6.5
+Requires PHP: 8.0
+Text Domain: ni
+*/
+
+/* スタイルは assets/css/ にある（読み込みは inc/assets.php）。このファイルはテーマ情報だけ */

@@ -1,0 +1,843 @@
+/* ==========================================================================
+   cross-talk.css — 座談会 一覧 / 詳細
+   一覧: Figma PC 892:27331 / SP 1140:20025（行 = cross-talk-row 900:28613）
+   詳細: Figma PC 900:28232 / SP 1140:20431
+   - ct-list / ct-row … 一覧の行（番号 + タイトル + サマリー + ボタン | 四隅カッコの写真 + 参加者）
+   - ct-more        … 「次の5件をみる」の置き場所（ボタンは lower.css の .more-btn）
+   - ct-hero        … 詳細のメインビジュアル + タイトル
+   - ct-article / ct-members / ct-member … 詳細の 2 カラム（PC は参加メンバーが sticky）
+   - cross-talk-body … 本文ラッパー（ブロックエディタの出力を直下に並べる）
+   - ct-question / speech … 本文用の自己完結ブロック（親セレクタに依存しない。WP でブロックスタイル化する想定）
+   - ct-others / ct-card … その他の記事
+   ========================================================================== */
+
+/* ==========================================================================
+   一覧: 行のリスト（PC 892:27796 / SP 1140:20027）
+   行の間隔は section-margin-l（160 / 80）
+   ========================================================================== */
+.ct-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-margin-l);
+}
+
+/* SP: 番号 → タイトル → 写真の箱 → サマリー → ボタン を 24 間隔で縦積み（1140:20028） */
+.ct-row {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ct-row[hidden] {
+  display: none;
+}
+
+/* 「Cross Talk」+ #01（895:28099: 縦 16 間隔） */
+.ct-row__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.ct-row__label {
+  font-size: var(--fs-tight-2xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* # は 28px・数字は 56px、上揃え。Figma は text-box-trim（cap〜alphabetic）で文字の天地ぴったりの箱。
+   line-height 0.73（≒ 欧文の cap height）で同じ高さ 41px にする。上下の padding / margin は
+   background-clip: text の塗りが数字の丸みのはみ出しで欠けないようにするための逃げ */
+.ct-row__num {
+  display: flex;
+  align-items: flex-start;
+  margin-block: -4px;
+  padding-block: 4px;
+  font-weight: 500;
+  background: var(--grd-blue70);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ct-row__num small {
+  font-size: 28px;
+  line-height: 0.73;
+  letter-spacing: 0.04em;
+}
+
+.ct-row__num b {
+  font-size: 56px;
+  font-weight: 500;
+  line-height: 0.73;
+  letter-spacing: 0.03em;
+}
+
+/* タイトル（section-heading SP-sub: 22px / 1.5、cap 20×25・間隔 6） */
+.ct-row__title .sec-head__title {
+  line-height: 1.5;
+}
+
+.ct-row__title .sec-head__title--cap {
+  gap: 6px;
+}
+
+/* 写真の箱: 四隅カッコ 24 + 間隔 16 + 中身（左右 24）。中身は 写真 → 参加者 を 24 間隔 */
+.ct-row__media {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 40px 24px;
+}
+
+.ct-row__img {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 616 / 429;
+  border-radius: 8px;
+}
+
+.ct-row__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ct-row__members {
+  font-size: var(--fs-body-2xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.ct-row__summary {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (hover: hover) {
+  .ct-row__img:hover img {
+    transform: scale(1.04);
+  }
+
+  .ct-row__title a:hover {
+    opacity: 0.7;
+  }
+}
+
+.ct-row__title a {
+  transition: opacity 0.2s ease;
+}
+
+/* 出現: 行ごとにふわっと上がる（lower.js が is-inview を付ける）。JS が動かない環境では最初から見せる */
+@media (scripting: enabled) {
+  .ct-row[data-anim="inview"] {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ct-row[data-anim="inview"].is-inview {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-row[data-anim="inview"] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .ct-row__img img {
+    transition: none;
+  }
+}
+
+@media (min-width: 768px) {
+  /* PC（900:28225 右 / 900:28612 左）: 1248 = 文章 536 + 間 109 + 写真の箱 603。
+     列は fr で持ち、間だけ vw にして 768 まで縮む（1440 で 536 / 603 ちょうど）。
+     写真の箱は全行にまたがり、余った高さは最後の 1fr 行が受ける */
+  .ct-row {
+    --ct-gap: clamp(32px, 7.57vw, 109px);
+    display: grid;
+    grid-template-columns: minmax(0, 536fr) minmax(0, 603fr);
+    grid-template-rows: auto auto auto auto 1fr;
+    column-gap: var(--ct-gap);
+    row-gap: 0;
+  }
+
+  .ct-row__head,
+  .ct-row__title,
+  .ct-row__summary,
+  .ct-row__btn {
+    grid-column: 1;
+  }
+
+  .ct-row__head {
+    margin-bottom: 48px;   /* 892:27798: 番号 → 見出し 48 */
+  }
+
+  .ct-row__title,
+  .ct-row__summary {
+    margin-bottom: 24px;
+  }
+
+  .ct-row__media {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: start;
+    padding: 32px clamp(16px, 2.78vw, 40px);   /* カッコ 24 + 間隔 8、左右 40 */
+  }
+
+  .ct-row__img {
+    aspect-ratio: 523 / 364;
+  }
+
+  /* 番号の横から写真の下へ伸びる罫線（892:27893: 上 56.3、左 104 から 677px）。写真の箱（z-index 1）の下にもぐる */
+  .ct-row::before {
+    content: "";
+    position: absolute;
+    top: 56px;
+    left: 104px;
+    right: calc((100% - var(--ct-gap)) * 603 / 1139 - 80px);
+    height: 1px;
+    background: var(--c-border);
+  }
+
+  /* 偶数行は左右反転（写真が左、番号は右端・ボタンも右寄せ。900:28612） */
+  .ct-row:nth-child(even) {
+    grid-template-columns: minmax(0, 603fr) minmax(0, 536fr);
+  }
+
+  .ct-row:nth-child(even) .ct-row__head,
+  .ct-row:nth-child(even) .ct-row__title,
+  .ct-row:nth-child(even) .ct-row__summary,
+  .ct-row:nth-child(even) .ct-row__btn {
+    grid-column: 2;
+  }
+
+  .ct-row:nth-child(even) .ct-row__media {
+    grid-column: 1;
+  }
+
+  .ct-row:nth-child(even) .ct-row__head {
+    align-items: flex-end;
+  }
+
+  .ct-row:nth-child(even) .ct-row__btn {
+    justify-self: end;
+  }
+
+  .ct-row:nth-child(even)::before {
+    left: calc((100% - var(--ct-gap)) * 603 / 1139 - 80px);
+    right: 107px;
+  }
+
+  /* section-heading PC-sub: 32px / 1.5、cap 30.85×38 を中央揃え・間隔 8 */
+  .ct-row__title .sec-head__title--cap {
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ct-row__title .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 0;
+  }
+}
+
+/* 共通ボタンをこのページの寸法に（Figma Frame 1488 PC: 幅 248 × 高さ 54） */
+@media (min-width: 768px) {
+  .ct-row__btn.btn,
+  .ct-others__btn.btn {
+    min-width: 248px;
+    line-height: 1.4;
+  }
+}
+
+/* ==========================================================================
+   もっと見る（bnr/btn 855:25551）: 上 56、下 section-margin-l。SP 中央 / PC 右寄せ
+   ========================================================================== */
+.ct-more {
+  display: flex;
+  justify-content: center;
+  padding-top: 56px;
+  padding-bottom: var(--section-margin-l);
+}
+
+.ct-more.is-done {
+  padding-top: 0;
+}
+
+/* ボタン本体は lower.css の .more-btn */
+
+@media (min-width: 768px) {
+  .ct-more {
+    justify-content: flex-end;
+  }
+}
+
+/* ==========================================================================
+   詳細: ページ頭はパンくずだけ（H2 900:28233 / SP 1137:11743）。
+   記事タイトルが長いので折り返さず 1 行にして、最後の項目を … で省略（SP の高さ 185 を保つ）
+   ========================================================================== */
+.ct-page-head .breadcrumb {
+  flex-wrap: nowrap;
+}
+
+.ct-page-head .breadcrumb li {
+  flex: none;
+}
+
+.ct-page-head .breadcrumb li:last-child {
+  display: block;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.ct-page-head .breadcrumb li:last-child::before {
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* ==========================================================================
+   詳細: メインビジュアル + タイトル（PC 900:28234 / SP 1200:19639）
+   写真は左端から、右に余白（SP 24 / PC 96）を残して右側だけ角丸 8。黒 40% を重ねて白文字を左下に置く
+   ========================================================================== */
+.ct-hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 314px;
+  color: var(--c-white);
+}
+
+.ct-hero__img {
+  position: absolute;
+  top: 0;
+  right: 24px;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  border-radius: 0 8px 8px 0;
+}
+
+.ct-hero__img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.ct-hero__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ct-hero__txt {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 64px 48px 40px var(--side-margin);
+  font-weight: 500;
+}
+
+.ct-hero__label {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* SP: 307 幅に 3 行で高さ 114（= 26px × 1.45 × 3） */
+.ct-hero__title {
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+@media (min-width: 768px) {
+  .ct-hero {
+    max-width: 1440px;
+    min-height: 570px;
+    margin-inline: auto;
+  }
+
+  /* 1440 より広い画面では写真の左だけウィンドウ端まで伸ばす（右の余白 96 はコンテナ基準のまま） */
+  .ct-hero__img {
+    right: var(--side-margin);
+    left: min(0px, (100% - 100vw) / 2);
+  }
+
+  /* Frame 1378: 幅 635（左 96 + 文字 539）、下 64 */
+  .ct-hero__txt {
+    width: calc(539px + var(--side-margin));
+    max-width: 70%;
+    padding: 64px 0 64px var(--side-margin);
+  }
+
+  .ct-hero__title {
+    font-size: 36px;
+  }
+}
+
+/* ==========================================================================
+   詳細: 参加メンバー + 本文（PC 900:28250 / SP 1140:20440）
+   SP: 上 64 → メンバー → 40 → 本文。PC: 上 120、左 416（sticky）| 右 680
+   ========================================================================== */
+.ct-article__main {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-top: 64px;
+}
+
+/* 四隅カッコ 24 + 間隔 16 + 中身（左右 24 / PC 40） */
+.ct-members {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 40px 24px;
+}
+
+.ct-members__label {
+  width: fit-content;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ct-members__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* メンバー 1 人（Frame 1591 900:29087）: 丸写真 + 入社年のピル / 部署 / 名前 */
+.ct-member {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 16px;
+  border-radius: var(--radius);
+  background: rgba(199, 219, 236, 0.4);
+}
+
+.ct-member__img {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.ct-member__body {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.ct-member__year {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  margin-bottom: 5px;
+  padding: 1px 12px 0;
+  border-radius: 100px;
+  background: var(--c-white);
+  color: var(--c-blue);
+  font-size: var(--fs-tight-2xs);
+  white-space: nowrap;
+}
+
+.ct-member__dept {
+  margin-bottom: 2px;
+  font-size: var(--fs-tight-2xs);
+  font-weight: 300;
+}
+
+.ct-member__name {
+  font-size: var(--fs-tight-xs);
+  font-weight: 500;
+}
+
+@media (min-width: 1024px) {
+  .ct-article__main {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+    padding-top: 120px;
+  }
+
+  /* Figma では箱の上端が本文より 8px 下（128.3）。スクロール中は画面上 40px に留まる（CSS sticky。JS なし） */
+  .ct-members {
+    position: sticky;
+    top: 40px;
+    flex: 0 1 416px;
+    min-width: 336px;
+    margin-top: 8px;
+  }
+
+  .cross-talk-body {
+    flex: 0 1 680px;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .ct-members {
+    padding: 40px clamp(20px, 2.78vw, 40px);
+  }
+
+  .ct-member {
+    align-items: center;
+  }
+
+  .ct-member__img {
+    width: 88px;
+    height: 88px;
+  }
+}
+
+/* 768〜1023 は 2 カラムに足りないので SP と同じ縦積み（メンバーは 416 幅のまま左寄せ、本文は 680 まで） */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .ct-article__main {
+    gap: 56px;
+    padding-top: 80px;
+  }
+
+  .ct-members {
+    width: 416px;
+    max-width: 100%;
+  }
+
+  .cross-talk-body {
+    max-width: 680px;
+  }
+}
+
+/* ==========================================================================
+   本文ラッパー（PC 900:28251 / SP 1140:20441）
+   直下に h2 / p / figure / .ct-question / .speech を並べるだけで Figma の間隔になる:
+   - 見出し・質問の前: 32（PC 56）  - 質問 → 発言・発言どうし: 24（PC 32）
+   - 写真: 前後 32（PC 56）+ 写真自身の上下 32（Frame 2219 855:27212）
+   余白は margin の相殺を使うので display は block のまま（flex / grid にしない）
+   ========================================================================== */
+.cross-talk-body {
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.cross-talk-body > * + * {
+  margin-top: 24px;
+}
+
+.cross-talk-body > * + h2,
+.cross-talk-body > h2 + *,
+.cross-talk-body > * + .ct-question,
+.cross-talk-body > .ct-question + p {
+  margin-top: 32px;
+}
+
+/* SP: 335 幅に 3 行で高さ 75（= 18px × 1.4 × 3）。PC は 20px */
+.cross-talk-body > h2 {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.cross-talk-body > figure {
+  margin-block: 64px;
+}
+
+.cross-talk-body > figure img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 520 / 347;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.cross-talk-body > figure figcaption {
+  margin-top: 8px;
+  font-size: var(--fs-body-2xs);
+}
+
+@media (min-width: 768px) {
+  .cross-talk-body > * + * {
+    margin-top: 32px;
+  }
+
+  .cross-talk-body > * + h2,
+  .cross-talk-body > h2 + *,
+  .cross-talk-body > * + .ct-question {
+    margin-top: 56px;
+  }
+
+  .cross-talk-body > h2 {
+    font-size: 20px;
+  }
+
+  .cross-talk-body > figure {
+    margin-block: 88px;
+  }
+}
+
+/* ==========================================================================
+   質問ブロック（Frame 1449 855:27172）: 左に accent の縦罫、「Question 01」+ 質問文
+   自己完結（親に依存しない）
+   ========================================================================== */
+.ct-question {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding-left: 32px;
+  border-left: 1px solid var(--c-accent);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ct-question__label {
+  margin: 0;
+  font-size: 18px;
+  background: var(--grd-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ct-question__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   発言ブロック（Frame 2242 900:28887 / SP 1158:27381）: 丸アバター + 名前 | 発言
+   自己完結（親に依存しない）。--left = アバターが左（Figma はすべてこれ）、--right = 右（左右反転）
+   <div class="speech speech--left">
+     <div class="speech__who"><img class="speech__avatar" width="80" height="80"><span class="speech__name">氏名</span></div>
+     <div class="speech__text"><p>…</p></div>
+   </div>
+   ========================================================================== */
+.speech {
+  display: flex;
+  align-items: flex-start;
+  gap: 27px;   /* SP: アバター 64 + 27 = 発言の左 91（1158:27501） */
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.speech--right {
+  flex-direction: row-reverse;
+}
+
+.speech__who {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 64px;
+  margin: 0;
+}
+
+.speech__avatar {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.speech__name {
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.speech__text {
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: 16px;
+}
+
+.speech__text > * {
+  margin: 0;
+}
+
+.speech__text > * + * {
+  margin-top: 1em;
+}
+
+@media (min-width: 768px) {
+  .speech {
+    gap: 32px;
+  }
+
+  .speech__who {
+    width: 80px;
+  }
+
+  .speech__avatar {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* ==========================================================================
+   その他の記事（PC 900:28297 / SP 1140:20492）: 上下 section-margin-l、見出し → カード → ボタン を 32 間隔
+   ========================================================================== */
+.ct-others {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-block: var(--section-margin-l);
+}
+
+.ct-others__head .sec-head__label {
+  width: fit-content;
+}
+
+.ct-others__head .sec-head__title {
+  line-height: 1.5;
+}
+
+.ct-others__head .sec-head__title--cap {
+  gap: 6px;
+}
+
+.ct-others__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* カード（speech-wrap/Frame 2251 900:29014）: 写真 389:271・角丸 8 + タイトル */
+.ct-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ct-card__img {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 389 / 271;
+  border-radius: 8px;
+}
+
+.ct-card__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* SP は 14px・2 行で省略（1158:27663: 高さ 45） */
+.ct-card__title {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.65;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+@media (hover: hover) {
+  .ct-card:hover .ct-card__img img {
+    transform: scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-card__img img {
+    transition: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .ct-others__head .sec-head__title--cap {
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ct-others__head .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 0;
+  }
+
+  .ct-others__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 48px 40px;
+  }
+
+  /* PC は 3 件まで */
+  .ct-others__list > li:nth-child(n + 4) {
+    display: none;
+  }
+
+  .ct-card {
+    gap: 24px;
+  }
+
+  .ct-card__title {
+    display: block;
+    font-size: 16px;
+  }
+
+  .ct-others__btn {
+    align-self: flex-end;
+  }
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   一覧の行は上の fr + vw で縮むので、ここでは見出しの大きさと固定値だけ
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .ct-row__title .sec-head__title,
+  .ct-others__head .sec-head__title {
+    font-size: clamp(24px, 2.22vw, 32px);
+  }
+
+  .ct-row__head {
+    margin-bottom: clamp(32px, 3.33vw, 48px);
+  }
+
+  .ct-hero {
+    min-height: clamp(400px, 39.6vw, 570px);
+  }
+
+  .ct-hero__img {
+    right: clamp(24px, 6.67vw, 96px);
+  }
+
+  .ct-hero__txt {
+    width: calc(539px + clamp(24px, 6.67vw, 96px));
+    padding-left: clamp(24px, 6.67vw, 96px);
+  }
+
+  .ct-hero__title {
+    font-size: clamp(28px, 2.5vw, 36px);
+  }
+
+  .ct-others__list {
+    gap: 48px clamp(20px, 2.78vw, 40px);
+  }
+}

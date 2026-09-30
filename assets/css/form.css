@@ -1,0 +1,740 @@
+/* ==========================================================================
+   form.css — フォーム（Contact Form 7 の出力 DOM 前提）/ 完了・404 のメッセージ
+   使うページ: casual-talk/（900:29131 / SP 1140:20797）、casual-talk/thanks/（900:29657 / SP 1140:21161）、
+               404.html（900:30222 / SP 1140:21350）、募集要項詳細のエントリーフォーム（565:17165 内 567:17870）
+   Figma コンポーネント: field 1158:26259（PC 567:18270 / SP 1158:26243）
+
+   - `.wpcf7` を置けばどこでも同じ見た目になる（.page-head など他のブロックに依存しない）
+   - 行の構造（.form__row / __label / __field）は CF7 のフォームテンプレートに自分で書く部分。
+     部品の見た目は CF7 が出すクラス（.wpcf7-text / -select / -date / -file / -checkbox / -acceptance / -submit）に当てる
+   - 入力欄の地色は変数 --input-bg。白地に置くとき（募集要項詳細）は #ebf0f5、
+     淡い青のパネル .form-panel の中（カジュアル面談）は白（Figma の変数 input-bg と同じ切り替え）
+   - WP 化メモ: CF7 の自動 <p> / <br> は切る（add_filter('wpcf7_autop_or_not', '__return_false')）。
+     CF7 標準の styles.css と併用しても崩れないよう、標準 CSS が持つ指定（list-item の margin、response-output の枠など）は上書きしてある
+   ========================================================================== */
+
+/* ==========================================================================
+   Form panel（カジュアル面談 900:29562 / SP 1140:20800）
+   PC: 904 幅・中央・角丸 8・左右 58 上下 72 / SP: 画面幅いっぱい・左右 20 上下 64・下はフッターに接する
+   ========================================================================== */
+.form-sec {
+  padding-bottom: 0;
+}
+
+.form-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 64px var(--side-margin);
+  background: rgba(199, 219, 236, 0.4);
+  --input-bg: var(--c-white);
+}
+
+/* リード（900:29563）: 黒丸つきリスト。Figma のマーカー字下げ 1.5em */
+.form-panel__lead {
+  padding-left: 1.5em;
+  list-style: disc;
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.form-panel__lead a {
+  text-decoration: underline;
+  text-underline-position: from-font;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 768px) {
+  .form-sec {
+    max-width: 1440px;
+    margin-inline: auto;
+    padding: 0 var(--side-margin) var(--section-margin-l);
+  }
+
+  .form-panel {
+    width: 100%;
+    max-width: 904px;
+    margin-inline: auto;
+    padding: 72px 58px;
+    border-radius: 8px;
+  }
+}
+
+/* ==========================================================================
+   CF7 の外枠
+   ========================================================================== */
+.wpcf7 {
+  --input-bg: #ebf0f5;          /* Figma: input-bg の既定値（白地に置くとき） */
+  --form-error: #c9444b;        /* エラーの赤。Figma に指定が無いので紺・青のトーンに合わせた落ち着いた赤 */
+  width: 100%;
+}
+
+.form-panel .wpcf7 {
+  --input-bg: var(--c-white);
+}
+
+.wpcf7 .screen-reader-response {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  word-wrap: normal;
+}
+
+.wpcf7-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   行（field）— PC: ラベル 250 + 24 + 入力 514、上下 16 / SP: 縦積み gap 8、上下 12
+   チェックボックスの行（.form__row--top）は上下 24・上揃え。行の間は 1px の罫線
+   ========================================================================== */
+.form__row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-block: 12px;
+}
+
+.form__row + .form__row {
+  border-top: 1px solid var(--c-border);
+}
+
+.form__row--top {
+  padding-block: 24px;
+}
+
+.form__label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  font-size: var(--fs-tight-xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* 必須バッジ（567:17876）: 高さ 20・左右 6・角丸 3・12px Regular */
+.form__req {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  height: 20px;
+  padding-inline: 6px;
+  border-radius: 3px;
+  background: var(--c-blue);
+  color: var(--c-white);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.form__field {
+  min-width: 0;
+}
+
+/* ファイル選択の横の注記（567:18274 ※様式不問） */
+.form__field--file {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+.form__note {
+  color: var(--c-gray);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .form__row {
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    padding-block: 16px;
+  }
+
+  .form__row--top {
+    align-items: flex-start;
+    padding-block: 24px;
+  }
+
+  /* テキストエリアの行（933:14737）は上下 16 のまま上揃え */
+  .form__row--textarea {
+    align-items: flex-start;
+  }
+
+  .form__label {
+    flex: none;
+    width: 250px;
+  }
+
+  .form__field {
+    flex: 1 1 0;
+    max-width: 514px;
+  }
+}
+
+/* ==========================================================================
+   入力部品（CF7 のクラス）
+   ========================================================================== */
+.wpcf7-form-control-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+/* 内容の幅に合わせる select（性別 I933:14635）と、ファイル選択 */
+.form__field--hug .wpcf7-form-control-wrap,
+.form__field--file .wpcf7-form-control-wrap {
+  width: auto;
+  max-width: 100%;
+}
+
+.wpcf7-text,
+.wpcf7-select,
+.wpcf7-date,
+.wpcf7-textarea {
+  display: block;
+  width: 100%;
+  height: 48px;
+  margin: 0;
+  padding: 0 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background-color: var(--input-bg);
+  color: var(--c-black);
+  font-family: inherit;
+  font-size: var(--fs-body-xs);   /* 16px。iOS の自動ズームも起きない */
+  font-weight: 300;
+  line-height: 1.65;
+  letter-spacing: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wpcf7-text::placeholder,
+.wpcf7-textarea::placeholder {
+  color: var(--c-gray);
+  opacity: 1;
+}
+
+.wpcf7-text:focus,
+.wpcf7-select:focus,
+.wpcf7-date:focus,
+.wpcf7-textarea:focus {
+  outline: none;
+  border-color: var(--c-blue);
+  box-shadow: 0 0 0 3px rgba(99, 120, 174, 0.2);
+}
+
+/* textarea（PC 933:14737: 行 200 − 上下 16×2 = 168、内側 上 14 / SP 1140:20821: 行 190 − 12×2 − ラベル 22 − gap 8 = 136、内側 上 16） */
+.wpcf7-textarea {
+  height: 136px;
+  padding: 16px 16px 14px;
+  resize: vertical;
+}
+
+/* select（矢印 567:18484: 9×4 の線。文字との間 24、右 16） */
+.wpcf7-select {
+  padding-right: 49px;
+  background-image: url("../img/form/icon_select_arrow.svg");
+  background-repeat: no-repeat;
+  background-position: right 15.25px center;
+  background-size: 10.5px 5.5px;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+/* 未選択（value=""）の間はプレースホルダーと同じグレー。form.js が .is-empty を付け外しする（WP でも使う小さな補助） */
+.wpcf7-select.is-empty,
+.wpcf7-date.is-empty {
+  color: var(--c-gray);
+}
+
+.wpcf7-select option {
+  color: var(--c-black);
+}
+
+.form__field--hug .wpcf7-select {
+  width: auto;
+  min-width: 199px;   /* Figma: 16 + 「選択してください」132 + 24 + 矢印 9 + 16 + 枠 2（select は字間ぶんを幅に数えないので下限で合わせる） */
+  max-width: 100%;
+}
+
+/* date（933:14565: PC 280 幅 / SP 全幅、左右 20、16px Regular、右にカレンダー 16×16） */
+.wpcf7-date {
+  padding-inline: 20px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.wpcf7-date::-webkit-date-and-time-value {
+  text-align: left;   /* iOS は中央寄せになる */
+}
+
+.wpcf7-date::-webkit-calendar-picker-indicator {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  background: url("../img/form/icon_calendar.svg") center / 16px 16px no-repeat;
+  opacity: 1;
+  cursor: pointer;
+}
+
+/* file（567:18271: 紺の丸ボタン 高さ 40・左右 24・14px Medium。選択後のファイル名は右に 14px Light グレー） */
+.wpcf7-file {
+  display: block;
+  max-width: 100%;
+  color: var(--c-gray);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.4;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+
+.wpcf7-file::file-selector-button {
+  height: 40px;
+  margin: 0 14px 0 0;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 100px;
+  background: var(--c-navy);
+  color: var(--c-white);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.wpcf7-file:focus-visible {
+  outline: 2px solid var(--c-blue);
+  outline-offset: 4px;
+  border-radius: 100px;
+}
+
+/* checkbox / acceptance（1350:20568: 20×20 の白い四角・角丸 3・枠 #cbdce9、文字との間 12、項目の間 12）
+   input は見えなくして .wpcf7-list-item-label::before に四角を描く */
+.wpcf7-checkbox,
+.wpcf7-radio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.wpcf7 .wpcf7-list-item {
+  display: block;
+  margin: 0;
+}
+
+.wpcf7-list-item label {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.wpcf7-list-item input[type="checkbox"],
+.wpcf7-list-item input[type="radio"] {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.wpcf7-list-item-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: var(--fs-tight-xs);
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.wpcf7-list-item-label::before {
+  content: "";
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;   /* 1 行 22.4px の中央に 20px の四角 */
+  border: 1px solid var(--c-border);
+  border-radius: 3px;
+  background: var(--c-white);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+/* チェック印（Figma は未チェックのみ。紺地に白のチェックを CSS の罫線で描く） */
+.wpcf7-list-item-label::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 7px;
+  width: 6px;
+  height: 10px;
+  border: solid var(--c-white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.15s ease;
+}
+
+.wpcf7-list-item input:checked + .wpcf7-list-item-label::before {
+  border-color: var(--c-navy);
+  background: var(--c-navy);
+}
+
+.wpcf7-list-item input:checked + .wpcf7-list-item-label::after {
+  transform: rotate(45deg) scale(1);
+}
+
+.wpcf7-radio .wpcf7-list-item-label::before {
+  border-radius: 50%;
+}
+
+.wpcf7-list-item input:focus-visible + .wpcf7-list-item-label::before {
+  outline: 2px solid var(--c-blue);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   記入された情報の取扱について（note 933:14753 / SP 1140:20822）
+   見出しの上 28・下 10。枠は高さ固定（PC 205 / SP 140）で中だけスクロール
+   ========================================================================== */
+.form__policy {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 28px;
+  border-top: 1px solid var(--c-border);   /* SP は textarea の行との間に罫線あり（1350:21555）。PC はなし */
+}
+
+.form__policy-title {
+  font-size: var(--fs-tight-xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.form__policy-box {
+  height: 140px;
+  padding: 20px 8px 20px 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-white);
+}
+
+.form__policy-body {
+  height: 100%;
+  padding-right: 12px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  color: var(--c-gray);
+  font-size: 14px;   /* Figma: Body-Light/2XS。SP も 14 のまま（1140:20825） */
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.form__policy-body p + p {
+  margin-top: 1.65em;   /* Figma は空行 1 行で段落を分けている */
+}
+
+/* スクロールバー（scroll-rail 933:14757: 幅 6・角丸 3・#6e7179） */
+.form__policy-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.form__policy-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.form__policy-body::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: var(--c-gray);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .form__policy-body {
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-gray) transparent;
+  }
+}
+
+.form__policy-body:focus-visible {
+  outline: 2px solid var(--c-blue);
+  outline-offset: 4px;
+}
+
+/* 同意（agree 933:14758: 中央・上下 24。四角の枠は #6e7179、文字は下線つき） */
+.form__agree {
+  display: flex;
+  justify-content: center;
+  padding-block: 24px;
+}
+
+.form__agree .wpcf7-form-control-wrap {
+  width: auto;
+}
+
+.wpcf7-acceptance .wpcf7-list-item-label::before {
+  border-color: var(--c-gray);
+}
+
+.wpcf7-acceptance .wpcf7-list-item-label {
+  text-decoration: underline;
+  text-underline-position: from-font;
+}
+
+.wpcf7-acceptance .wpcf7-list-item-label::before,
+.wpcf7-acceptance .wpcf7-list-item-label::after {
+  text-decoration: none;
+}
+
+@media (min-width: 768px) {
+  .wpcf7-textarea {
+    height: 168px;
+    padding-top: 14px;
+  }
+
+  .form__field--date .wpcf7-form-control-wrap {
+    width: 280px;
+    max-width: 100%;
+  }
+
+  .form__policy {
+    border-top: 0;
+  }
+
+  .form__policy-box {
+    height: 205px;
+    padding: 20px 4px 20px 24px;
+  }
+}
+
+/* ==========================================================================
+   送信（input[type=submit]。Figma は矢印なしの紺ベタ）
+   既定: PC 288×54（募集要項詳細 1158:26849）/ SP 全幅×54（1158:27301）
+   .form-panel の中（カジュアル面談 933:14762）は PC 320×64
+   ========================================================================== */
+.form__submit {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.wpcf7-submit {
+  display: block;
+  width: 100%;
+  height: 54px;
+  margin: 0;
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--c-navy);
+  color: var(--c-white);
+  font-family: inherit;
+  font-size: var(--fs-tight-xs);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.wpcf7-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.wpcf7-submit:focus-visible {
+  outline: 2px solid var(--c-blue);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .wpcf7-submit:not(:disabled):hover {
+    background: var(--c-btn);
+  }
+
+  .wpcf7-file:hover::file-selector-button {
+    opacity: 0.8;
+  }
+}
+
+/* CF7 が submit の直後に出す <span class="wpcf7-spinner">。ボタンの中央寄せを崩さないよう右に浮かせる */
+.wpcf7 .wpcf7-spinner {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  margin: -12px 0 0;
+}
+
+@media (min-width: 768px) {
+  .wpcf7-submit {
+    width: 288px;
+  }
+
+  .form-panel .wpcf7-submit {
+    width: 320px;
+    height: 64px;
+  }
+}
+
+/* ==========================================================================
+   エラー / 送信結果（CF7 が出す要素。Figma に指定なし → トーンを合わせて用意）
+   ========================================================================== */
+.wpcf7-not-valid-tip {
+  display: block;
+  margin-top: 6px;
+  color: var(--form-error);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.wpcf7-text.wpcf7-not-valid,
+.wpcf7-select.wpcf7-not-valid,
+.wpcf7-date.wpcf7-not-valid,
+.wpcf7-textarea.wpcf7-not-valid {
+  border-color: var(--form-error);
+}
+
+.wpcf7-checkbox.wpcf7-not-valid .wpcf7-list-item-label::before,
+.wpcf7-acceptance.wpcf7-not-valid .wpcf7-list-item-label::before {
+  border-color: var(--form-error);
+}
+
+.wpcf7 form .wpcf7-response-output {
+  margin: 24px 0 0;
+  padding: 14px 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  background: var(--c-white);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.65;
+  text-align: center;
+}
+
+.wpcf7 form.init .wpcf7-response-output,
+.wpcf7 form.resetting .wpcf7-response-output,
+.wpcf7 form.submitting .wpcf7-response-output {
+  display: none;
+}
+
+.wpcf7 form.invalid .wpcf7-response-output,
+.wpcf7 form.unaccepted .wpcf7-response-output,
+.wpcf7 form.payment-required .wpcf7-response-output,
+.wpcf7 form.failed .wpcf7-response-output,
+.wpcf7 form.aborted .wpcf7-response-output,
+.wpcf7 form.spam .wpcf7-response-output {
+  border-color: var(--form-error);
+  color: var(--form-error);
+}
+
+.wpcf7 form.sent .wpcf7-response-output {
+  border-color: var(--c-navy);
+  color: var(--c-navy);
+}
+
+/* ==========================================================================
+   完了・404 のメッセージ（main 900:29719 / 900:30224、SP 1140:21163 / 1140:21352）
+   PC: 左 128・gap 32・下 160、見出し 32px 左寄せ、ボタン 288×54
+   SP: 左右 20・gap 24・下 80、見出し 24px 中央寄せ、ボタン全幅
+   ========================================================================== */
+.msg {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 0 var(--side-margin) var(--section-margin-l);
+}
+
+.msg__title {
+  width: 100%;
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.msg__txt {
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .msg {
+    gap: 32px;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-left: 128px;
+  }
+
+  .msg__title {
+    text-align: left;
+  }
+
+  .msg .btn {
+    gap: 0;
+    width: 288px;
+    line-height: 1.4;   /* Figma PC の Frame 1488: 高さ 54 */
+  }
+}
+
+/* ページ頭がパンくずだけのとき（完了・404 の H2 900:30144: 高さ PC 232.7 / SP 185）。
+   背景の NI ロゴは本文側まではみ出して見える（Figma の ni 枠は高さ 655）ので、縦は切らず横だけ切る */
+.page-head--bare {
+  overflow: visible;
+  overflow-x: clip;
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .form-sec {
+    padding-inline: clamp(24px, 6.67vw, 96px);
+  }
+
+  .form-panel {
+    padding: clamp(48px, 5vw, 72px) clamp(24px, 4.03vw, 58px);
+  }
+
+  .form__label {
+    width: clamp(190px, 17.36vw, 250px);
+  }
+
+  .msg {
+    padding-left: clamp(24px, 8.89vw, 128px);
+    padding-right: clamp(24px, 6.67vw, 96px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wpcf7 *,
+  .wpcf7 *::before,
+  .wpcf7 *::after {
+    transition: none !important;
+  }
+}

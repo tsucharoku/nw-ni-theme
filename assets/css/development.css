@@ -1,0 +1,987 @@
+/* ==========================================================================
+   development.css — 教育・研修・キャリアパス
+   Figma: PC 553:10756（Container 553:10759）/ SP 1137:10920（Container 1140:13959）
+   dev-intro（導入 + 3 つの特長）/ dev-sec（セクション枠）/ dev-tabs（丸タブ。見た目は .job__tab を再利用）/
+   growth（成長ステップ: タブ + 横スクロール 1069:14743）/ dev-h3（h3 557:12835）/ grade（等級制度）/
+   icon-card（562:13897）/ career-path・career-case・career-stage（キャリアパス 557:12580）
+   ========================================================================== */
+
+/* ==========================================================================
+   導入（553:10761 / SP 1140:13961）
+   ========================================================================== */
+.dev-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dev-intro__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dev-intro__title {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.dev-intro__read {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.dev-intro__list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 特長カード（Frame 1419 553:12035） */
+.dev-feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 24px 24px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 15px rgba(0, 36, 119, 0.12);
+  text-align: center;
+}
+
+.dev-feature__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 4px;
+}
+
+.dev-feature__title {
+  margin-bottom: 8px;
+  font-size: var(--fs-tight-s);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.dev-feature__txt {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .dev-intro {
+    gap: 32px;
+  }
+
+  .dev-intro__txt {
+    gap: 24px;
+  }
+
+  .dev-intro__title {
+    font-size: var(--fs-h2);
+  }
+
+  .dev-intro__list {
+    flex-direction: row;
+    gap: 40px;
+  }
+
+  .dev-feature {
+    flex: 1 1 0;
+    padding: 40px 24px 32px;
+    box-shadow: 0 30px 30px rgba(0, 36, 119, 0.12);
+  }
+}
+
+/* ==========================================================================
+   Section 枠: 上 80 / 160、見出し → 本文 32 / 56。最後（キャリアパス）だけ下にも余白
+   ========================================================================== */
+.dev-sec {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-top: var(--section-margin-l);
+}
+
+.career-path {
+  padding-bottom: var(--section-margin-l);
+}
+
+/* section-heading（PC 603:9035 / SP 611:9697）: 共通 .sec-head との差分 */
+.dev-sec .sec-head__title {
+  line-height: 1.5;
+}
+
+.dev-sec .sec-head__title--cap {
+  gap: 6px;
+}
+
+.dev-sec .sec-head__read {
+  gap: 8px;
+  padding-left: 10px;
+}
+
+/* 丸タブ（Frame 1382）。ボタンは components.css の .job__tab */
+.dev-tabs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.dev-tabs--wrap {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.dev-tabs .job__tab {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+@media (hover: hover) {
+  .dev-tabs .job__tab:hover {
+    background: rgba(199, 219, 236, 0.75);
+  }
+}
+
+@media (min-width: 768px) {
+  .dev-sec {
+    gap: 56px;
+  }
+
+  .dev-sec .sec-head__title--cap {
+    align-items: center;
+    gap: 8px;
+  }
+
+  .dev-sec .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 0;
+  }
+
+  .dev-sec .sec-head__read {
+    gap: 12px;
+    padding-left: 20px;
+    font-weight: 400;
+  }
+
+  .dev-tabs {
+    flex-direction: row;
+    gap: 16px;
+  }
+}
+
+/* ==========================================================================
+   成長ステップ（557:12255 / process-step 1069:14743）
+   帯は右端まで裁ち落とし（PC 1344 = 1440 − 96、SP 355）で横スクロール
+   ========================================================================== */
+.growth__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.growth__bar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.growth__hint {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: var(--fs-tight-xs);
+  line-height: 1.4;
+}
+
+.growth__hint-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+/* scroll-indicator（684:6768）: 線が左から伸びて左から消える 2 秒ループ（Figma のモーション 687:6746） */
+.growth__hint-line {
+  width: 40px;
+  height: 1px;
+  background: #b5ccea;
+  transform-origin: left center;
+}
+
+.growth__scroll {
+  margin-right: calc(-1 * var(--side-margin));
+  padding: 32px 0 24px 24px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: 8px 0 0 8px;
+  background: rgba(199, 219, 236, 0.4);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.growth__scroll:focus-visible {
+  outline: 2px solid var(--c-navy);
+  outline-offset: 2px;
+}
+
+.growth__scroll.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.growth__list {
+  display: flex;
+  gap: 30px;
+  width: max-content;
+}
+
+.growth-step {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-start;
+  width: min(352px, 80vw);   /* Figma は SP も 352。375 幅で次のカードが覗くよう 80vw まで */
+}
+
+.growth-step__no {
+  margin-bottom: 6px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.growth-step__badge {
+  padding: 6px 16px 6px 12px;
+  border-radius: 4px 60px 60px 0;
+  background: var(--c-navy);
+  color: var(--c-white);
+  font-size: var(--fs-tight-xs);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* ピン（Frame 2047: 白縁の丸 + 下へ 20px の線）。横罫はピンの丸の中心を通す */
+.growth-step__pin {
+  position: relative;
+  align-self: stretch;
+  height: 36px;
+  margin-top: 8px;           /* バッジ → ピン枠 16、SVG は上に 8 はみ出す */
+  padding-left: 16px;
+}
+
+.growth-step__pin::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: -24px;              /* 最後のステップではこのはみ出しが右の余白になる */
+  left: -24px;
+  height: 1px;
+  background: var(--c-border);
+}
+
+.growth-step__pin img {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 36px;
+}
+
+.growth-step__card {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 4px;
+  align-self: stretch;
+  padding: 24px;
+  border-radius: var(--radius);
+  background: var(--c-white);
+}
+
+.growth-step__title {
+  color: var(--c-navy);
+  font-size: var(--fs-tight-ss);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.growth-step__txt {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .growth__body {
+    gap: 24px;
+  }
+
+  .growth__bar {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .growth__hint {
+    margin-left: auto;
+  }
+
+  .growth__hint-icon {
+    margin-left: 0;
+  }
+
+  .growth__hint-line {
+    width: 56px;
+  }
+
+  .growth__scroll {
+    padding: 48px 0 48px 48px;
+    cursor: grab;
+  }
+
+  .growth-step {
+    width: 352px;
+  }
+
+  .growth-step__no {
+    font-size: var(--fs-tight-s);
+  }
+
+  .growth-step__pin::before {
+    right: -48px;
+    left: -48px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .growth__hint-line {
+    animation: growth-hint-line 2s linear infinite;
+  }
+}
+
+@keyframes growth-hint-line {
+  0%    { transform: scaleX(0); transform-origin: left center; }
+  40%   { transform: scaleX(1); transform-origin: left center; animation-timing-function: ease-in-out; }
+  40.1% { transform: scaleX(1); transform-origin: right center; animation-timing-function: ease-in-out; }
+  80%   { transform: scaleX(0); transform-origin: right center; }
+  100%  { transform: scaleX(0); transform-origin: right center; }
+}
+
+/* ==========================================================================
+   研修・教育制度（576:7122）
+   ========================================================================== */
+.training__blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.training__block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.training__block--gap {
+  padding-top: 24px;
+}
+
+.training__read {
+  font-size: var(--fs-tight-xs);
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+/* h3（557:12835）: 左の 3px のグラデ線は Figma のベクター */
+.dev-h3 {
+  display: flex;
+  align-items: center;
+  min-height: 68px;
+  padding: 8px 24px;
+  border-radius: var(--radius);
+  background: url("../img/development/h3_bar.svg") left center / 3px 100% no-repeat, rgba(199, 219, 236, 0.4);
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* 等級制度（557:12508 / SP 1140:13999） */
+.grade {
+  position: relative;
+}
+
+.grade__list {
+  display: flex;
+  flex-direction: column;
+  margin-inline: 24px;
+}
+
+.grade__cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 0 20px 10px;
+}
+
+.grade__cell--1 { background: rgba(27, 58, 152, 0.1); }
+.grade__cell--2 { background: rgba(27, 58, 152, 0.2); }
+.grade__cell--3 { background: rgba(27, 58, 152, 0.4); color: var(--c-white); }
+.grade__cell--4 { background: rgba(27, 58, 152, 0.6); color: var(--c-white); }
+.grade__cell--5 { background: rgba(27, 58, 152, 0.8); color: var(--c-white); }
+.grade__cell--6 { background: var(--c-navy); color: var(--c-white); }
+
+.grade__code {
+  flex: none;
+  width: 71px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: right;
+}
+
+.grade__label {
+  font-size: var(--fs-tight-xs);
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;       /* Figma も 1 行（S2 は行の右 padding に少しはみ出す） */
+}
+
+.grade__badge {
+  position: absolute;
+  top: 50%;
+  left: -24px;
+  padding: 6px 12px;
+  border-radius: 60px;
+  background: var(--c-navy);
+  color: var(--c-white);
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: nowrap;
+  transform: translateY(-50%);
+}
+
+/* 注記: SP は右に縦書き（J1〜S2 の 4 行ぶん）、PC は下に横書き（4 セルぶん）。前後の線は罫線 */
+.grade__note {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 24px;
+  height: 66.667%;
+  color: var(--c-gray);
+  font-size: 11px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.grade__note span {
+  writing-mode: vertical-rl;
+  white-space: nowrap;
+}
+
+.grade__note::before,
+.grade__note::after {
+  content: "";
+  flex: 1 1 0;
+  align-self: flex-start;
+  width: 8px;
+  margin-left: 4px;
+  border-right: 1px solid var(--c-border);
+}
+
+.grade__note::before { border-top: 1px solid var(--c-border); }
+.grade__note::after  { border-bottom: 1px solid var(--c-border); }
+
+/* icon-card（562:13897）: SP は横並び、PC は縦 4 列 */
+.icon-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.icon-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px;
+  border-radius: var(--radius);
+  background: rgba(199, 219, 236, 0.4);
+}
+
+.icon-card__icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  background: var(--c-white);
+}
+
+.icon-card__icon img {
+  width: 40px;
+  height: 40px;
+}
+
+.icon-card__txt {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.icon-card__title {
+  color: var(--c-navy);
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.icon-card__desc {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .training__blocks {
+    gap: 80px;
+  }
+
+  .training__block {
+    gap: 24px;
+  }
+
+  .dev-h3 {
+    font-size: var(--fs-tight-s);
+  }
+
+  .grade__list {
+    flex-direction: row;
+    margin-inline: 0;
+  }
+
+  .grade__cell {
+    flex: 1 1 0;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    height: 145px;
+    padding: 0 10px;
+    text-align: center;
+  }
+
+  .grade__code {
+    width: auto;
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .grade__label {
+    white-space: nowrap;
+  }
+
+  .grade__badge {
+    top: 124.3px;
+    left: 50%;
+    padding: 6px 16px;
+    font-size: var(--fs-tight-2xs);
+    transform: translateX(-50%);
+  }
+
+  .grade__note {
+    position: static;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px;
+    width: 66.667%;
+    height: auto;
+    margin-top: 23.3px;
+    font-size: var(--fs-tight-2xs);
+    line-height: 1.4;
+  }
+
+  .grade__note span {
+    padding-top: 6px;
+    writing-mode: horizontal-tb;
+  }
+
+  .grade__note::before,
+  .grade__note::after {
+    align-self: auto;
+    width: auto;
+    height: 18px;
+    margin-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .grade__note::before { border-left: 1px solid var(--c-border); }
+  .grade__note::after  { border-right: 1px solid var(--c-border); }
+
+  .icon-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .icon-card {
+    flex-direction: column;
+    align-items: center;
+    padding: 32px;
+  }
+
+  .icon-card__icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .icon-card__txt {
+    flex: none;
+    align-self: stretch;
+  }
+
+  .icon-card__title {
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   キャリアパス（557:12580）: タブ → 罫線 → [Case の本文 744 | Interview 384（sticky）]
+   ========================================================================== */
+.career-path__panels {
+  padding-top: 48px;         /* SP: 罫線 → 32 + 16 */
+  border-top: 1px solid var(--c-border);
+}
+
+.career-case {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.career-case[hidden] {
+  display: none;
+}
+
+.career-case__main,
+.career-case__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  min-width: 0;
+}
+
+.career-case__head {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.career-case__label {
+  width: fit-content;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.career-case__route {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.career-case__route img {
+  flex: none;
+  width: 9px;
+  height: 11px;
+  transform: rotate(90deg);  /* 素材は上向きの三角（Polygon 1） */
+}
+
+.career-case__role {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 32px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 15px rgba(0, 36, 119, 0.12);
+  color: var(--c-navy);
+  font-size: var(--fs-tight-xs);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.career-case__lead {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.career-case__stages {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.career-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.career-stage + .career-stage {
+  padding-top: 24px;
+  border-top: 1px solid var(--c-border);
+}
+
+.career-stage__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.career-stage__badge {
+  flex: none;
+  width: 108px;
+  padding: 6px 12px;
+  border-radius: 8px 100px 100px 0;
+  background: var(--c-navy);
+  color: var(--c-white);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.career-stage__title {
+  color: var(--c-navy);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.career-stage__txt {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.career-case__voice {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* interview-card SP-l（1145:25523）: 写真は 335 角 */
+.career-case__voice .voice-card {
+  width: 100%;
+}
+
+.career-case__voice .voice-card__img {
+  aspect-ratio: 1 / 1;
+}
+
+.career-case__voice .voice-card__img img {
+  object-position: center top;
+}
+
+@media (min-width: 768px) {
+  .career-path__panels {
+    padding-top: 72px;       /* 罫線 → 56 + 16 */
+  }
+
+  .career-case {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 96px;
+  }
+
+  .career-case__main {
+    flex: 1 1 0;
+  }
+
+  .career-case__intro {
+    gap: 32px;
+  }
+
+  .career-case__head {
+    flex-direction: row;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .career-case__label {
+    font-size: var(--fs-tight-s);
+  }
+
+  .career-case__role {
+    box-shadow: 0 30px 30px rgba(0, 36, 119, 0.12);
+  }
+
+  /* PC は本文の下にも罫線 → 各ステージの上に罫線（間隔 40） */
+  .career-case__stages {
+    gap: 40px;
+  }
+
+  .career-stage,
+  .career-stage + .career-stage {
+    gap: 10px;
+    padding-top: 40px;
+    border-top: 1px solid var(--c-border);
+  }
+
+  .career-stage__head {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .career-stage__badge {
+    font-size: var(--fs-tight-2xs);
+  }
+
+  .career-stage__title {
+    font-size: var(--fs-tight-s);
+  }
+
+  /* 576:7141: 右の Interview はスクロールに追従（sticky。JS では追わない） */
+  .career-case__voice {
+    position: sticky;
+    top: 32px;
+    flex: none;
+    width: 384px;
+  }
+
+  .career-case__voice .voice-card {
+    flex: none;
+  }
+
+  .career-case__voice .voice-card__img {
+    position: relative;
+    display: block;
+    aspect-ratio: 384 / 472;
+  }
+
+  /* 写真左下の名前（I557:12879;557:12899）。背面は Figma のぼかした紺の楕円（525 角、left -226 / top 304）を放射グラデで */
+  .career-case__name {
+    position: absolute;
+    inset: 0;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 2px;
+    padding: 32px;
+    background: radial-gradient(circle 370px at 36px 566px, rgba(17, 41, 107, 0.85) 0%, rgba(17, 41, 107, 0.55) 45%, rgba(17, 41, 107, 0) 100%);
+    color: var(--c-white);
+    font-weight: 500;
+  }
+
+  .career-case__name-jp {
+    font-size: 24px;
+    line-height: 1.5;
+  }
+
+  .career-case__name-en {
+    font-size: var(--fs-tight-2xs);
+    line-height: 1.4;
+  }
+}
+
+/* ==========================================================================
+   登場（lower.js の [data-anim="inview"]）。development.js が <html> に js-anim を付けたときだけ隠す
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .js-anim .page-development [data-anim="inview"] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .js-anim .page-development [data-anim="inview"].is-inview {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js-anim .dev-feature:nth-child(2) { transition-delay: 0.1s; }
+  .js-anim .dev-feature:nth-child(3) { transition-delay: 0.2s; }
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .dev-sec {
+    gap: clamp(40px, 3.9vw, 56px);
+  }
+
+  .dev-intro__title {
+    font-size: clamp(24px, 2.22vw, 32px);
+  }
+
+  .dev-intro__list {
+    gap: clamp(16px, 2.78vw, 40px);
+  }
+
+  .growth__scroll {
+    margin-right: calc(-1 * clamp(24px, 6.67vw, 96px));
+  }
+
+  .growth__bar {
+    flex-wrap: wrap;
+  }
+
+  .grade__code {
+    font-size: clamp(20px, 1.94vw, 28px);
+  }
+
+  .grade__label {
+    font-size: clamp(12px, 1.11vw, 16px);
+    white-space: normal;
+  }
+
+  .icon-cards {
+    gap: clamp(16px, 1.67vw, 24px);
+  }
+
+  .icon-card {
+    padding: clamp(20px, 2.22vw, 32px);
+  }
+
+  .career-case {
+    gap: clamp(32px, 6.67vw, 96px);
+  }
+
+  .career-case__voice {
+    width: clamp(240px, 26.67vw, 384px);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1099px) {
+  .icon-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dev-feature {
+    padding-inline: 16px;
+  }
+}

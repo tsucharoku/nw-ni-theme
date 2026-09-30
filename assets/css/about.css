@@ -1,0 +1,788 @@
+/* ==========================================================================
+   about.css — 3分でわかる日本インフォメーション
+   Figma: PC 522:9048（Container 522:9051）/ SP 1137:10919（Container 1140:12191）
+   about-lead（リード）/ about-sec（セクション枠）/ num-card（数字カード 541:10358）/
+   pie（円グラフ 662:6917）/ about-voice + voice-pill（社員に聞きました 522:9670）
+   ========================================================================== */
+
+/* ==========================================================================
+   Lead（522:9592 / SP 1140:12193）: h2 相当の一文 + 本文。ページ頭（下 64 / 80）のすぐ下
+   ========================================================================== */
+.about-lead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--item-gap);      /* SP 16 / PC 24 */
+}
+
+.about-lead__title {
+  font-size: 22px;           /* SP Heading/h2-S */
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.about-lead__txt {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* ==========================================================================
+   Section 枠。上下の余白は Figma のフレームどおり:
+   scale = 上下 80/160、env = 下のみ、culture = なし、voice = 上下
+   ========================================================================== */
+.about-sec {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;                 /* SP 見出し → カード 32（PC は heading-gap/s 56） */
+}
+
+.about-sec--scale,
+.about-voice {
+  padding-block: var(--section-margin-l);
+}
+
+.about-sec--env {
+  padding-bottom: var(--section-margin-l);
+}
+
+.about-sec__head {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;                 /* SP 1140:12199: 見出しとボタンの間 32 */
+}
+
+/* section-heading（PC 603:9035 / SP 611:9697）: 共通 .sec-head との差分だけ上書き */
+.about-sec .sec-head__title {
+  line-height: 1.5;
+}
+
+.about-sec .sec-head__title--cap {
+  gap: 6px;
+}
+
+.about-sec .sec-head__read {
+  gap: 8px;
+  padding-left: 10px;
+}
+
+@media (min-width: 768px) {
+  .about-lead__title {
+    font-size: var(--fs-h2);
+  }
+
+  .about-sec {
+    gap: 56px;
+  }
+
+  .about-sec__head {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  /* Figma PC の Frame 1488: 幅 288 × 高さ 54 */
+  .about-sec__head .btn {
+    flex: none;
+    gap: 0;
+    min-width: 288px;
+    line-height: 1.4;
+  }
+
+  .about-sec .sec-head__title--cap {
+    gap: 8px;
+  }
+
+  .about-sec .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 5px;         /* 1 行 48 の中央。2 行の見出しでは 1 行目に揃う */
+  }
+
+  .about-sec .sec-head__read {
+    gap: 12px;
+    padding-left: 20px;
+    font-weight: 400;        /* PC は Body-Regular */
+  }
+}
+
+/* ==========================================================================
+   数字カード（Figma: 数字カード 541:10358 ほか）
+   --center: 中央揃え（見出し / 数字 / 補足）
+   --media : 左にテキスト、右に図版（PC 104 幅、SP 72 角。SP は補足が図版の下に回る）
+   --lead  : 数字の代わりに 20px の見出し（大見出し）
+   --pie / --ai / --career / --gender: 個別レイアウト
+   ========================================================================== */
+.num-rows,
+.num-row,
+.about-scale,
+.about-scale__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--item-gap);      /* SP 16 / PC 24 */
+}
+
+.num-card {
+  display: flex;
+  min-width: 0;
+  padding: 24px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 15px rgba(0, 36, 119, 0.12);   /* SP。PC は 30/30 */
+}
+
+.num-card__txt,
+.num-card__head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.num-card__label {
+  font-size: var(--fs-tight-xs);
+  line-height: 1.4;
+}
+
+.num-card__num {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  color: var(--c-navy);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.num-card__value {
+  display: inline-block;
+  font-size: 28px;           /* SP Accent/display（PC 38） */
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.num-card__unit {
+  font-size: 22px;           /* SP Accent/unit（PC 24） */
+  line-height: 1;
+}
+
+.num-card__lead {
+  color: var(--c-navy);
+  font-size: 18px;           /* SP Tight/S 18（PC 20） */
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.num-card__note {
+  font-size: var(--fs-body-2xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.num-card__sub {
+  font-size: var(--fs-tight-2xs);
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+/* --center */
+.num-card--center {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.num-card--center .num-card__txt,
+.num-card--center .num-card__head {
+  align-items: center;
+}
+
+/* --media（SP 1145:25073）: [見出し+数字 | 図版 72] の下に補足 */
+.num-card--media {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 72px;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 16px 16px 24px;
+}
+
+.num-card--media .num-card__txt {
+  display: contents;
+}
+
+.num-card--media .num-card__note {
+  grid-column: 1 / -1;
+}
+
+.num-card--media .num-card__num {
+  align-items: center;       /* SP のみ中央（1145:25049） */
+}
+
+.num-card__thumb {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: rgba(172, 196, 228, 0.3);
+}
+
+.num-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.num-card__thumb--icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.num-card__thumb--icon img {
+  width: 32px;
+  height: 32px;
+}
+
+.num-card__thumb--icon-l img {
+  width: 50px;               /* ビルのアイコンは SP でも 44 相当（余白込み 50） */
+  height: 50px;
+}
+
+/* --pie（662:6910 / SP 1140:12203） */
+.num-card--pie {
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 32px 32px;
+  text-align: center;
+}
+
+.num-card--pie .num-card__txt,
+.num-card--pie .num-card__head {
+  align-items: center;
+}
+
+.num-card--pie .num-card__note {
+  white-space: nowrap;
+}
+
+/* --ai（546:10457）/ --career（548:10537）/ --gender（548:10504） */
+.num-card--ai,
+.num-card--career,
+.num-card--gender {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.num-card--ai {
+  gap: 8px;
+  padding: 40px 20px;
+}
+
+.num-card--ai .num-card__label {
+  font-size: var(--fs-tight-ss);
+}
+
+/* SP: 295 幅に 2 列（137 + 罫線 + 141）。13px だと「自由回答の自動深掘り・」が 1 行に収まらないので 12px */
+.num-card--ai .num-card__sub {
+  font-size: 12px;
+}
+
+.num-card__split {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+}
+
+.num-card__split-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.num-card__split-item + .num-card__split-item {
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid var(--c-border);
+}
+
+.num-card--career {
+  gap: 6px;
+}
+
+.num-card__career {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--c-navy);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.num-card__career li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.num-card__career img {
+  flex: none;
+  width: 10px;
+  height: 8px;
+  transform: rotate(90deg);  /* 素材は上向きの三角（Polygon 5）。右向きで使う */
+}
+
+.num-card--gender {
+  gap: 8px;
+}
+
+.num-card__ratio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.num-card__ratio .num-card__num {
+  align-items: flex-end;
+}
+
+.num-card__ratio .num-card__unit:first-child {
+  align-self: center;
+  margin-right: 4px;         /* 男/女 と数字の間 6（gap 2 + 4） */
+}
+
+.num-card__ratio .num-card__num + .num-card__num {
+  margin-left: 24px;
+  padding-left: 24px;
+  border-left: 1px solid var(--c-border);
+}
+
+@media (min-width: 768px) {
+  .num-row,
+  .about-scale {
+    flex-direction: row;
+  }
+
+  .about-scale {
+    align-items: stretch;
+  }
+
+  /* 662:6919: 円グラフ 424 + 右の列（内容なり。1 行目 640、2 行目 730） */
+  .about-scale__side {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .about-scale__side .num-row {
+    align-self: flex-start;
+    max-width: 100%;
+  }
+
+  /* カードの幅は Figma と同じく内容なり（縮むのは可）。--grow だけ残り幅を分け合う */
+  .num-card {
+    flex: 0 1 auto;
+    padding: 32px 24px;
+    box-shadow: 0 30px 30px rgba(0, 36, 119, 0.12);
+  }
+
+  .num-card--grow {
+    flex: 1 1 0;
+  }
+
+  .num-card--start {
+    align-self: flex-start;
+  }
+
+  .num-card__value {
+    font-size: 38px;
+  }
+
+  .num-card__unit {
+    font-size: 24px;
+  }
+
+  .num-card__lead {
+    font-size: var(--fs-tight-s);
+  }
+
+  /* --media（541:10360）: テキスト | 図版 104 */
+  .num-card--media {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 24px 24px 32px;
+  }
+
+  .num-card--media .num-card__txt {
+    display: flex;
+    flex: 1 1 auto;
+  }
+
+  .num-card--media .num-card__num {
+    align-items: flex-end;
+  }
+
+  .num-card--lead .num-card__txt,
+  .num-card--lead .num-card__head {
+    gap: 6px;
+  }
+
+  .num-card__thumb {
+    flex: none;
+    align-self: stretch;     /* svg2: テキストの高さなり（118〜139） */
+    width: 104px;
+    height: auto;
+    min-height: 118px;
+  }
+
+  .num-card__thumb img {
+    position: absolute;
+    inset: 0;
+  }
+
+  .num-card--lead .num-card__thumb {
+    align-self: center;      /* svg: 104 × 139 固定 */
+    height: 139px;
+  }
+
+  .num-card__thumb--icon img {
+    position: static;
+    width: 50px;
+    height: 50px;
+  }
+
+  /* Figma でテキスト幅が固定のカード */
+  .num-card__txt--w207 { width: 207px; }
+  .num-card__txt--w235 { width: 235px; }
+  .num-card__txt--w355 { width: 355px; }
+
+  .num-card--pie {
+    flex: 0 1 424px;
+    padding: 24px 32px 32px;
+  }
+
+  .num-card--ai {
+    padding: 24px 32px;
+  }
+
+  .num-card--ai .num-card__sub {
+    font-size: var(--fs-tight-2xs);
+  }
+
+  .num-card--ai .num-card__split-item + .num-card__split-item {
+    margin-left: 24px;
+    padding-left: 24px;
+  }
+
+  .num-card--career,
+  .num-card--gender {
+    padding: 24px;
+  }
+
+  .num-card__career {
+    font-size: var(--fs-tight-s);
+  }
+
+  .num-card--gender {
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .num-card--gender .num-card__label,
+  .num-card__ratio {
+    width: 276px;
+  }
+
+  .num-card__ratio {
+    justify-content: space-between;
+  }
+
+  .num-card__ratio .num-card__num + .num-card__num {
+    margin-left: 0;
+    padding-left: 35px;      /* 548:10523: 罫線は 276 の中央（x 135.5）、女は x 172 から */
+  }
+}
+
+/* ==========================================================================
+   円グラフ（662:6986）: 扇 4 枚は Figma のベクター、ラベルは HTML。228 角。
+   中央の白丸は SP と同じく円の中心に置く（PC の Figma は枠が伸びたぶん 20px 下にずれている）
+   登場: conic-gradient のマスクを 0 → 100% に回す（@property 非対応なら最初から全表示）
+   ========================================================================== */
+@property --pie-p {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+
+.pie {
+  position: relative;
+  flex: none;
+  width: 228px;
+  height: 228px;
+}
+
+.pie__sectors {
+  position: absolute;
+  inset: 0;
+  --pie-p: 100%;
+  -webkit-mask-image: conic-gradient(#000 var(--pie-p), transparent 0);
+  mask-image: conic-gradient(#000 var(--pie-p), transparent 0);
+}
+
+.pie__sector {
+  position: absolute;
+  max-width: none;
+}
+
+/* 位置は Figma の inset（%）そのまま */
+.pie__sector--clt    { top: 0;      right: 0;      bottom: 9.55%;  left: 50%;    width: 50%;    height: 90.45%; }
+.pie__sector--teisei { top: 50%;    right: 20.61%; bottom: 0;      left: 15.77%; width: 63.62%; height: 50%; }
+.pie__sector--web    { top: 28.71%; right: 50%;    bottom: 13.55%; left: 0;      width: 50%;    height: 57.74%; }
+.pie__sector--hut    { top: 0;      right: 50%;    bottom: 50%;    left: 4.76%;  width: 45.24%; height: 50%; }
+
+.pie__label {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  color: var(--c-white);
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+/* left はラベル枠の中心（Figma の left − 50.5 + 幅/2）、top は Figma の top − 0.3 */
+.pie__label--clt    { top: 70px;  left: 180px; }
+.pie__label--teisei { top: 159px; left: 108.5px; }
+.pie__label--web    { top: 106px; left: 45px; }
+.pie__label--hut    { top: 32px;  left: 76.5px; }
+
+.pie__name {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.pie__val {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.pie__hole {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 71px;
+  height: 71px;
+  border-radius: 50%;
+  background: var(--c-white);
+  transform: translate(-50%, -50%);
+}
+
+/* ==========================================================================
+   社員に聞きました（522:9670 / SP 1140:12315）
+   ========================================================================== */
+.about-voice__top,
+.about-voice__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.about-voice__group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.about-voice__q {
+  color: var(--c-navy);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.about-voice__list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* 吹き出しのピル（Frame 1676 553:10716 pale / 553:11337 deep）。尻尾 71×8.5 は Figma のベクター */
+.voice-pill {
+  position: relative;
+  max-width: 100%;
+  margin-bottom: 8.5px;
+  padding: 12px 24px;
+  border-radius: 32px;
+  background: rgba(199, 219, 236, 0.4);
+  color: var(--c-navy);
+  font-size: var(--fs-tight-xs);
+  line-height: 1.4;
+}
+
+.voice-pill::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 71px;
+  height: 8.5px;
+  background: url("../img/about/tail_pale.svg") left top / 71px 8.5px no-repeat;
+}
+
+.voice-pill--deep {
+  background: var(--c-navy);
+  color: var(--c-white);
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+}
+
+.voice-pill--deep::after {
+  background-image: url("../img/about/tail_deep.svg");
+}
+
+@media (min-width: 768px) {
+  .about-voice__top {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  .about-voice__bottom {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  .about-voice__group--q1 { flex: 0 1 560px; }   /* Figma 555 / 704。フォントの実幅で折り返さないよう +5 */
+  .about-voice__group--q2 { flex: 0 1 709px; }
+  .about-voice__group--q3 { flex: 1 1 0; }
+
+  .about-voice__q {
+    font-size: 24px;
+  }
+
+  .about-voice__list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px 12px;          /* 尻尾 8.5 はピルの margin-bottom 側 */
+  }
+}
+
+/* ==========================================================================
+   登場（lower.js の [data-anim="inview"] → is-inview）
+   about.js が <html> に js-anim を付けたときだけ隠す（JS が動かなければ最初から表示）
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .js-anim .page-about [data-anim="inview"] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .js-anim .page-about [data-anim="inview"].is-inview {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js-anim .num-card--pie .pie__sectors {
+    --pie-p: 0%;
+    transition: --pie-p 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s;
+  }
+
+  .js-anim .num-card--pie.is-inview .pie__sectors {
+    --pie-p: 100%;
+  }
+
+  .js-anim .num-card--pie .pie__label {
+    opacity: 0;
+    transition: opacity 0.4s ease 1s;
+  }
+
+  .js-anim .num-card--pie.is-inview .pie__label {
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   カードは内容なりの幅なので、1248 に収まらない幅では折り返して残り幅を分け合う
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .about-sec {
+    gap: clamp(40px, 3.9vw, 56px);
+  }
+
+  .about-lead__title {
+    font-size: clamp(24px, 2.22vw, 32px);
+  }
+
+  .num-row {
+    flex-wrap: wrap;
+  }
+
+  .num-card,
+  .num-card--grow {
+    flex: 1 1 auto;
+  }
+
+  .num-card__txt--w207,
+  .num-card__txt--w235,
+  .num-card__txt--w355 {
+    width: auto;
+  }
+
+  .num-card--media .num-card__txt {
+    flex: 1 1 200px;
+  }
+
+  .about-scale__side .num-row {
+    align-self: stretch;
+  }
+
+  .about-voice__group--q1 { flex-basis: 44.5%; }
+  .about-voice__group--q2 { flex-basis: 56.4%; }
+}
+
+@media (min-width: 768px) and (max-width: 1099px) {
+  .about-scale {
+    flex-direction: column;
+  }
+
+  .num-card--pie {
+    flex: none;
+  }
+
+  .about-sec__head {
+    flex-wrap: wrap;
+  }
+
+  .about-voice__top,
+  .about-voice__bottom {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .about-voice__group--q1,
+  .about-voice__group--q2,
+  .about-voice__group--q3 {
+    flex: none;
+    width: 100%;
+  }
+}

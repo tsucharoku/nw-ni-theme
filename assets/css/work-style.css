@@ -1,0 +1,748 @@
+/* ==========================================================================
+   work-style.css — 制度・環境（/work-style/）
+   Figma: PC 557:13145 / SP 1140:14534
+   ws-sec（セクション余白 + 見出しの上書き）/ ws-culture（カルチャー 3 枚）/ ws-flex（社員の声つきの制度カード）/
+   icon-cards + icon-card（アイコンカード。縦 / 金額つき / 横）/ photo-marquee（写真の帯）/
+   arc-cards + arc-card（中央 1 枚 → 左右に開くカード。付箋 1370:17451）
+   ========================================================================== */
+
+/* ==========================================================================
+   Section（SP: 上 80 / 見出し下 32。PC: 上 160 / 見出し下 56）
+   ========================================================================== */
+.ws-sec {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-top: var(--section-margin-l);
+}
+
+.ws-sec--first {
+  padding-top: 0;          /* 557:13147: page-head の下 80（SP 64）は page-head 側の余白 */
+}
+
+.ws-sec--last {
+  padding-bottom: var(--section-margin-l);
+}
+
+/* section-heading（PC-sub 603:9035 / SP-sub）: 共通 .sec-head との差分だけ */
+.page-work-style .sec-head__title {
+  line-height: 1.5;
+}
+
+.page-work-style .sec-head__title--cap {
+  gap: 6px;
+}
+
+.page-work-style .sec-head__read {
+  gap: 8px;
+  padding-left: 10px;
+}
+
+@media (min-width: 768px) {
+  .ws-sec {
+    gap: 56px;             /* heading-gap/s */
+  }
+
+  .ws-sec--first {
+    gap: 32px;             /* 557:13147 は item-gap/32 */
+  }
+
+  .page-work-style .sec-head__title--cap {
+    align-items: center;
+    gap: 8px;
+  }
+
+  .page-work-style .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 0;
+  }
+
+  .page-work-style .sec-head__read {
+    gap: 12px;
+    padding-left: 20px;
+    font-weight: 400;      /* PC は Body-Regular/XS */
+  }
+}
+
+/* ==========================================================================
+   Culture（Frame 1419: 553:12035 / SP 1158:25913）
+   白 10% の板 + 青い落ち影。SP 縦積み gap 24、PC 3 列 gap 40
+   ========================================================================== */
+.ws-culture {
+  display: grid;
+  gap: 24px;
+}
+
+.ws-culture__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 24px 24px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 15px rgba(0, 36, 119, 0.12);
+  text-align: center;
+}
+
+.ws-culture__icon {
+  flex: none;
+  width: 40px;
+  height: 40px;
+}
+
+.ws-culture__icon img {
+  width: 100%;
+  height: 100%;
+}
+
+.ws-culture__title {
+  margin-top: 4px;
+  font-size: 18px;         /* SP 1158:25917: 2 行で 50 → 18px（PC は 20） */
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ws-culture__body {
+  margin-top: 8px;
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .ws-culture {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px;
+  }
+
+  .ws-culture__item {
+    padding: 40px 24px 32px;
+    box-shadow: 0 30px 30px rgba(0, 36, 119, 0.12);
+  }
+
+  .ws-culture__title {
+    font-size: var(--fs-tight-s);
+  }
+}
+
+/* ==========================================================================
+   Work Style の大きいカード（Frame 1782: 562:14031 / SP 1140:14546）
+   上: アイコン + 見出し + 本文、下: 社員の声（白い箱、ラベルが上辺にまたがる）
+   ========================================================================== */
+.ws-flex-list {
+  display: grid;
+  gap: 16px;
+}
+
+.ws-flex-list + .icon-cards {
+  margin-top: -16px;       /* SP: ブロック間 16（.ws-sec の gap 32 との差） */
+}
+
+.ws-flex {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  background: rgba(199, 219, 236, 0.4);
+}
+
+.ws-flex__head {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  grid-template-areas:
+    "icon title"
+    "body body";
+  align-items: center;
+  align-content: start;
+  gap: 16px 24px;
+}
+
+.ws-flex__icon {
+  grid-area: icon;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  background: var(--c-white);
+}
+
+.ws-flex__icon img {
+  width: 40px;
+  height: 40px;
+}
+
+.ws-flex__title {
+  grid-area: title;
+  color: var(--c-navy);
+  font-size: 18px;         /* SP 1145:24952: 1 行 25 → 18px（PC は 20） */
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ws-flex__body {
+  grid-area: body;
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.ws-flex__voice {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 56px;
+  grid-template-areas:
+    "who photo"
+    "quote quote";
+  gap: 8px 24px;
+  padding: 24px 24px 16px 16px;
+  border-radius: var(--radius);
+  background: var(--c-white);
+}
+
+.ws-flex__voice-label {
+  position: absolute;
+  top: -13px;
+  left: 16px;
+  padding: 3px 12px;
+  border-radius: 3px;
+  background: var(--c-blue);
+  color: var(--c-white);
+  font-size: var(--fs-tight-2xs);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.ws-flex__voice-who {
+  grid-area: who;
+  color: var(--c-navy);
+  font-size: var(--fs-tight-xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ws-flex__voice-quote {
+  grid-area: quote;
+  font-size: var(--fs-body-2xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.ws-flex__voice-photo {
+  grid-area: photo;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.ws-flex__voice-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .ws-flex-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .ws-flex-list + .icon-cards {
+    margin-top: -32px;     /* PC: ブロック間 24（gap 56 との差） */
+  }
+
+  .ws-flex {
+    padding: 32px;
+  }
+
+  .ws-flex__head {
+    grid-template-columns: 80px minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "icon title"
+      "icon body";
+    align-items: start;
+    gap: 4px 24px;
+  }
+
+  .ws-flex__icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .ws-flex__title {
+    font-size: var(--fs-tight-s);
+  }
+
+  .ws-flex__voice {
+    grid-template-columns: minmax(0, 1fr) 88px;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "who photo"
+      "quote photo";
+    gap: 2px 24px;
+    padding: 24px 24px 16px;
+  }
+
+  .ws-flex__voice-photo {
+    width: 88px;
+    height: 88px;
+  }
+}
+
+/* ==========================================================================
+   Icon card（icon-card 562:13897 / 557:12810 縦・562:14173 縦-金額・562:14283 横 / SP 1145:25277）
+   SP はどの型も「48 の白い箱 + 右に文」。PC は縦（中央寄せ）が基本、--row で横
+   ========================================================================== */
+.icon-cards {
+  display: grid;
+  gap: 16px;
+}
+
+.icon-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px;
+  border-radius: var(--radius);
+  background: rgba(199, 219, 236, 0.4);
+}
+
+.icon-card__icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  background: var(--c-white);
+}
+
+.icon-card__icon img {
+  width: 40px;
+  height: auto;
+}
+
+.icon-card__icon--s img {
+  width: 32px;             /* SP の福利厚生は 32（1158:25863） */
+}
+
+.icon-card__txt {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.icon-card__title {
+  color: var(--c-navy);
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.icon-card__sub,
+.icon-card__amount {
+  display: block;
+}
+
+.icon-card__amount {
+  display: none;           /* SP のデザイン（1140:14556）に金額の行は無い */
+}
+
+.icon-card__body {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .icon-cards {
+    gap: 24px;
+  }
+
+  .icon-cards--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .icon-cards--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .icon-card {
+    flex-direction: column;
+    align-items: center;
+    padding: 32px;
+  }
+
+  .icon-card__icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .icon-card__icon--s img {
+    width: 40px;
+  }
+
+  .icon-card__txt {
+    flex: none;
+    width: 100%;
+  }
+
+  .icon-card__title {
+    text-align: center;
+  }
+
+  .icon-card--amount .icon-card__sub {
+    font-size: var(--fs-body-2xs);
+    font-weight: 400;
+    line-height: 1.65;
+  }
+
+  .icon-card__amount {
+    display: block;
+    font-size: var(--fs-tight-s);
+    line-height: 1.4;
+  }
+
+  /* 横（562:14283）: 24 の余白、箱 80 + 右に文（左寄せ） */
+  .icon-card--row {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .icon-card--row .icon-card__txt {
+    flex: 1 1 0;
+    width: auto;
+  }
+
+  .icon-card--row .icon-card__title {
+    text-align: left;
+  }
+}
+
+/* ==========================================================================
+   Photo marquee（Autocarousel 1069:14885 / SP 1140:14564）
+   376×251（SP 192×128）の写真を 56（SP 29）間隔で並べ、偶数枚目を 64（SP 33）下げる。
+   JS が中身を複製し、CSS で 1 組ぶん左へ流してループ
+   ========================================================================== */
+.photo-marquee {
+  --pm-gap: 29px;
+  padding-top: 29px;
+  overflow: hidden;
+}
+
+.photo-marquee__track {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--pm-gap);
+  width: max-content;
+  padding-bottom: 33px;
+}
+
+.photo-marquee__track.is-loop {
+  animation: photo-marquee 70s linear infinite;
+}
+
+.photo-marquee__item {
+  flex: none;
+  width: 192px;
+  aspect-ratio: 192 / 128;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.photo-marquee__item:nth-child(even) {
+  transform: translateY(33px);
+}
+
+.photo-marquee__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes photo-marquee {
+  to { transform: translateX(calc(-50% - var(--pm-gap) / 2)); }
+}
+
+@media (min-width: 768px) {
+  .photo-marquee {
+    --pm-gap: 56px;
+    padding-top: 56px;
+  }
+
+  .photo-marquee__track {
+    padding-bottom: 64px;
+  }
+
+  .photo-marquee__track.is-loop {
+    animation-duration: 120s;
+  }
+
+  .photo-marquee__item {
+    width: 376px;
+    aspect-ratio: 376 / 251;
+  }
+
+  .photo-marquee__item:nth-child(even) {
+    transform: translateY(64px);
+  }
+}
+
+/* ==========================================================================
+   Communication（562:14272 / SP 1140:14566）
+   ========================================================================== */
+.ws-comm > .lower-sec {
+  width: 100%;
+}
+
+/* ==========================================================================
+   Arc cards（Frame 2134 658:6715 / 付箋 1370:17451、参考 https://ni-communication.pages.dev）
+   SP: 縦積み（gap 24）。PC: JS が is-ready を付けると中央に 3 枚を重ね、画面に入ると
+   背後の 2 枚が弧に沿って左右へ開く。以後はホバーで寄る / クリック・ドラッグで入れ替わる
+   ========================================================================== */
+.arc-cards {
+  padding-inline: var(--side-margin);
+}
+
+.arc-cards__stage {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.arc-card {
+  padding: 16px;
+  border: 1px solid var(--c-accent);
+  border-radius: 8px;
+  background: var(--c-white);
+}
+
+.arc-card__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 8px;       /* 上下: カッコの行 24 + gap 8 */
+}
+
+/* SP のカッコは 12px（1140:14571） */
+.arc-card .bracket__corner {
+  width: 14px;
+  height: 14px;
+}
+
+.arc-card__pill {
+  align-self: stretch;
+  position: relative;
+  padding-bottom: 8.5px;
+}
+
+.arc-card__pill span {
+  display: block;
+  padding: 12px 24px;
+  border-radius: 32px;
+  background: var(--c-navy);
+  color: var(--c-white);
+  font-size: 16px;         /* SP 1140:14574 は書き出しで 16px 相当（PC は 18） */
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* 吹き出しの尻尾（639:8637、71×8.5 の右端に三角） */
+.arc-card__pill::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 71px;
+  height: 8.5px;
+  background: url("../img/work-style/pill_tail.svg") center / 100% 100% no-repeat;
+}
+
+.arc-card__photo {
+  width: 100%;
+  margin-block: 24px;
+  aspect-ratio: 237 / 158;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--c-gray);
+}
+
+.arc-card__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.arc-card__catch {
+  width: 100%;
+  color: var(--c-navy);
+  font-size: var(--fs-body-s);   /* Body-Regular/S: 20 / SP 18（1140:14579 は 2 行で 60） */
+  font-weight: 400;
+  line-height: 1.65;
+  text-align: center;
+}
+
+.arc-card__body {
+  width: 100%;
+  margin-top: 8px;
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .arc-cards {
+    --arc-w: 601px;        /* 535 + 余白 32×2 + 罫 1×2 */
+    padding-inline: 0;
+    /* 傾いたカードの張り出しぶんを上下に確保してから左右を切る */
+    margin-block: -40px -80px;
+    padding-block: 40px 80px;
+    overflow: hidden;
+  }
+
+  .arc-cards__stage {
+    align-items: center;
+  }
+
+  .arc-card {
+    width: var(--arc-w);
+    padding: 32px;
+  }
+
+  .arc-card__inner {
+    width: 100%;
+    padding: 40px 16px;    /* カッコの行 24 + gap 16 */
+  }
+
+  .arc-card .bracket__corner {
+    width: 28px;
+    height: 28px;
+  }
+
+  .arc-card__pill {
+    align-self: center;
+  }
+
+  .arc-card__pill span {
+    font-size: var(--fs-tight-ss);
+    white-space: nowrap;
+  }
+
+  .arc-card__photo {
+    margin-block: 32px;
+    aspect-ratio: 503 / 335;
+  }
+
+  /* --- JS が有効なとき: 重ねて置き、transform で動かす --- */
+  .arc-cards.is-ready .arc-cards__stage {
+    position: relative;
+    display: block;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .arc-cards.is-ready .arc-card {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: calc(var(--arc-w) / -2);
+    transform-origin: 50% 50%;
+    transition: transform 1.6s cubic-bezier(0.25, 0.85, 0.3, 1);   /* 参考（0.6s）よりゆっくり */
+    will-change: transform;
+    cursor: pointer;
+  }
+
+  .arc-cards.is-ready .arc-card.is-center {
+    cursor: grab;
+  }
+
+  .arc-cards.is-spread .arc-card {
+    transition-duration: 0.9s;
+  }
+
+  .arc-cards.is-dragging .arc-card {
+    transition: none;
+    cursor: grabbing;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-marquee__track.is-loop {
+    animation: none;
+  }
+
+  .arc-cards.is-ready .arc-card {
+    transition-duration: 1ms;
+  }
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .ws-sec {
+    padding-top: clamp(96px, 11.1vw, 160px);
+  }
+
+  .ws-sec--first {
+    padding-top: 0;
+  }
+
+  .ws-sec--last {
+    padding-bottom: clamp(96px, 11.1vw, 160px);
+  }
+
+  .ws-culture {
+    gap: clamp(16px, 2.78vw, 40px);
+  }
+
+  .icon-card {
+    padding: clamp(20px, 2.22vw, 32px);
+  }
+
+  .arc-cards {
+    --arc-w: clamp(440px, 41.74vw, 601px);
+  }
+
+  .arc-card {
+    padding: clamp(20px, 2.22vw, 32px);
+  }
+
+  .arc-card__pill span {
+    white-space: normal;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .icon-cards--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .icon-cards--row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .icon-cards--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ws-flex-list,
+  .icon-cards--row,
+  .ws-culture {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

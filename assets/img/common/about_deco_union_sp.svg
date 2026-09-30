@@ -1,0 +1,7 @@
+<svg width="244" height="161.5" viewBox="0 0 244 161.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- Figma SP: 四隅の点（PC の 8px を 244/569 に縮小した約3.4px）。244x161.5 の枠の角に配置 -->
+<circle cx="1.75" cy="1.75" r="1.75" fill="#fff"/>
+<circle cx="242.25" cy="1.75" r="1.75" fill="#fff"/>
+<circle cx="1.75" cy="159.75" r="1.75" fill="#fff"/>
+<circle cx="242.25" cy="159.75" r="1.75" fill="#fff"/>
+</svg>

@@ -1,0 +1,733 @@
+/* ==========================================================================
+   career.css — 中途（リサーチ経験者）TOP（/career/）
+   Hero / Message(navy card) / Openings / Info(bracket) / Why / Future(title)
+   / Bnr / 固定バナー がページ固有。他は components.css。
+   ========================================================================== */
+
+/* ---- Hero（FV）: Figma 準拠（419:928 / 474:8469）。通常フロー・固定高さ（PC 594px / SP 439px）。
+   components.css の共通 .hero（新卒 = demo 準拠で画面固定・100svh）をここで打ち消す。
+   ロゴ（ni-logo.js の data-fv-static モード）は Hero 座標の定位置でその場回転し、ページと一緒にスクロールする。
+   コピーは CSS のグラデ文字のまま静止（fv-copy.js は読まない）。文字サイズ・位置は px 固定（ブラウザ幅に比例させない） ---- */
+.hero--career {
+  position: relative;
+  z-index: auto;
+  display: block;
+  height: 439px;
+  min-height: 0;
+  overflow: visible;
+}
+
+.hero--career .hero__stage {
+  position: relative;
+  width: 100%;
+  max-width: 1440px;
+  height: 100%;
+  margin-inline: auto;
+}
+
+.hero__txt {
+  position: absolute;
+  top: 161px;
+  left: 28px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: calc(100% - 56px);
+}
+
+.hero__title,
+.hero__sub {
+  background: var(--grd-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero__title {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.hero__sub {
+  font-size: var(--fs-tight-xs);
+  font-weight: 600;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+}
+
+/* ---- コピーの登場（fv-unfold.js）: 文字が横に開く（rotateY -90° → 0°、左から順に）、サブはフェード ----
+   html.is-fv-unfold は head のインラインスクリプトが付ける（動き抑制・撮影時は付かない = 静止表示）。
+   JS が分割するまで（.is-split / .is-in が付くまで）は隠してちらつきを防ぐ */
+.is-fv-unfold .hero__title:not(.is-split),
+.is-fv-unfold .hero__sub:not(.is-in) {
+  visibility: hidden;
+}
+
+.hero__title.is-split {
+  perspective: 800px;   /* 扉のように回る立体感（支給サンプルは perspective なし） */
+  background: none;     /* グラデは文字ごとの span に移す。見出し自身に残すと、文字が 3D 合成されている間だけ先頭に塊が描かれる（Chrome） */
+}
+
+.hero__char {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  transform: rotateY(-90deg);
+  background: var(--grd-text);   /* 行全体で 1 本のグラデになるよう size / position は JS が文字ごとに設定 */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero__title.is-play .hero__char {
+  animation: hero-unfold 0.6s ease forwards;   /* 遅れは JS（1 文字 0.05s ずつ） */
+}
+
+.hero__sub.is-in {
+  visibility: visible;
+  opacity: 0;
+  animation: hero-fade-in 1.6s ease forwards;   /* 遅れ・長さは JS（SUB_DUR） */
+}
+
+@keyframes hero-unfold {
+  from { transform: rotateY(-90deg); opacity: 0; }
+  to { transform: rotateY(0deg); opacity: 1; }
+}
+
+@keyframes hero-fade-in {
+  to { opacity: 1; }
+}
+
+@media (min-width: 768px) {
+  .hero--career {
+    height: 594px;
+  }
+
+  .hero__txt {
+    top: 217px;
+    left: 166.5px;
+    width: 840px;   /* Figma の txt は 775 幅だが、ブラウザの字送りでは 1 行目（20 文字）が 775 に収まらず折れるので余裕を持たせる（左揃えなので見た目は同じ） */
+    max-width: calc(100% - 190px);
+  }
+
+  .hero__title {
+    font-size: 42px;
+    line-height: 1.7;
+  }
+
+  .hero__sub {
+    font-size: var(--fs-tight-s);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+}
+
+/* ---- Message（navy card）: Hero 直下に静止（出現アニメなし）。Figma 419:2031 / 474:9155 ----
+   components.css の .message は新卒（demo 準拠）用にウィンドウ幅比例（vw）なので、ここで px 固定に上書きする
+   （SP 375 / PC 1440 の実寸。ブラウザ幅に比例させない） */
+.message--card {
+  gap: 24px;   /* Figma 474:9155: Have Fun! 下端 153 → 本文 177 */
+  margin: 0 20px;
+  padding: 64px 20px 40px;
+  border-radius: 8px;
+  background: #1b3071;
+  color: var(--c-white);
+}
+
+/* ロゴが動いているときは紺を fv-message-card.js が画面固定の canvas（ロゴの下）に描き、ロゴの背景板にも敷くので、
+   DOM 側は透明にする。実物のガラスの NI ロゴが紺を屈折しながらカードの上に透けて見える（Figma 419:2031 のロゴ画像の代わり）。
+   文字はそのままロゴの手前。ロゴの絵を紺の上に貼る方式（opacity / blend）は透明感が出なかったので使わない */
+.message--card.is-card-fx {
+  background: transparent;
+}
+
+/* Have Fun! は fv-message-card.js が紺の canvas に描く（ロゴの奥 = Figma のロゴ画像が文字の上の重なり）。DOM はレイアウトだけ残す */
+.message--card.is-card-fx .message__havefun {
+  visibility: hidden;
+}
+
+/* カードの紺の板（fv-message-card.js が body 直下・ロゴ canvas .ni-logo の直前に置く DOM）。
+   文書座標の absolute なのでネイティブスクロールでカードの文字と同期する。位置・大きさ・角丸は JS がカードから写す
+   （スクロールでは書き換えない）。中の Have Fun! も JS がカード側の書式を写す */
+.message-card-fx {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #1b3071;
+}
+
+.message-card-fx__havefun {
+  position: absolute;
+  margin: 0;
+}
+
+.message--card .btn {
+  padding: 16px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.message--card .btn__arrow {
+  height: 20px;
+  padding-left: 20px;
+}
+
+.message--card .btn__arrow img {
+  width: 12px;
+  height: 20px;
+}
+
+.message--card .message__havefun {
+  font-size: 68px;
+  background: none;
+  color: var(--c-white);
+}
+
+.message--card .message__body {
+  gap: 16px;
+  padding: 0 11px;
+}
+
+.message--card .message__head {
+  gap: 12px;
+}
+
+.message--card .message__label {
+  font-size: 18px;
+  background: none;
+  color: var(--c-white);
+}
+
+.message--card .message__title {
+  font-size: 30px;   /* Figma 474:9169: 336 幅 × 43 高（30px × 行間 1.44）。Figma では 1 行でカードの右端を 32px はみ出しているが、
+                        ここでは折り返す（2 行）。1 行にするなら文言かサイズの調整が必要 */
+  line-height: 1.44;
+}
+
+.message--card .message__text {
+  font-size: 18px;   /* Figma 474:9170: 273 幅 × 324 高 = 18px × 行間 2 × 9 行 */
+}
+
+@media (min-width: 768px) {
+  .message--card {
+    gap: 40px;
+    width: calc(100% - 48px);
+    max-width: 1392px;   /* デザイン幅（1440 - 24*2）以上は広がらず中央固定（About などと同じ） */
+    margin: 0 auto;
+    padding: 96px 24px 96px 96px;
+    border-radius: 8px;
+  }
+
+  .message--card .btn {
+    gap: 40px;
+    padding: 16px 32px;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+
+  .message--card .btn__arrow {
+    height: 20px;
+    padding-left: 32px;
+  }
+
+  .message--card .btn__arrow img {
+    width: 12px;
+    height: 20px;
+  }
+
+  .message--card .message__havefun {
+    font-size: 180px;
+    margin-right: 40px;
+  }
+
+  .message--card .message__body {
+    flex: 0 1 645px;
+    gap: 48px;
+    padding: 0;
+  }
+
+  .message--card .message__head {
+    gap: 12px;
+  }
+
+  .message--card .message__label {
+    font-size: 18px;
+  }
+
+  .message--card .message__title {
+    font-size: 42px;
+    line-height: 1.44;   /* Figma 419:2035: 470 × 60 */
+  }
+
+  .message--card .message__text {
+    font-size: 20px;
+  }
+}
+
+/* ---- Openings（募集中の職種一覧） ---- */
+.openings {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;              /* Figma SP 474:8566: 見出し → 本文 32、上 80 */
+  padding: 80px 20px 0;
+}
+
+.openings__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .openings {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 120px;
+    max-width: calc(1248px + var(--side-margin) * 2);   /* デザイン幅（1440 - 96*2）以上は広がらず中央固定（About などと同じ） */
+    margin-inline: auto;
+    padding: var(--section-margin-l) var(--side-margin) 96px;
+  }
+
+  .openings__head {
+    flex: none;
+  }
+
+  .openings__body {
+    flex: 1 1 0;
+    gap: 24px;
+    min-width: 0;
+  }
+}
+
+/* ---- Info / Bnr（カッコ付きプレースホルダ） ---- */
+.pitch-box {
+  padding: 40px 20px;
+}
+
+.pitch-box__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0;   /* Figma 474:8499 / 474:9978（SP）: カッコ行 24 → -4 重なり → 中身 → -4 → カッコ行 24。カッコは .bracket__corner の絶対配置なので上下 20 の余白で同じ位置になる（2026-09-15 修正。以前は余白なしでカッコが中身に 24px 食い込んでいた） */
+}
+
+.pitch-box__pitch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 303px;
+  max-width: 100%;
+  height: 170px;
+  border-radius: var(--radius);
+  background: var(--c-gray);
+  color: var(--c-white);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.pitch-box__pitch--bnr {
+  height: 101px;
+  border-radius: 8px;
+  background: #797979;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  /* Figma（Info 419:991 / Bnr 419:2667）: カッコ行 24 → 16 → 中身 → 16 → カッコ行 24。Bnr は上下 80 の余白。
+     カッコの画像は Figma でも 24 の枠から 4px はみ出しているので（.bracket__corner の -4px と同じ）補正は不要 */
+  .pitch-box {
+    max-width: 1440px;   /* カッコ行 1064 + 188×2。デザイン幅以上は広がらず中央固定（About などと同じ） */
+    margin-inline: auto;
+    padding: 0 188px;
+  }
+
+  .pitch-box--bnr {
+    padding: 80px 188px;
+  }
+
+  /* 上下: カッコ行 24 + 間 16 = 40。左右にも余白を持たせ、幅を縮めてもカッコと中身がくっつかないようにする
+     （1440 で 74px = Figma の 1064 − 916） */
+  .pitch-box__inner {
+    padding: 40px clamp(40px, 5.139vw, 74px);
+  }
+
+  .pitch-box__pitch {
+    width: 916px;
+    height: 515px;
+  }
+
+  .pitch-box__pitch--bnr {
+    height: 180px;
+    border-radius: var(--radius);
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.55;
+  }
+}
+
+/* ---- Why Us ---- */
+.why {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0 20px 64px;
+}
+
+.why__cols {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.why__col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.why-item {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.why-item__row {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+}
+
+.why-item__head {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  min-width: 0;
+  padding: 12px 0 0 12px;
+}
+
+.why-item__head::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  background: url("../img/career/why_marker.svg") center / 100% 100% no-repeat;
+  /* 向きは PC と同じ ┌（Figma SP 474:10000 の描画: ブロック左上端に 12x12、タイトルは x 12 / y 25）。
+     以前の scaleY(-1)（└）は Figma の SVG 書き出しのパスをそのまま信じたもので、描画とは逆だった（2026-09-17 修正） */
+}
+
+.why-item__title {
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.why-item__img {
+  flex: none;
+  width: 88px;
+  height: 88px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--c-gray);
+}
+
+.why-item__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.why-item__text {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .why {
+    flex-direction: row;
+    gap: 88px;
+    max-width: calc(1248px + var(--side-margin) * 2);   /* 2 カラム 580 + 88 + 580 = 1248。デザイン幅以上は広がらず中央固定 */
+    margin-inline: auto;
+    padding: var(--section-margin-l) var(--side-margin);
+  }
+
+  .why__cols {
+    display: contents;
+  }
+
+  .why__col {
+    flex: 1 1 0;
+    gap: 72px;
+    min-width: 0;
+  }
+
+  .why__col--head {
+    gap: 72px;
+  }
+
+  .why-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 248px;
+    grid-template-rows: 1fr auto;
+    grid-template-areas: "head img" "body img";
+    align-items: end;
+    column-gap: 40px;
+    row-gap: 12px;
+  }
+
+  .why-item__row {
+    display: contents;
+  }
+
+  .why-item__head {
+    grid-area: head;
+    align-self: end;
+    padding: 0 0 0 24px;
+  }
+
+  .why-item__head::before {
+    top: -16px;
+  }
+
+  .why-item__body {
+    grid-area: body;
+    padding-left: 24px;
+  }
+
+  .why-item__img {
+    grid-area: img;
+    width: 248px;
+    height: 248px;
+  }
+
+  .why-item__title {
+    font-size: var(--fs-tight-s);
+  }
+
+}
+
+/* ---- Future（中途版: 見出しはテキスト） ---- */
+.future--career {
+  padding-top: 80px;
+}
+
+/* SP: 四角は Figma 474:8520 の img フレーム（x 1 / y -7.5 / 374x422）の座標（x は +1）。新卒（components.css）と違い 11 個すべて表示 */
+@media (max-width: 767px) {
+  .future--career .future__squares {
+    top: -8px;
+    height: 422px;
+  }
+
+  /* カッコの中の余白: Figma 474:8536 は中身の枠（474:8540）の左右が 40（新卒は 24）。上下は同じ 40 */
+  .future--career .future__box {
+    padding: 40px;
+  }
+
+  /* 見出しは Figma どおり 3 行（改行は <br>）。「日本インフォメーションが」（282px）が中身の幅 255 に入らず 4 行になるので、
+     この見出しだけカッコの内側（枠 335 − カッコ 24×2 = 287）まで使えるよう左右に 16 ずつはみ出させる。
+     それでも入らない狭い画面では普通に折り返す（2026-09-15 指示） */
+  .future__title-text {
+    margin-inline: -16px;
+  }
+
+  .future--career .future__squares span:nth-child(1) { left: 296px !important; top: 237px !important; width: 30px !important; height: 36px !important; display: block; }
+  .future--career .future__squares span:nth-child(2) { left: -11px !important; top: 223px !important; width: 40px !important; height: 49px !important; display: block; }
+  .future--career .future__squares span:nth-child(3) { left: 339px !important; top: 154px !important; width: 52px !important; height: 63px !important; display: block; }
+  .future--career .future__squares span:nth-child(4) { left: 7px !important; top: 22px !important; width: 26px !important; height: 31px !important; display: block; }
+  .future--career .future__squares span:nth-child(5) { left: 339px !important; top: 287px !important; width: 18px !important; height: 16px !important; display: block; }
+  .future--career .future__squares span:nth-child(6) { left: 350px !important; top: 257px !important; width: 9px !important; height: 9px !important; display: block; }
+  .future--career .future__squares span:nth-child(7) { left: 284px !important; top: 25px !important; width: 9px !important; height: 9px !important; display: block; }
+  .future--career .future__squares span:nth-child(8) { left: 42px !important; top: 178px !important; width: 18px !important; height: 17px !important; display: block; }
+  .future--career .future__squares span:nth-child(9) { left: 17px !important; top: 342px !important; width: 12px !important; height: 11px !important; display: block; }
+  .future--career .future__squares span:nth-child(10) { left: 24px !important; top: 294px !important; width: 18px !important; height: 16px !important; display: block; }
+  .future--career .future__squares span:nth-child(11) { left: 36px !important; top: 271px !important; width: 9px !important; height: 8px !important; display: block; }
+}
+
+.future--career .future__marquee {
+  top: 41px;
+  left: 0;
+}
+
+.future__title-text {
+  font-family: "Shippori Antique", var(--ff-jp);
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 1.4;
+  letter-spacing: -0.06em;
+  text-align: center;
+  background: var(--grd-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (min-width: 768px) {
+  .future--career {
+    padding-top: var(--section-margin-m);
+  }
+
+  .future--career .future__marquee {
+    top: 374px;
+  }
+
+  /* 四角の散らばり: 中途は Figma 419:1022 の img フレームが y 42（新卒 303:1023 は 288）。中身は同じ座標 */
+  .future--career .future__squares {
+    top: 42px;
+  }
+
+  .future__title-text {
+    font-size: 45px;
+  }
+}
+
+/* ---- 固定バナー（カジュアル面談） ---- */
+.fixed-bnr {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 295px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 4px 0 0 0;
+  background: var(--grd-blue100);
+  color: var(--c-white);
+}
+
+.fixed-bnr__text {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  line-height: 1.4;
+}
+
+.fixed-bnr__small {
+  font-size: 12px;
+}
+
+.fixed-bnr__main {
+  font-size: var(--fs-tight-2xs);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.fixed-bnr__img {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  background: var(--c-gray);
+}
+
+.fixed-bnr__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .fixed-bnr {
+    width: 292px;
+    height: 88px;
+    background: var(--grd-blue80);
+  }
+
+  .fixed-bnr__text {
+    padding: 9px 20px;
+  }
+
+  .fixed-bnr__main {
+    font-size: var(--fs-tight-xs);
+  }
+
+  .fixed-bnr__img {
+    width: 88px;
+    height: 88px;
+  }
+}
+
+/* ---- Do（中途版の余白） ---- */
+.do--career {
+  padding-top: 56px;   /* Figma SP 474:8503: 上のカッコ（top）が y 56 */
+  padding-bottom: 40px;
+}
+
+@media (min-width: 768px) {
+  .do--career {
+    padding-top: var(--section-margin-l);
+    padding-bottom: 0;
+  }
+}
+
+/* ---- 中間幅（768〜1439px）の流動化 ---- */
+@media (min-width: 768px) {
+  .openings {
+    gap: clamp(40px, 8.3vw, 120px);
+  }
+
+  .pitch-box {
+    padding-inline: clamp(24px, 13vw, 188px);
+  }
+
+  .pitch-box--bnr {
+    padding-inline: clamp(24px, 13vw, 188px);
+  }
+
+  .pitch-box__pitch {
+    max-width: 100%;
+  }
+
+  .why {
+    flex-wrap: wrap;
+    gap: clamp(40px, 6vw, 88px);
+  }
+
+  .why__col {
+    flex: 1 1 440px;
+  }
+
+  .why-item {
+    grid-template-columns: minmax(0, 1fr) clamp(160px, 32%, 248px);
+  }
+
+  .why-item__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .message--card {
+    padding-left: clamp(32px, 6.6vw, 96px);
+  }
+}
+
+@media (min-width: 768px) {
+  .openings {
+    flex-wrap: wrap;
+  }
+
+  .openings__head {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .openings__body {
+    flex: 1 1 420px;
+  }
+}

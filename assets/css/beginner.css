@@ -1,0 +1,124 @@
+/* ==========================================================================
+   beginner.css — 新卒・中途（リサーチ未経験者）TOP（/beginner/）
+   Hero（FV）のみページ固有。他セクションは components.css。
+   ========================================================================== */
+
+/* ---- Hero（FV）----
+   FV の画面固定・スクロール余白は components.css（新卒・中途共通）。
+   クリスタル（NIロゴ）は ni-logo.js、コピーは fv-copy.js、Have Fun! は fv-havefun.js。写真の散らばりアニメは次フェーズ */
+.hero__stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 375 / 667;
+  max-height: 100%;
+  margin-inline: auto;
+}
+
+.hero__copy,
+.hero__photo {
+  position: absolute;
+  display: block;
+  height: auto;
+}
+
+.hero__photo {
+  z-index: 1;
+  border-radius: var(--radius);
+  object-fit: cover;
+}
+
+.hero__photo--1 { top: 12.1%; left: 73.1%; width: 34.2%; aspect-ratio: 196 / 242; }
+.hero__photo--2 { top: 75.4%; left: 29.5%; width: 19.9%; aspect-ratio: 104 / 129; }
+.hero__photo--3 { top: 69.9%; left: 80.8%; width: 16.7%; aspect-ratio: 104 / 129; }
+.hero__photo--4 { top: 61.5%; left: -4.8%; width: 24.5%; aspect-ratio: 108 / 134; }
+
+.hero__copy {
+  top: 31%;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  margin: 0;
+}
+
+.hero__copy img {
+  width: 100%;
+  height: auto;
+}
+
+/* 写真 4 枚は fv-photos.js が 3D ロゴと同じ WebGL シーンに板として置く（demo 準拠: 浮遊の揺れ、スクロールで散って消える）。
+   動き出したら DOM の写真は隠す。WebGL が使えない環境では DOM の写真がそのまま */
+.hero.is-photos-fx .hero__photo {
+  visibility: hidden;
+}
+
+/* コピーの演出 canvas（fv-copy.js が .hero に差し込む。demo の「流れる光 × ガラスワイプ」）。
+   動き出したら元の SVG は隠す（h1 は読み上げ用に残す） */
+.hero__copy-fx {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero.is-copy-fx .hero__copy img {
+  visibility: hidden;
+}
+
+/* Have Fun! の演出 canvas（fv-havefun.js が .hero の右 60% に置く。demo 準拠で画面固定・流れる光・左→右のガラスワイプ）。
+   動き出したら Message セクション側の Have Fun! 文字は隠す（位置は demo の比率で hero 基準） */
+.hero__havefun-fx {
+  position: absolute;
+  left: 40%;
+  top: 0;
+  z-index: 3;
+  width: 60%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ロゴの背面モード（fv-havefun.js がロゴ canvas .ni-logo の直前に移す）: 画面固定、重なり順はロゴの下・波背景の上 */
+.hero__havefun-fx--behind {
+  position: fixed;
+  left: 40%;
+  top: 0;
+  z-index: 0;
+  width: 60%;
+  height: 100%;
+}
+
+body.is-havefun-fx .message__havefun {
+  visibility: hidden;
+}
+
+/* SP: 文字は Message 内の DOM の位置（本文の上・左右中央）に描くので canvas は全幅 */
+@media (max-width: 767px) {
+  .hero__havefun-fx,
+  .hero__havefun-fx--behind {
+    left: 0;
+    width: 100%;
+  }
+
+  /* SP（2026-09-17）: Have Fun! の canvas は Message の中に置き、Message と一緒にブラウザにスクロールさせる
+     （fv-havefun.js の IN_MSG。位置・大きさは JS が文字の箱から決める。文字の DOM は body.is-havefun-fx で隠れる） */
+  .message__havefun-fx {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero__stage {
+    aspect-ratio: 1440 / 768;
+  }
+
+  .hero__photo--1 { top: 16.9%; left: 73.1%; width: 13.6%; }
+  .hero__photo--2 { top: 73.7%; left: 28.8%; width: 7.2%; }
+  .hero__photo--3 { top: 56%; left: 89.4%; width: 7.2%; }
+  .hero__photo--4 { top: 45.6%; left: 3.7%; width: 7.5%; }
+
+  .hero__copy {
+    top: 30%;
+    left: 12.5%;
+    width: 62.6%;
+  }
+}

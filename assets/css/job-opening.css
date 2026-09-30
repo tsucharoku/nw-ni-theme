@@ -1,0 +1,340 @@
+/* ==========================================================================
+   job-opening.css — 募集要項 カテゴリアーカイブ / 詳細（テンプレート側）
+   本文ブロック（.entry-content の中）は editor-style.css。ここには書かない
+   Figma: アーカイブ PC 562:16546 / SP 1140:16115、詳細 PC 565:17165 / SP 1140:16411
+   ========================================================================== */
+
+/* ==========================================================================
+   カテゴリアーカイブ（562:16554 / SP 1140:16117）
+   ページ頭はパンくずだけ（.page-head の下余白 SP 64 / PC 80 がそのまま見出しまでの間）
+   PC: [見出し（残り幅）| 112 | 一覧 780]。SP: 見出し → 32 → 一覧
+   ========================================================================== */
+.job-archive {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-bottom: var(--section-margin-l);
+}
+
+.job-archive__title {
+  color: var(--c-navy);
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.job-archive__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;          /* SP 1140:16119: 一覧とボタンの間（PC は 16） */
+}
+
+.job-archive__body .job__list {
+  width: 100%;
+}
+
+/* 「次の 10 件をみる」は lower.css の .more-btn */
+
+@media (min-width: 768px) {
+  .job-archive {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 112px;
+  }
+
+  .job-archive__title {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .job-archive__body {
+    flex: none;
+    align-items: flex-end;
+    gap: 16px;
+    width: 780px;
+  }
+}
+
+/* ==========================================================================
+   詳細: ページ頭（H2 565:17166 / SP 1137:11485）
+   共通 .page-head の英字タイトルの代わりに [カテゴリ名 13/18px] + [職種名 34/48px]（どちらもグラデ文字）
+   ========================================================================== */
+.page-head--job .page-head__txt {
+  gap: 0;
+}
+
+.page-head__cat,
+.page-head__name {
+  width: fit-content;
+  background: var(--grd-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.page-head__cat {
+  font-size: var(--fs-tight-2xs);
+}
+
+.page-head__name {
+  font-size: 34px;
+}
+
+@media (min-width: 768px) {
+  .page-head--job .page-head__txt {
+    gap: 1px;
+    padding-top: 64px;
+  }
+
+  .page-head__cat {
+    font-size: var(--fs-tight-ss);
+  }
+
+  .page-head__name {
+    font-size: 48px;
+  }
+}
+
+/* ==========================================================================
+   詳細: 本文の 2 カラム（Frame 1604 565:17168 / SP 1140:16413）
+   SP: アンカー（折り返しの丸ボタン）→ 40 → 本文の箱（画面幅いっぱい、内側 40 / 20）
+   PC(1024〜): [追従アンカー 192 | 残り | 本文の箱 964（内側 56）]、下 120
+   ========================================================================== */
+.job-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* 共通 .anchor-nav を入れ子で使う（SP は Figma も同じ部品。間だけ 8） */
+.job-detail__nav .anchor-nav {
+  gap: 8px;
+  max-width: none;
+  padding-inline: 0;
+}
+
+.job-detail__body {
+  margin-inline: calc(var(--side-margin) * -1);
+  padding: 40px var(--side-margin);
+  background: rgba(199, 219, 236, 0.4);
+}
+
+.job-detail [id] {
+  scroll-margin-top: 24px;
+}
+
+/* エントリーフォームの枠（block: エントリーフォーム 567:17870 / SP 1140:16559）
+   見出しは本文の h2 と同じ見た目（editor-style.css の h2 と数値を合わせる） */
+.job-entry {
+  margin-top: 40px;
+}
+
+.job-entry__title {
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  background: var(--c-blue);
+  color: var(--c-white);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.job-entry__box {
+  margin-top: var(--item-gap);
+  padding: 32px 16px;
+  border-radius: var(--radius);
+  background: var(--c-white);
+}
+
+@media (min-width: 768px) {
+  .job-detail {
+    padding-bottom: var(--section-margin-m);
+  }
+
+  .job-detail__body {
+    margin-inline: 0;
+    padding: 56px;
+    border-radius: var(--radius);
+  }
+
+  .job-entry {
+    margin-top: 56px;
+  }
+
+  .job-entry__title {
+    padding-block: 10px;
+  }
+
+  .job-entry__box {
+    padding: 40px 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .job-detail {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  /* 追従: sticky（JS でスクロール位置を読まない） */
+  .job-detail__nav {
+    position: sticky;
+    top: 32px;
+    flex: none;
+    width: 192px;
+  }
+
+  .job-detail__nav .anchor-nav {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  /* Frame 1382（855:26795）: 高さ 56、左右 32、文字とアイコンは両端 */
+  .job-detail__nav .anchor-nav__link {
+    justify-content: space-between;
+    gap: 8px;
+    height: 56px;
+  }
+
+  .job-detail__body {
+    flex: 0 1 964px;
+    min-width: 0;
+  }
+}
+
+/* ==========================================================================
+   詳細: その他の募集職種（Frame 1637 565:17454 / SP 1140:16626）
+   PC: 左右 24 内側の 1392 幅に [見出し | 一覧 660]、上 60 / 左右 96 / 下 160。背景に薄い楕円 + 紺の葉（SP は非表示）
+   SP: 上 64 / 下 80、見出し → 40 → 一覧 → 16 → ボタン
+   ========================================================================== */
+.job-other {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 64px var(--side-margin) var(--section-margin-l);
+}
+
+.job-other__deco {
+  display: none;
+}
+
+.job-other__head .sec-head__label {
+  width: fit-content;
+  font-size: var(--fs-tight-2xs);
+}
+
+.job-other__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--item-gap);
+}
+
+@media (max-width: 767px) {
+  .job-other__head .sec-head__title {
+    font-size: var(--fs-h2);
+    line-height: 1.5;
+  }
+
+  .job-other__head .sec-head__title--cap {
+    align-items: center;
+    gap: 8px;
+  }
+
+  .job-other__head .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .job-other {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    max-width: 1392px;
+    margin-inline: auto;
+    padding: 60px 96px var(--section-margin-l);
+  }
+
+  /* Frame 1900: 488 高の枠に対して上 -130.95% / 左 -61.62% はみ出す 2249.75×1256.69 の SVG */
+  .job-other__deco {
+    position: absolute;
+    top: -582.7px;
+    left: -929.8px;
+    z-index: -1;
+    display: block;
+    width: 2249.75px;
+    max-width: none;
+    height: 1256.69px;
+    pointer-events: none;
+  }
+
+  .job-other__head .sec-head__title--cap {
+    align-items: center;
+    gap: 8px;
+  }
+
+  .job-other__head .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 0;
+  }
+
+  .job-other__body {
+    flex: none;
+    align-items: flex-end;
+    width: 660px;
+  }
+
+  .job-other__body .job__list {
+    width: 100%;
+  }
+
+  .job-other__body .btn {
+    gap: 0;
+    width: 288px;
+    line-height: 1.4;   /* Figma: 高さ 54 */
+  }
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .job-archive {
+    gap: clamp(32px, 7.78vw, 112px);
+  }
+
+  .job-archive__body {
+    width: clamp(400px, 54.17vw, 780px);
+  }
+
+  .job-detail__body {
+    padding: clamp(24px, 3.89vw, 56px);
+  }
+
+  .job-other {
+    margin-inline: clamp(0px, 1.67vw, 24px);
+    padding-inline: clamp(24px, 6.67vw, 96px);
+    gap: clamp(32px, 5vw, 72px);
+  }
+
+  .job-other__body {
+    width: clamp(360px, 45.8vw, 660px);
+  }
+
+  .job-other__deco {
+    top: -40.47vw;
+    left: -64.57vw;
+    width: 156.23vw;
+    height: 87.27vw;
+  }
+}
+

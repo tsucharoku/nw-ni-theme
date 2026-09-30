@@ -1,0 +1,604 @@
+/* ==========================================================================
+   chart.css — 仕事の相関図（Figma PC 720:6705 / SP 1137:10926）
+   - chart-intro   … ページ頭の下の見出し + 説明
+   - chart-sec     … 相関図の置き場所（SP はヒント + リセット + 枠）
+   - chart         … 相関図そのもの。Figma の img（722:8368、1248×2372）と同じ座標系の「ステージ」に、
+                     カード・ラベルを絶対配置し、線と矢印は Figma 書き出しの SVG（assets/img/chart/lines.svg）を重ねる。
+                     文字はすべて HTML（WP で編集できるように画像にしない）
+   - chart-btn     … 「この職種のインタビューを見る」の小さいボタン（Frame 1488 PC small）
+   - chart-links   … SP だけ相関図の下に出す職種別のインタビューへのリンク
+   - chart-pic     … SP 用の図の画像（Figma SP の img 3。ボタンなし）
+   PC はステージを枠の幅に合わせて縮小するだけ。SP は Figma 付箋 1370:17497 のとおり、図を枠の中に入れて
+   ピンチで拡大・縮小、ドラッグで移動できる（assets/js/chart.js）。SP の図は Figma どおりボタンなしの画像にしている
+   （全体表示ではボタンが押せない大きさになるため、リンクは図の下の chart-links に出す。2026-09-30 ユーザー確認）
+   ========================================================================== */
+
+/* ==========================================================================
+   Intro（720:7086 / SP 1140:17345）
+   ========================================================================== */
+.chart-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;                 /* SP: 見出し 108 + 16 + 本文 104 = 228 */
+}
+
+.chart-intro__title {
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.chart-intro__text {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .chart-intro {
+    gap: 24px;
+  }
+}
+
+/* ==========================================================================
+   Section（720:6715 / SP 1140:17348）: SP 上 40 / 下 80、PC 上 80 / 下 160
+   ========================================================================== */
+.chart-sec {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 40px;
+  padding-bottom: 80px;
+}
+
+/* ヒント + リセット（SP のみ。1456:22096） */
+.chart-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.chart-tools__hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+  white-space: nowrap;
+}
+
+.chart-tools__hint img {
+  flex: none;
+  width: 29.39px;
+  height: 23.39px;
+}
+
+.chart-tools__reset {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 100px;
+  background: rgba(199, 219, 236, 0.4);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.chart-tools__reset img {
+  width: 14px;
+  height: 14px;
+}
+
+.chart-tools__reset:focus-visible {
+  outline: 2px solid var(--c-navy);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .chart-tools__reset:hover {
+    background: rgba(199, 219, 236, 0.75);
+  }
+}
+
+/* 枠（SP 1466:20576: 罫線 2px #cbdce9、内側の余白 上下 24 / 左右 16）。
+   中のステージは chart.js が transform で縮尺・位置を決める。JS が動くまでは横スクロールで見られる */
+.chart-viewer {
+  position: relative;
+  overflow: auto;
+  border: 2px solid var(--c-border);
+  aspect-ratio: 335 / 599.5; /* JS が高さを入れるまでの仮（375 幅のとき 余白 48 + 図 547.5 + 罫線 4 = Figma 599.5） */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.chart-viewer.is-ready {
+  overflow: hidden;
+  aspect-ratio: auto;
+  touch-action: pan-y;       /* 等倍のときは縦スクロールをページに渡す。ピンチは JS が受ける */
+}
+
+.chart-viewer.is-zoomed {
+  touch-action: none;        /* 拡大中は 1 本指のドラッグで図を動かす */
+  cursor: grab;
+}
+
+.chart-viewer.is-grabbing {
+  cursor: grabbing;
+}
+
+.chart-viewer.is-anim .chart-pic {
+  transition: transform 0.3s ease;
+}
+
+/* SP の図（画像）。表示幅 1248px = PC の実寸を 1 倍として、chart.js が transform で縮尺と位置を決める */
+.chart-pic {
+  display: block;
+  width: 1248px;
+  max-width: none;
+  height: auto;
+  transform-origin: 0 0;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+.chart-viewer > .chart {
+  display: none;             /* HTML の図は PC だけ */
+}
+
+@media (min-width: 768px) {
+  .chart-sec {
+    padding-top: 80px;
+    padding-bottom: var(--section-margin-l);
+  }
+
+  .chart-tools {
+    display: none;
+  }
+
+  /* PC は枠なし。幅に合わせて縮めるだけ（1440 以上で等倍 1248px） */
+  .chart-viewer,
+  .chart-viewer.is-ready {
+    overflow: visible;
+    border: 0;
+    aspect-ratio: auto;
+    touch-action: auto;
+    -webkit-user-select: auto;
+    user-select: auto;
+  }
+
+  .chart-viewer:not(.is-ready) {
+    overflow-x: auto;
+  }
+
+  .chart-pic {
+    display: none;
+  }
+
+  .chart-viewer > .chart {
+    display: block;
+  }
+}
+
+/* ==========================================================================
+   Chart stage（722:8368、1248×2372 固定。縮尺は親の transform）
+   位置は Figma の座標をそのまま --x / --y（px）で持たせる
+   ========================================================================== */
+.chart {
+  position: relative;
+  width: 1248px;
+  height: 2372px;
+  color: #1c1f2a;
+  transform-origin: 0 0;
+}
+
+.chart [style*="--x"] {
+  position: absolute;
+  top: calc(var(--y) * 1px);
+  left: calc(var(--x) * 1px);
+}
+
+/* 線と矢印（Figma 書き出し。カードより上、ラベルより下） */
+.chart__lines {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 1248px;
+  height: 2372px;
+  max-width: none;
+  pointer-events: none;
+}
+
+/* ---- カード共通 ---- */
+.chart-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  border-radius: var(--radius);
+  z-index: 1;
+}
+
+.chart-card__badge {
+  flex: none;
+  padding: 5px 12px 4px;
+  border-radius: 100px;
+  color: var(--c-white);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.chart-card__img {
+  flex: none;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--c-white);
+}
+
+.chart-card__img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+.chart-card__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.chart-card__name {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.chart-card__desc {
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* ---- クライアント（724:12131） ---- */
+.chart-card--client {
+  justify-content: center;
+  gap: 24px;
+  width: 311px;
+  height: 249px;
+  padding: 24px;
+  background: rgba(245, 210, 211, 0.4);
+}
+
+.chart-card--client .chart-card__img {
+  width: 263px;
+  height: 118px;
+}
+
+.chart-card--client .chart-card__txt {
+  align-items: center;
+}
+
+.chart-card--client .chart-card__desc {
+  white-space: nowrap;
+}
+
+.chart-card--client .chart-card__badge {
+  position: absolute;
+  top: -12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 65px;
+  height: 65px;
+  padding: 1px 0 0;
+  background: #e59394;
+}
+
+/* ---- 本部ブロック（722:8375）: 2 部署 + OR ---- */
+.chart-hq {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  width: 855px;
+  height: 556px;
+  padding: 40px 24px;
+  border-radius: 8px;
+  background: rgba(199, 219, 236, 0.4);
+  z-index: 1;
+}
+
+.chart-hq .chart-card {
+  width: 326px;
+}
+
+.chart-hq .chart-card__badge {
+  background: #659bc3;
+}
+
+.chart-hq .chart-card__img {
+  width: 326px;
+  height: 245px;
+}
+
+.chart-hq__or {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 40px;
+}
+
+.chart-hq__or::before,
+.chart-hq__or::after {
+  content: "";
+  flex: 1 1 0;
+  width: 1px;
+  background: var(--c-border);
+}
+
+/* ---- インターネットリサーチ / FW（722:10410 / 722:10418） ---- */
+.chart-card--ops {
+  width: 374px;
+  height: 557px;
+  padding: 40px 24px;
+}
+
+.chart-card--ops .chart-card__img {
+  width: 326px;
+  height: 245px;
+}
+
+.chart-card--net { background: rgba(189, 229, 214, 0.4); }
+.chart-card--net .chart-card__badge { background: #6ca089; }
+.chart-card--fw { background: rgba(219, 225, 175, 0.4); }
+.chart-card--fw .chart-card__badge { background: #949965; }
+
+/* ---- NI マーケティング研究所（722:10426） ---- */
+.chart-card--lab {
+  width: 505px;
+  height: 305px;
+  padding: 40px 24px;
+  background: rgba(241, 227, 205, 0.4);
+}
+
+.chart-card--lab .chart-card__badge {
+  background: #b9a17c;
+}
+
+.chart-card__row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.chart-card__row .chart-card__img {
+  width: 120px;
+  height: 120px;
+}
+
+.chart-card__row .chart-card__txt {
+  width: auto;
+}
+
+.chart-card__row .chart-card__name {
+  text-align: left;
+}
+
+.chart-card__row .chart-card__desc {
+  white-space: nowrap;
+}
+
+/* ---- 外部パートナー（722:10434）: 点線の枠 + 2 枚 ---- */
+.chart-partner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 215px;
+  height: 786px;
+  padding: 20px 16px 16px;
+  border: 1px dashed #9aa0b0;
+  border-radius: 8px;
+  z-index: 1;
+}
+
+.chart-partner .chart-card {
+  position: relative;
+  width: 100%;
+  padding: 24px 16px;
+  background: rgba(219, 202, 234, 0.4);
+}
+
+.chart-partner .chart-card__badge {
+  background: #a288b9;
+}
+
+.chart-partner .chart-card__img {
+  width: 120px;
+  height: 120px;
+}
+
+/* ---- 経営企画室 / 新価値創造部 / 品質管理委員会（724:11610） ---- */
+.chart-card--staff {
+  flex-direction: row;
+  align-items: stretch;
+  gap: 24px;
+  padding: 24px;
+  background: rgba(199, 210, 219, 0.4);
+}
+
+.chart-card--staff.chart-card--half {
+  width: 612px;
+  height: 193px;
+}
+
+.chart-card--staff.chart-card--wide {
+  align-items: center;
+  width: 719px;
+  height: 168px;
+}
+
+.chart-card--staff .chart-card__img {
+  width: 120px;
+}
+
+.chart-card--wide .chart-card__img {
+  height: 120px;
+}
+
+.chart-card--staff .chart-card__body {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  min-width: 0;
+}
+
+.chart-card--staff .chart-card__name {
+  text-align: left;
+}
+
+.chart-card--wide .chart-card__desc {
+  white-space: nowrap;
+}
+
+/* ---- ラベル（線に添える小さい札） ---- */
+.chart-label {
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--w) * 1px);
+  height: calc(var(--h) * 1px);
+  border-radius: 2px;
+  background: #659bc3;
+  color: var(--c-white);
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.chart-label--s { font-size: 12px; }
+.chart-label--pink { background: #e59394; }
+.chart-label--gray { background: #9a9b9c; }
+.chart-label--beige { background: #b9a17c; }
+.chart-label--orange { background: #d6a884; }
+.chart-label--purple { background: #a288b9; }
+.chart-label--green { background: linear-gradient(90deg, #6ca089, #949965); }
+.chart-label--black { border-radius: var(--radius); background: var(--c-black); }
+.chart-label--round { border-radius: 100px; }
+.chart-label--r4 { border-radius: var(--radius); }
+
+/* 縦書き（Figma は 1 文字ずつ行間 1.1 で積んでいる = 字送り 1.1em）。長音は縦書きの字形になる */
+.chart-label--v {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  padding-top: 0.1em;        /* 末尾の字間ぶんを先頭に足して上下中央に */
+}
+
+/* OR（本部ブロックの中。絶対配置ではない） */
+.chart-hq__or .chart-label {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   小さいボタン（Frame 1488 PC small 1348:17490。288×44、14px）
+   ========================================================================== */
+.chart-btn {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 288px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  background: var(--grd-blue80);
+  color: var(--c-white);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.chart-btn::after {
+  content: "";
+  flex: none;
+  box-sizing: content-box;
+  width: 35.31px;            /* 枠 44.31 = 罫線 1 + 左 8 + 矢印ぶん 35.31（矢印 11.31 は中央） */
+  height: 20px;
+  padding-left: 8px;
+  border-left: 1px solid #7ab7e6;
+  background: url("../img/chart/arrow_btn_s.svg") calc(50% + 3.5px) 50% / 11.31px 20px no-repeat;
+}
+
+.chart-btn:focus-visible {
+  outline: 2px solid var(--c-navy);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .chart-btn:hover {
+    opacity: 0.85;
+  }
+}
+
+/* ==========================================================================
+   各職種のインタビューを見る（SP のみ。1456:21749）
+   ========================================================================== */
+.chart-links {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 80px;
+}
+
+.chart-links .sec-head__title {
+  line-height: 1.5;
+}
+
+.chart-links .sec-head__title--cap {
+  gap: 6px;
+}
+
+.chart-links__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chart-links .chart-btn {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .chart-links {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart-viewer.is-anim .chart-pic,
+  .chart-btn,
+  .chart-tools__reset {
+    transition: none;
+  }
+}

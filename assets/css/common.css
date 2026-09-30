@@ -1,0 +1,1018 @@
+/* ==========================================================================
+   common.css — header / hamburger menu / footer / buttons / bracket
+   ========================================================================== */
+
+/* ==========================================================================
+   訪問時イントロ（fv-intro.js）: FV の青いフレーム（.page-bg__frame の目型の穴）を閉じた状態から開く。
+   html.is-intro は head のインラインスクリプトが付け、JS が動き出すまで穴を閉じておく（全面フレーム色）
+   ========================================================================== */
+.is-intro .page-bg__frame .js-menu-eye {
+  opacity: 0;   /* display:none にすると common.js が穴の拡大率を測れなくなるので opacity で消す */
+}
+
+.is-intro .header,
+.is-intro .header__menu-btn {
+  opacity: 0;
+}
+
+/* ==========================================================================
+   Header（FV内は透明背景。FV通過後は .is-fixed で CTA が追従）
+   ========================================================================== */
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  padding: 4px 10px 10px;
+}
+
+.header__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.header__logo img {
+  width: 120px;
+  height: 45px;
+}
+
+.header__badge img {
+  width: 121px;
+  height: 26px;
+}
+
+/* ページ種別ラベル（新卒 / 中途ページのみ） */
+.header__context {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 24px;
+  font-size: var(--fs-tight-2xs);
+  line-height: 1.4;
+}
+
+.header__context::before {
+  content: "";
+  width: 1px;
+  height: 36px;
+  background: var(--c-black);
+}
+
+.header__left {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.header__nav {
+  display: contents;
+}
+
+.header__links {
+  display: none;
+}
+
+/* ---- ハンバーガー（開くと3本線がバツに変形。メニューより前面） ---- */
+.header__menu-btn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 50;
+  width: 56px;
+  height: 32px;
+  border-radius: var(--radius);
+  background: transparent;
+  transition: background-color 0.3s ease;
+}
+
+/* SP も追従時のみ白 70% の箱（角丸 4px、ぼかしは PC と同じ 4px）。Figma の SP ヘッダー（507:8045 / 追従 845:18927）には無く、
+   2026-09-17 デザイナー指示「右上の SP ハンバーガー 背景を白 70%、角丸 4px」で追加。PC と同じタイミング（is-fixed）で、FV 上は透明。
+   開いたら透明（紺のメニューの上に白いバツ） */
+.header.is-fixed + .header__menu-btn {
+  background: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.header.is-fixed + .header__menu-btn.is-open {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.header__menu-lines {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 36px;
+  height: 13px;
+  transform: translate(-50%, -50%);
+}
+
+.header__menu-lines span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--c-navy);
+  transform-origin: center;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, background-color 0.3s ease, width 0.35s ease, left 0.35s ease;
+}
+
+.header__menu-lines span:nth-child(1) { top: 0; }
+.header__menu-lines span:nth-child(2) { top: 6px; }
+.header__menu-lines span:nth-child(3) { top: 12px; }
+
+/* 開いた状態: SP は Figma SP_Menu の白いバツ（約45px・±30deg） */
+.header__menu-btn.is-open .header__menu-lines span {
+  left: -4.5px;
+  width: 45px;
+  background: var(--c-white);
+}
+
+.header__menu-btn.is-open .header__menu-lines span:nth-child(1) { transform: translateY(6px) rotate(30deg); }
+.header__menu-btn.is-open .header__menu-lines span:nth-child(2) { opacity: 0; }
+.header__menu-btn.is-open .header__menu-lines span:nth-child(3) { transform: translateY(-6px) rotate(-30deg); }
+
+/* ---- CTA（SP: 最初から最後まで画面下に固定。Figma 845:18927 の追従ヘッダーも下にボタンが残る配置） ----
+   PC は FV 内ではヘッダー内に置き、追従の開始（is-fixed）は Message（Have Fun!）が出てきたとき（fv-message.js が
+   付ける。Message のない TOP 扉は common.js が FV 通過で付ける）。フッターに入る手前で is-hidden で消える（SP のみ。2026-09-17 指示。以前は Figma メモ 834:18563 の Entry で消していた。PC は消さない） */
+.header__cta {
+  position: fixed;
+  bottom: 9px;
+  left: 0;
+  z-index: 25;
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  height: 40px;
+  padding: 0 10px;
+  transition: opacity 0.3s ease;
+}
+
+@media (max-width: 767px) {
+  .header.is-hidden .header__cta {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .header {
+    padding: 8px 16px 0;
+  }
+
+  .header__brand {
+    gap: 8px;
+  }
+
+  .header__logo img {
+    width: 151px;
+    height: 57px;
+  }
+
+  .header__badge img {
+    width: 156px;
+    height: 33px;
+  }
+
+  .header__left {
+    gap: 20px;
+  }
+
+  .header__context {
+    gap: 20px;
+  }
+
+  .header__context::before {
+    height: 40px;
+  }
+
+  .header__nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    min-height: 62px;
+    padding: 11px 176px 11px 0; /* Figma: リンクの右端は 1248px（右余白 176） */
+  }
+
+  .header__nav--cta {
+    padding-right: 104px;       /* CTA ボタンあり（新卒）: 右余白 104 */
+  }
+
+  .header__links {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header__link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--fs-tight-2xs);
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .header__link-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 16px;
+    border-radius: 100px;
+    background: rgba(17, 24, 76, 0.7);
+  }
+
+  .header__link-arrow img {
+    width: 6px;
+    height: 16px;
+  }
+
+  .header__cta {
+    position: static;
+    gap: 8px;
+    width: auto;
+    height: auto;
+    padding: 0;
+  }
+
+  /* 追従時（Figma 845:22459「追従ヘッダー」）: ボタン 2 つとハンバーガーをまとめて白 70%・ぼかしの角丸の箱に入れる。
+     箱は CTA 側に描き（上 8 / 右 8、高さ 56、左 8・右はハンバーガー 95 + 間隔 16 の余白）、ハンバーガーはその右端に重ねる */
+  .header.is-fixed .header__cta {
+    position: fixed;
+    top: 8px;
+    right: 8px;
+    bottom: auto;
+    left: auto;
+    align-items: center;
+    height: 56px;
+    padding: 4px 111px 4px 8px;
+    gap: 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    animation: header-cta-in 0.3s ease;
+  }
+
+  @keyframes header-cta-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .header__menu-btn {
+    top: 16px;
+    right: 16px;
+    width: 95px;
+    height: 48px;
+    border-radius: var(--radius);
+    background: transparent;
+    transition: background-color 0.3s ease, top 0.3s ease, right 0.3s ease;
+  }
+
+  /* 追従時のみ白い半透明の枠＋ぼかしが付く（Figma: PC_Hamburger 追従ヘッダー。上 8 / 右 8） */
+  .header.is-fixed + .header__menu-btn {
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+
+  /* CTA ありのページ（新卒 .header--cta）: 箱は CTA 側が描くので、ハンバーガーは透明で箱の右端（上 12 = 箱 8 + 内側 4）に乗る。
+     PC は Entry でも CTA を消さないので、箱は最後まで CTA 側が描く */
+  .header--cta.is-fixed + .header__menu-btn {
+    top: 12px;
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .header__menu-lines {
+    width: 63px;
+    height: 17px;
+  }
+
+  .header__menu-lines span:nth-child(2) { top: 8px; }
+  .header__menu-lines span:nth-child(3) { top: 16px; }
+
+  /* 開いた状態: PC は Figma PC_Menu の白い細いバツ（63px・±30deg、紺の角の上）。白枠は消す */
+  .header.is-fixed + .header__menu-btn.is-open,
+  .header__menu-btn.is-open {
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .header__menu-btn.is-open .header__menu-lines span {
+    left: 0;
+    width: 100%;
+    background: var(--c-white);
+  }
+
+  .header__menu-btn.is-open .header__menu-lines span:nth-child(1) { transform: translateY(8px) rotate(30deg); }
+  .header__menu-btn.is-open .header__menu-lines span:nth-child(3) { transform: translateY(-8px) rotate(-30deg); }
+}
+
+/* ---- ヘッダーボタン（header-btn） ---- */
+.header-btn {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 40px;
+  padding: 0 16px;
+  color: var(--c-white);
+  font-size: var(--fs-tight-2xs);
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.header-btn--grd {
+  background: var(--grd-blue100);
+}
+
+.header-btn--navy {
+  background: var(--c-navy);
+}
+
+.header-btn__arrow {
+  display: flex;
+  align-items: center;
+  height: 16px;
+  padding-left: 16px;
+  border-left: 1px solid #7ab7e6;
+}
+
+.header-btn--navy .header-btn__arrow {
+  border-left-color: #9fb7d9;
+}
+
+.header-btn__arrow img {
+  width: 9px;
+  height: 16px;
+}
+
+@media (max-width: 767px) {
+  .header-btn {
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 12px;
+    border-radius: 3px;
+  }
+
+  .header-btn__arrow {
+    padding-left: 8px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-btn {
+    flex: none;
+    border-radius: 3px;
+  }
+}
+
+/* ==========================================================================
+   Hamburger Menu overlay（PC_Menu / SP_Menu）
+   ========================================================================== */
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow-y: auto;
+  background: var(--c-white);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s; /* 閉じ: 目型が閉じ切ってから短くフェードアウト */
+}
+
+.menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.2s ease; /* 開き: 紺の全面が短くフェードイン → 目型が開く */
+}
+
+/* 紺のマスク面。中身（.menu__inner）の上に重ね、穴から見せる */
+.menu__frame {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.menu__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 47px;
+  min-height: 100%;
+  padding: 76px 40px 60px;
+}
+
+.menu__col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.menu__head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu__label {
+  font-size: var(--fs-tight-2xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.menu__title {
+  font-size: var(--fs-en-2xl);
+  line-height: var(--lh-display-en);
+  color: var(--c-navy);
+}
+
+.menu__groups {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.menu__group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: var(--fs-tight-ss);
+  line-height: 1.4;
+}
+
+.menu__group-title {
+  font-weight: 400;
+}
+
+.menu__sub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-tight-xs);
+  font-weight: 300;
+}
+
+.menu__sub::before {
+  content: "";
+  flex: none;
+  width: 5px;
+  height: 5px;
+  margin-top: 2px;
+  background: url("../img/common/icon_chevron.svg") center / contain no-repeat;
+  transform: rotate(-135deg);
+}
+
+@media (min-width: 768px) {
+  .menu__inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 168px;
+    padding: 112px 120px 96px;
+  }
+
+  .menu__col {
+    gap: 32px;
+  }
+
+  .menu__groups {
+    flex-direction: row;
+    gap: 48px;
+  }
+
+  .menu__group {
+    gap: 20px;
+  }
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.footer {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  padding: 120px 20px 24px;
+  color: var(--c-white);
+  background: var(--c-footer);
+}
+
+.footer__deco {
+  position: absolute;
+  top: -20px;
+  left: -12px;
+  width: 404px;
+  max-width: none;
+  pointer-events: none;
+}
+
+.footer__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* SP（Figma 474:8223）: ロゴ（+ 採用情報サイトの楕円）を中央に、ナビ（アコーディオン 4 段）、その下に Instagram バナー（335x89）の縦並び。
+   .footer__brand は display: contents で子（ロゴ / Instagram）を .footer__inner の直接の並びにし、order で Instagram をナビの下へ。
+   PC は従来どおり（ロゴ列 + ナビ）。2026-09-15 */
+.footer__brand {
+  display: contents;
+}
+
+.footer__brand-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  gap: 10px;
+}
+
+.footer__nav {
+  order: 1;
+}
+
+.footer__logo img {
+  width: 120px;
+  height: 45px;
+}
+
+.footer__badge {
+  position: relative;
+  width: 121px;
+  height: 26px;
+  background: url("../img/common/footer_badge_ellipse.svg") center / 100% 100% no-repeat;
+  color: var(--c-footer);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 26px;
+  text-align: center;
+}
+
+/* Instagram バナー（Figma: 白丸 56 の中に公式グリフ 24、リード 13px 2 行 + 見出し 18px、グラデ背景） */
+.footer__insta {
+  order: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 4px;
+  background: linear-gradient(28.68deg, #ffbc4f 3.09%, #df4a81 21.71%, #5438c3 81.5%);
+  color: var(--c-white);
+}
+
+.footer__insta-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--c-white);
+}
+
+/* 公式グリフ: 形（マスク SVG）× 公式グラデ画像（Figma と同じ合成。画像は 24px の枠に対して 156% を中心に） */
+.footer__insta-icon::before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  background: url("../img/common/instagram_glyph_gradient.png") center / 156% 156% no-repeat;
+  -webkit-mask: url("../img/common/instagram_glyph_mask.svg") center / 100% 100% no-repeat;
+  mask: url("../img/common/instagram_glyph_mask.svg") center / 100% 100% no-repeat;
+}
+
+.footer__insta-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer__insta-lead {
+  font-size: var(--fs-tight-2xs);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+  white-space: nowrap;   /* Figma: 2 行固定（<br>） */
+}
+
+.footer__insta-title {
+  font-size: var(--fs-tight-ss, 18px);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+}
+
+.footer__nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer__group {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer__group-title {
+  font-size: var(--fs-tight-xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.footer__group-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px 0;
+  text-align: left;
+}
+
+.footer__group-toggle::after {
+  content: "";
+  flex: none;
+  width: 16px;
+  height: 16px;
+  background: url("../img/common/icon_chevron_down.svg") center / contain no-repeat;
+  transition: transform 0.3s ease;
+}
+
+.footer__group-toggle[aria-expanded="true"]::after {
+  transform: rotate(180deg);
+}
+
+.footer__panel {
+  padding-bottom: 20px;
+}
+
+.footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer__list a {
+  display: inline-block;
+  color: var(--c-txt-deep);
+  font-size: var(--fs-tight-2xs);
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.footer__subgroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer__subhead {
+  color: var(--c-white);
+  font-size: var(--fs-tight-2xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.footer__sub li a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer__sub li a::before {
+  content: "";
+  flex: none;
+  width: 5px;
+  height: 5px;
+  background: url("../img/common/icon_chevron.svg") center / contain no-repeat;
+  transform: rotate(-135deg);
+}
+
+.footer__bottom {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;   /* Figma SP 474:8223 copyright（2026-09-16 更新）: リンク行・コピーライトとも中央寄せ。PC は両端揃えで上書き */
+  gap: 10px;
+  margin-top: 56px;   /* Figma SP: 本体と copyright の間 56（PC は margin-top: auto で下詰め） */
+  font-size: var(--fs-tight-2xs);
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.footer__copy {
+  color: var(--c-gray);
+}
+
+.footer__links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.footer__links a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.footer__links img {
+  width: 13px;
+  height: 11px;
+}
+
+@media (min-width: 768px) {
+  /* PC（Figma 474:7156、2026-09-15 の新レイアウト）: 上 214 / 左右 60 / 下 40。ロゴ行（左: ロゴ + バッジ、右: Instagram バナー 294x101）
+     → 24 → ナビ（上 40 空けて 4 列、両端揃え）→ 56 → copyright。高さ 693.7 */
+  .footer {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+    padding: 214px 60px 40px;
+  }
+
+  .footer__deco {
+    top: -16px;
+    left: calc(50% - 796px); /* 1440 幅で -76px。コンテンツ幅に追従 */
+    width: 986px;
+  }
+
+  /* コンテンツはデザイン幅（1440 - 60*2 = 1320px）以上に広げない。背景は全幅 */
+  .footer__inner,
+  .footer__bottom {
+    width: 100%;
+    max-width: 1320px;
+    margin-inline: auto;
+  }
+
+  .footer__inner {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .footer__brand {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .footer__brand-logo {
+    align-items: center;
+    align-self: auto;
+    gap: 12px;
+  }
+
+  .footer__nav {
+    order: 0;
+  }
+
+  .footer__logo img {
+    width: 151px;
+    height: 57px;
+  }
+
+  .footer__badge {
+    width: 155px;
+    height: 32px;
+    font-size: var(--fs-tight-2xs);
+    line-height: 32px;
+  }
+
+  /* Instagram バナー: Figma の Frame 1646（294x101、余白 20 / 22.5） */
+  .footer__insta {
+    order: 0;
+    width: auto;
+    min-width: 294px;
+    padding: 16px 20px;
+  }
+
+  .footer__nav {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: space-between;
+    column-gap: 40px;
+    row-gap: 48px;
+    padding-top: 40px;
+  }
+
+  .footer__group {
+    border-bottom: 0;
+  }
+
+  .footer__group-toggle {
+    width: auto;
+    padding: 0;
+    pointer-events: none;
+  }
+
+  .footer__group-toggle::after {
+    display: none;
+  }
+
+  .footer__panel {
+    padding: 24px 0 0;
+  }
+
+  .footer__list {
+    gap: 24px;
+  }
+
+  .footer__list a {
+    display: block;   /* li の行ボックス（16px 基準）で高さが 26 になるのを防ぐ。Figma のリンクは 20 高・間 24 */
+  }
+
+  /* 「日本インフォメーションを知る」の列: Figma（Frame 2266）はリンク 3 つの列の右に「仕事とキャリア」「人とカルチャー」の小見出し列が横並び（間 24） */
+  .footer__group:has(.footer__subgroup) .footer__list:not(.footer__sub) {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(3, auto);
+    align-items: start;
+    column-gap: 24px;
+    row-gap: 24px;
+  }
+
+  .footer__subgroup {
+    grid-row: 1 / span 3;
+  }
+
+  .footer__sub {
+    gap: 16px;
+  }
+
+  .footer__bottom {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+  }
+
+  .footer__bottom {
+    margin-top: auto;
+    margin-inline: auto;
+  }
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+/* グラデーションボタン（Figma: Btn） */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 20px;   /* Figma SP の共通ボタン Frame 1488: 上下 16 + 文字 16px × 行間 1.4 = 高さ 54（2026-09-15 修正。以前は 14 + 行間 1 で 48） */
+  border-radius: var(--radius);
+  background: var(--grd-blue80);
+  color: var(--c-white);
+  font-size: var(--fs-body-xs);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.btn__arrow {
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 20px;
+  padding-left: 20px;
+  border-left: 1px solid #7ab7e6;
+}
+
+.btn__arrow img {
+  width: 12px;
+  height: 20px;
+}
+
+@media (min-width: 768px) {
+  .btn {
+    width: auto;
+    gap: 40px;
+    padding: 16px 32px;
+    line-height: 1;   /* PC は従来どおり高さ 48（Figma PC の Frame 1488 は 54。未対応） */
+  }
+
+  .btn__arrow {
+    padding-left: 32px;
+  }
+}
+
+/* 白丸矢印（Figma: Arrow white s / white m） */
+.pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 32px;
+  height: 20px;
+  border-radius: 100px;
+  background: var(--c-white);
+}
+
+.pill img {
+  width: 14px;
+  height: 20px;
+}
+
+@media (min-width: 768px) {
+  .pill--m {
+    width: 64px;
+    height: 32px;
+  }
+
+  .pill--m img {
+    width: 16px;
+    height: 24px;
+  }
+}
+
+/* ==========================================================================
+   Bracket（四隅カッコ）※本番はアニメーション（中央から広がる）
+   ========================================================================== */
+.bracket {
+  position: relative;
+}
+
+.bracket__corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: url("../img/common/corner_sp.svg") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.bracket__corner--tl { top: 0; left: 0; }
+.bracket__corner--tr { top: 0; right: 0; transform: scaleX(-1); }
+.bracket__corner--bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.bracket__corner--br { bottom: 0; right: 0; transform: scale(-1, -1); }
+
+@media (min-width: 768px) {
+  .bracket__corner {
+    width: 28px;
+    height: 28px;
+    background-image: url("../img/common/corner.svg");
+  }
+
+  .bracket__corner--tl { top: -4px; left: -4px; }
+  .bracket__corner--tr { top: -4px; right: -4px; }
+  .bracket__corner--bl { bottom: -4px; left: -4px; }
+  .bracket__corner--br { bottom: -4px; right: -4px; }
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化: 1440基準の固定幅を縮められるようにする
+   ========================================================================== */
+@media (min-width: 768px) {
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .header__nav {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .menu__inner {
+    gap: clamp(48px, 11vw, 168px);
+    padding-inline: clamp(40px, 8vw, 120px);
+  }
+
+  .menu__groups {
+    flex-wrap: wrap;
+  }
+
+  .footer {
+    padding-inline: clamp(24px, 4vw, 60px);
+  }
+
+  /* 幅が狭いときは右2列を下段へ（2列×2段） */
+  @media (max-width: 1199px) {
+    .footer__nav {
+      grid-template-columns: repeat(2, auto);
+      justify-content: start;
+      column-gap: 80px;
+    }
+  }
+}

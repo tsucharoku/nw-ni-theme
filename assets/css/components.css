@@ -1,0 +1,2750 @@
+/* ==========================================================================
+   components.css — 新卒 / 中途 TOP 共通セクション
+   section-heading / arrow-pill / message / about / info / do / story /
+   future / voice / talk / culture / job / entry
+   ========================================================================== */
+
+/* ==========================================================================
+   Section heading（Figma: section-heading）
+   --top: 英字大見出し + 和文小見出し(cap付き) + リード
+   --sub: ラベル + 和文大見出し
+   ========================================================================== */
+.sec-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sec-head__label {
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.sec-head__en {
+  font-size: var(--fs-en-2xl);
+  line-height: var(--lh-display-en);
+  color: var(--c-navy);
+}
+
+.sec-head__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sec-head__title {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.sec-head__title--cap {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.sec-head__title--cap::before {
+  content: "";
+  flex: none;
+  width: 20px;
+  height: 25px;
+  margin-top: 5px;
+  background: url("../img/common/icon_cap.svg") center / contain no-repeat;
+}
+
+.sec-head__read {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.sec-head__read::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 10px;
+  background: url("../img/common/icon_dot.svg") center / contain no-repeat;
+}
+
+.sec-head--white {
+  color: var(--c-white);
+}
+
+.sec-head--white .sec-head__en {
+  color: var(--c-white);
+}
+
+@media (min-width: 768px) {
+  .sec-head--top {
+    gap: 16px;
+  }
+
+  .sec-head__label {
+    font-size: var(--fs-tight-2xs);
+  }
+
+  .sec-head__title {
+    font-size: 24px;
+  }
+
+  .sec-head--sub .sec-head__title {
+    font-size: var(--fs-h2);
+    line-height: 1.5;
+  }
+
+  .sec-head__read {
+    padding-left: 20px;
+  }
+}
+
+/* ==========================================================================
+   Arrow pill（Figma: arrow navy m / s / white）
+   ========================================================================== */
+.arrow-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 32px;
+  height: 20px;
+  border-radius: 100px;
+  background: rgba(17, 24, 76, 0.7);
+}
+
+.arrow-pill img {
+  width: 14px;
+  height: 20px;
+}
+
+.arrow-pill--prev {
+  transform: rotate(180deg);
+}
+
+/* スライダー操作（common.js）: 押せることを示す */
+button.arrow-pill {
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+button.arrow-pill:active {
+  opacity: 0.8;
+}
+
+@media (min-width: 768px) {
+  .arrow-pill {
+    width: 46px;
+    height: 24px;
+  }
+
+  .arrow-pill img {
+    width: 16px;
+    height: 24px;
+  }
+
+  .arrow-pill--l {
+    width: 44px;
+  }
+
+  .arrow-pill--l img {
+    width: 20px;
+  }
+}
+
+/* カルーセル操作行（← →）。矢印は SP でも m サイズ（46×24） */
+.slider-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  width: 100%;
+}
+
+.slider-nav .arrow-pill {
+  width: 46px;
+  height: 24px;
+}
+
+.slider-nav .arrow-pill img {
+  width: 16px;
+  height: 24px;
+}
+
+/* 幅固定ボタン（PC 288px / SP 100%） */
+.btn--w {
+  justify-content: space-between;
+}
+
+@media (min-width: 768px) {
+  .btn--w {
+    width: fit-content;
+    min-width: 288px; /* 文言が長い場合（例: 日本インフォメーションについて知る）は広がる */
+    gap: 24px;
+  }
+}
+
+/* ==========================================================================
+   Message（Have Fun!）
+   ========================================================================== */
+/* 出現は fv-message.js（demo と同じく、ロゴが定位置に着く頃に文章が画面下からヌルっと上がって定位置へ）。
+   新卒（.message--fixed）は demo と同じく通常のフローに置かず画面固定にし、JS で動かす（定位置 → スクロールの半分の
+   速さで上へ抜ける → About に覆われたら非表示）。フローの高さは持たないので About のピンは FV の余白の直後から始まる。
+   中途（.message--card）は Figma 準拠で Hero 直下に静止（出現アニメなし）。career.css で px 固定に上書きする。
+   新卒のこのセクションだけは demo と同じくウィンドウ幅に比例して大きくなる（文字・余白・ボタンを vw で指定。
+   SP は 375px、PC は 1440px を 100vw とした換算）。下のセクションは固定サイズのまま */
+.message {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  will-change: transform;
+  align-items: center;
+  gap: 8.533vw;            /* 32px */
+  padding: 17.067vw 5.333vw;   /* 64px 20px */
+}
+
+.message--fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 0;
+  transform: translateY(120vh);   /* JS が動くまでは画面外 */
+  pointer-events: none;           /* 画面固定で下のコンテンツに重なるので、ボタンだけ受ける */
+}
+
+.message--fixed .btn {
+  pointer-events: auto;           /* 上がり切るまでは fv-message.js が none にする */
+}
+
+/* 新卒 SP（〜767px）: 画面固定にせずフロー（fv-message.js はフローモード。出現の translateY は JS がインラインで書く）。
+   上マージンは JS が「上がり切ったとき見出しが画面上 28.77%」になるよう負の値で決める（2026-09-15） */
+@media (max-width: 767px) {
+  .message--fixed {
+    position: relative;
+    z-index: auto;
+    transform: none;
+    pointer-events: auto;
+  }
+}
+
+.message .btn {
+  padding: 4.267vw 5.333vw;   /* 16px 20px（Figma 470:2703: 高さ 54） */
+  border-radius: 1.067vw;     /* 4px */
+  font-size: 4.267vw;         /* 16px */
+}
+
+.message .btn__arrow {
+  height: 5.333vw;            /* 20px */
+  padding-left: 5.333vw;
+}
+
+.message .btn__arrow img {
+  width: 3.2vw;               /* 12px */
+  height: 5.333vw;            /* 20px */
+}
+
+.message__havefun {
+  position: relative;
+  z-index: 1;
+  font-family: var(--ff-en);
+  font-weight: 600;
+  font-size: 18.133vw;        /* 68px */
+  line-height: 0.68;
+  letter-spacing: 0;
+  white-space: pre;
+  transform: skewX(-14deg) scaleY(0.97);
+  background: var(--grd-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.message__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6.4vw;                 /* 24px */
+  width: 100%;
+}
+
+.message__head {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2vw;                 /* 12px */
+}
+
+.message__label {
+  font-size: 4.8vw;           /* 18px */
+  font-weight: 500;
+  line-height: 1.4;
+  background: var(--grd-blue70);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.message__title {
+  font-size: 8.533vw;         /* 32px */
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+}
+
+.message__text {
+  font-size: 5.333vw;         /* 20px */
+  font-weight: 500;
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+
+@media (min-width: 768px) {
+  .message {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2.778vw;             /* 40px */
+    padding: 11.111vw 6.667vw;   /* 160px 96px（Figma: Frame 26 が x 96 / y 160） */
+  }
+
+  .message .btn {
+    gap: 2.778vw;             /* 40px */
+    padding: 1.111vw 2.222vw; /* 16px 32px */
+    border-radius: 0.278vw;   /* 4px */
+    font-size: 1.111vw;       /* 16px */
+  }
+
+  .message .btn__arrow {
+    height: 1.389vw;          /* 20px */
+    padding-left: 2.222vw;    /* 32px */
+  }
+
+  .message .btn__arrow img {
+    width: 0.833vw;           /* 12px */
+    height: 1.389vw;          /* 20px */
+  }
+
+  .message__havefun {
+    order: 2;
+    flex: none;
+    font-size: 13.056vw;      /* 188px */
+    margin-right: 2.778vw;    /* 40px */
+  }
+
+  .message__body {
+    order: 1;
+    flex: 0 1 44.792vw;       /* 645px */
+    gap: 2.778vw;             /* 40px */
+  }
+
+  /* 新卒（白版）: Have Fun! は canvas 側で描き DOM は非表示なので、本文は縮めず Figma の 645px を保つ
+     （非表示の Have Fun! が右にはみ出す分は overflow hidden で隠れる） */
+  .message:not(.message--card) .message__body {
+    flex-shrink: 0;
+  }
+
+  .message__head {
+    gap: 0.833vw;             /* 12px */
+  }
+
+  .message__label {
+    font-size: 1.25vw;        /* 18px */
+  }
+
+  .message__title {
+    font-size: 2.917vw;       /* 42px */
+    line-height: 1;
+  }
+
+  .message__text {
+    font-size: 1.389vw;       /* 20px */
+  }
+}
+
+/* ==========================================================================
+   About（3分でわかる、日本インフォメーション）
+   ========================================================================== */
+.about {
+  position: relative;
+  overflow: hidden;
+  padding: 64px 20px 40px;
+  color: var(--c-white);
+}
+
+/* ---- About の固定と切り替え（demo 準拠、fv-about.js） ----
+   .about-pin: 直前のフロー要素の下端の 1 画面 + 50px 手前から始まり（demo の about-pin と同じ margin-top）、この中で .about が sticky で 1 画面に固定される。
+   新卒は Message が画面固定（fv-message.js）でフローの高さを持たないので、FV の余白の直後から始まる（demo と同じ）。
+   高さ 210vh + 50px は demo の about-pin と同じ（開示ゾーン 0.6 画面 → 固定 → 次セクションが 0.35 画面で覆う）。
+   .about は clip-path（縦バーのモザイク）で隠された状態から開示され、中身は上下中央。
+   .after-about は About を覆って抜ける間だけ画面固定（.is-fixlock） */
+.about-pin {
+  position: relative;
+  margin-top: calc(-100vh - 50px);
+  margin-top: calc(-100svh - 50px);
+  height: calc(210vh + 50px);
+  height: calc(210svh + 50px);
+  pointer-events: none;   /* Message に重なる部分でクリックを奪わない（About 本体だけ受ける。clip-path の外は元々受けない） */
+}
+
+.about-pin .about {
+  pointer-events: auto;
+}
+
+.about-pin .about {
+  position: sticky;
+  top: -4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh + 8px);
+  height: calc(100svh + 8px);
+  min-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  will-change: clip-path;   /* clip-path 自体は fv-about.js が毎フレーム書く（JS が無ければ普通に見える） */
+}
+
+.about-pin .about__inner {
+  width: 100%;
+  transform-origin: 50% 50%;   /* 画面が低いときは fv-about.js が縮小して収める */
+}
+
+/* About より下: pin の最後の 1 画面に重ねて始める（demo の ni-secs と同じ）。
+   固定解除点（zone2 終端）でフロー位置がちょうど画面天面に来るので継ぎ目が出ない。About（sticky）より前面 */
+.after-about {
+  position: relative;
+  z-index: 2;
+  margin-top: -100vh;
+  margin-top: -100svh;
+}
+
+/* 抜けの間: 覆う側（.after-about）の先頭に固定背景のクローン（白 + 波の動画 + 青ベール）を敷き、
+   縦バーの中から About が透けないようにする（demo の #fvbgfix と同じ役割）。fv-about.js が動画を複製して差し込む。
+   抜け終わったら About 自体を非表示にするので、以降は本来の固定背景がそのまま透ける */
+.after-about__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  display: none;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--c-white);
+  pointer-events: none;
+}
+
+.after-about.is-fixlock .after-about__bg {
+  display: block;
+}
+
+.after-about__bg video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.63;
+}
+
+.after-about__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(254deg, #dce2fd 0%, #a9cdf8 100%);
+  opacity: 0.1;
+}
+
+.after-about.is-fixlock {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 100%;
+  margin-top: 0;
+  will-change: clip-path;
+}
+
+/* SP（〜767px）: About の固定・モザイク切り替えはしない（fv-about.js は SP では動かない。2026-09-15 指示）。
+   新卒の Message も SP では画面固定でなくフロー（下の .message--fixed の上書き。fv-message.js のフローモード）なので、
+   About は Message の直後に普通に続く */
+@media (max-width: 767px) {
+  .about-pin {
+    margin-top: 0;
+    height: auto;
+    pointer-events: auto;
+  }
+
+  .about-pin .about {
+    position: relative;
+    top: auto;
+    display: block;
+    height: auto;
+    padding: 64px 20px 40px;
+    will-change: auto;
+  }
+
+  .after-about {
+    margin-top: 0;
+  }
+}
+
+/* 切り替えの一時停止スイッチ（2026-09-16、動きの確認のため）: <body data-sweep="off"> のとき PC でも上の SP と同じ通常フローにする。
+   fv-about.js / fv-entry.js も同じ属性を見て動かない。戻すときは beginner / career の <body> から属性を消すだけ（この CSS と JS は残してよい） */
+@media (min-width: 768px) {
+  body[data-sweep="off"] .about-pin {
+    margin-top: 0;
+    height: auto;
+    pointer-events: auto;
+  }
+
+  body[data-sweep="off"] .about-pin .about {
+    position: relative;
+    top: auto;
+    display: block;
+    height: auto;
+    padding: 64px 20px 40px;
+    will-change: auto;
+  }
+
+  body[data-sweep="off"] .after-about {
+    margin-top: 0;
+  }
+}
+
+.about__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #517ea6;
+}
+
+.about__bg img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1524px;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  transform: translateX(-50%);
+  /* ソフトライト合成は about_skyline_blend.png に焼き込み済み（下地 #517ea6、W3C の式）。mix-blend-mode は iOS でスクロール中の合成が重いので外した（2026-09-17）。元画像 about_skyline.png は残す */
+}
+
+.about__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.about__content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.about__text {
+  font-size: var(--fs-body-s);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* 数字の図（SP: 292x290 基準）。幅に合わせて全体が拡大縮小する（内部寸法は cqw、292px = 100cqw）。
+   数字の行（図の箱より少しはみ出す設計）の左右がテキストエリアの左右余白と揃う大きさ（375px 幅で数字の行 = 335px） */
+.about__stats {
+  position: relative;
+  container-type: inline-size;
+  width: 85.6%;
+  margin-inline: auto;
+  aspect-ratio: 292 / 290;
+}
+
+/* Figma SP: 直径290の円（帯 67〜224 を除いた上下の弧）を (1,1) に、点 244x161 を (24.5, 65)。SP 専用SVGを使用 */
+.about__deco-circle {
+  position: absolute;
+  top: 0.34cqw;
+  left: 50%;
+  width: 99.32cqw;
+  height: 99.32cqw;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.about__deco-dots {
+  position: absolute;
+  top: 22.26cqw;
+  left: 8.39cqw;
+  width: 83.56cqw;
+  height: 55.31cqw; /* 161.5/292。SP専用SVG（点は正円） */
+  pointer-events: none;
+}
+
+.about__grid {
+  position: absolute;
+  top: 30.82cqw;
+  left: 50%;
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 5.48cqw;
+  transform: translateX(-50%);
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 3.42cqw;
+  height: 16.44cqw; /* Figma: 行の高さは 48（アイコンと同じ）。文字はこれを基準に上下中央 */
+}
+
+.stat__icon {
+  flex: none;
+  width: 16.44cqw;
+  height: 16.44cqw;
+}
+
+.stat__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4cqw;
+  white-space: nowrap;
+}
+
+.stat__label {
+  font-size: 4.79cqw;
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: 0.04em;
+}
+
+.stat__value {
+  display: flex;
+  align-items: flex-end;
+  line-height: 1;
+}
+
+.stat__num {
+  font-size: 11.64cqw;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
+.stat__unit {
+  font-size: 6.16cqw;
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: 0.04em;
+}
+
+@media (min-width: 768px) {
+  .about {
+    padding: 0 var(--side-margin);
+    min-height: 900px;
+  }
+
+  .about__bg img {
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-position: 50% 45%; /* セクションの高さが変わっても下が切れないよう cover で全面に敷く */
+  }
+
+  .about__inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 96px;
+    max-width: 1248px; /* デザイン幅（1440 - 96*2）以上は広がらず中央固定 */
+    margin-inline: auto;
+    min-height: 900px;
+  }
+
+  .about__content {
+    flex: 0 1 447px;
+    gap: 32px;
+  }
+
+  /* 数字の図（705x541）はコンテナ幅に合わせて全体が縮小する。内部寸法は cqw（705px = 100cqw） */
+  .about__stats {
+    container-type: inline-size;
+    flex: 1 1 705px;
+    width: auto;
+    max-width: 705px;
+    min-width: 0;
+    height: auto;
+    aspect-ratio: 705 / 541;
+  }
+
+  .about__deco-circle {
+    top: -6.24cqw;
+    left: 8.37cqw;
+    width: 79.86cqw;
+    height: 89.36cqw;  /* 630/705 */
+    transform: none;
+  }
+
+  .about__deco-dots {
+    top: 17.59cqw;
+    left: 8.09cqw;
+    width: 80.71cqw;
+    height: 41.28cqw;  /* 291/705 */
+  }
+
+  .about__grid {
+    top: 22.98cqw;
+    left: 0;
+    gap: 5.67cqw;
+    transform: none;
+  }
+
+  .stat {
+    gap: 3.4cqw;
+    height: 12.48cqw; /* 88px */
+  }
+
+  .stat__icon {
+    width: 12.48cqw;
+    height: 12.48cqw;
+  }
+
+  .stat__body {
+    gap: 2.27cqw;
+  }
+
+  .stat__label {
+    font-size: 2.55cqw;
+  }
+
+  .stat__num {
+    font-size: 11.35cqw;
+    line-height: 0.6;
+  }
+
+  .stat__unit {
+    font-size: 3.69cqw;
+  }
+}
+
+/* ==========================================================================
+   Info（Recruit pitch / 適性診断バナー）※プレースホルダ
+   ========================================================================== */
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 64px 20px;
+}
+
+.info__pitch,
+.info__bnr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  color: var(--c-white);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.info__pitch {
+  aspect-ratio: 800 / 450;
+  background: var(--c-gray);
+}
+
+.info__bnr {
+  height: 112px;
+  border-radius: 8px;
+  background: #797979;
+}
+
+@media (min-width: 768px) {
+  .info {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 40px;
+    max-width: calc(1248px + var(--side-margin) * 2);
+    margin-inline: auto;
+    padding: var(--section-margin-l) var(--side-margin);
+  }
+
+  .info__pitch {
+    flex: 0 0 73.4%;
+    aspect-ratio: 916 / 515;
+  }
+
+  .info__bnr {
+    flex: 1 1 0;
+    height: auto;
+    border-radius: var(--radius);
+  }
+}
+
+/* ==========================================================================
+   Do（リサーチの仕事って、実際どんなことをするの？）
+   ========================================================================== */
+.do {
+  padding: 0 20px;
+}
+
+.do__box {
+  padding: 40px 24px;   /* Figma SP 470:2711 / 中途 474:8503（2026-09-16 変更）: カッコ行 24 + 間 16 = 40、左右は中身の枠（470:2715）の余白 24。Future と同じ取り方 */
+}
+
+.do__content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.do__img {
+  overflow: hidden;
+  aspect-ratio: 536 / 357;
+  border-radius: var(--radius);
+  background: #797979;
+}
+
+.do__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.do__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.do__text {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .do {
+    max-width: calc(1248px + var(--side-margin) * 2);
+    margin-inline: auto;
+    padding: 0 var(--side-margin);
+  }
+
+  .do__box {
+    padding: 40px;
+  }
+
+  .do__content {
+    flex-direction: row;
+    align-items: center;
+    gap: 88px;
+  }
+
+  .do__img {
+    flex: none;
+    width: 562px;
+    aspect-ratio: 562 / 374;
+  }
+
+  .do__txt {
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 32px;
+  }
+}
+
+/* ==========================================================================
+   Project Story
+   ========================================================================== */
+.story {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 64px 20px 0;
+  overflow: hidden;
+}
+
+.story__title {
+  font-size: 46px;        /* Figma SP 470:4963: 2 行で 104（EN/2XL-sb、行間 1.12）。PC は下で上書き */
+  line-height: 1.12;
+  color: var(--c-navy);
+}
+
+/* Figma SP の item は高さ 267 固定（本文が 2 行でも下に余白）。矢印は 24 下 */
+@media (max-width: 767px) {
+  .story-card {
+    min-height: 267px;
+  }
+}
+
+.story__body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.story__intro {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* スライダー（Splide、common.js）。カード間隔は Splide の gap オプション（SP 24px / PC 48px）。
+   SP は右端まで見切れさせる（負マージン）。Splide の visibility:hidden は使わない（JS 前も見える） */
+.story__slider {
+  margin-right: -20px;
+  visibility: visible;
+}
+
+.story__list {
+  display: flex;
+}
+
+.story-card {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 285px;
+}
+
+/* 写真の上に帽子アイコン・PROJECT STORY・タグを重ねる領域。
+   タグの縦位置は写真の高さに対する％（Figma: SP 120/161、PC 223/383）にして、
+   中間幅で写真が縮んでもズレないようにする */
+.story-card__visual {
+  position: relative;
+}
+
+.story-card__img {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 680 / 383;
+  border-radius: var(--radius);
+  background: var(--c-gray);
+}
+
+.story-card__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.story-card__cap {
+  position: absolute;
+  top: 18px;
+  left: 10px;
+  width: 15px;
+  height: 18px;
+  background: url("../img/common/icon_cap.svg") center / contain no-repeat;
+  pointer-events: none;
+}
+
+.story-card__label {
+  position: absolute;
+  top: 16px;
+  left: 29px;
+  color: var(--c-white);
+  font-size: 12px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.story-card__tags {
+  position: absolute;
+  top: 74.5%;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: var(--c-white);
+}
+
+.story-card__client {
+  padding: 5px 8px;
+  background: var(--grd-text);
+  font-size: var(--fs-tight-2xs);
+  line-height: 1.4;
+}
+
+.story-card__lead {
+  display: none;
+}
+
+.story-card__lead span {
+  display: inline-block;
+  padding: 2px 12px;
+  background: var(--c-navy);
+  font-size: var(--fs-tight-s);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.story-card__summary {
+  font-size: var(--fs-body-xs);
+  line-height: 1.65;
+}
+
+.story-card__person {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .story {
+    flex-direction: row;
+    gap: 88px;
+    padding: var(--section-margin-m) 0 0 var(--side-margin);
+  }
+
+  .story__title {
+    flex: none;
+    font-size: var(--fs-en-2xl);
+    line-height: var(--lh-display-en);
+  }
+
+  .story__body {
+    flex: 1 1 0;
+    gap: 48px;
+  }
+
+  .story__slider {
+    margin-right: 0;
+  }
+
+  .story__nav {
+    padding-right: var(--side-margin);
+  }
+
+  .story-card {
+    gap: 32px;
+    width: 696px;
+    padding-left: 16px;
+  }
+
+  .story-card__cap {
+    top: 26px;
+    left: 26px;
+    width: 31px;
+    height: 38px;
+  }
+
+  .story-card__label {
+    top: 27px;
+    left: 65px;
+    font-size: 18px;
+  }
+
+  .story-card__tags {
+    top: 58.2%;
+    left: -16px; /* カードの左端（写真より 16px 外）まで出す */
+  }
+
+  .story-card__client {
+    padding: 5px 16px;
+    font-size: var(--fs-tight-xs);
+  }
+
+  .story-card__lead {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .story-card__summary {
+    font-weight: 300;
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .story-card__foot {
+    display: flex;
+    gap: 32px;
+  }
+
+  .story-card__avatar {
+    flex: none;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .story-card__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .story-card__info {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .story-card__person {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--c-navy);
+    font-size: var(--fs-tight-xs);
+    line-height: 1.4;
+  }
+
+  .story-card__badge {
+    padding: 6px 10px;
+    border-radius: 3px;
+    background: var(--c-navy);
+    color: var(--c-white);
+    font-size: var(--fs-tight-2xs);
+  }
+}
+
+/* ==========================================================================
+   Future（リサーチ業界の今と日本インフォメーションが描く未来）
+   ========================================================================== */
+.future {
+  position: relative;
+  z-index: 1;           /* 下にはみ出す飾りの四角を次のセクション（Voice の装飾）より上に */
+  overflow-x: clip;     /* マーキーの横はみ出しだけ切る（縦は切らない。四角がセクション下端より下まで広がる） */
+  padding: 88px 20px 0;
+}
+
+.future__squares {
+  position: absolute;
+  top: 39px;
+  left: 0;
+  width: 100%;
+  height: 400px;
+  pointer-events: none;
+}
+
+.future__squares span {
+  position: absolute;
+  border-radius: 4px;
+  background: #00aad5;
+  opacity: 0.14;
+}
+
+.future__squares span.is-navy {
+  background: var(--c-navy);
+  opacity: 0.1;
+}
+
+/* SP: 四角の位置・大きさは Figma の SP（新卒 470:2728 の img フレーム x 1 / y 38.84 / 374x400 の中の座標。x は +1）。
+   PC の値（1440 の比率と px）は HTML のインラインなので !important で上書き。Figma で非表示の 3 個（1・4・9）は消す。
+   中途（474:8520）は career.css で別の値（枠の上端 -8 / 高さ 422、全部表示）。2026-09-15 */
+@media (max-width: 767px) {
+  .future__squares span:nth-child(1) { left: 296px !important; top: 214px !important; width: 30px !important; height: 36px !important; display: none; }
+  .future__squares span:nth-child(2) { left: 43px !important; top: 175px !important; width: 40px !important; height: 49px !important; }
+  .future__squares span:nth-child(3) { left: 331px !important; top: 99px !important; width: 52px !important; height: 63px !important; }
+  .future__squares span:nth-child(4) { left: -9px !important; top: 82px !important; width: 26px !important; height: 31px !important; display: none; }
+  .future__squares span:nth-child(5) { left: 334px !important; top: 272px !important; width: 18px !important; height: 16px !important; }
+  .future__squares span:nth-child(6) { left: 350px !important; top: 234px !important; width: 9px !important; height: 9px !important; }
+  .future__squares span:nth-child(7) { left: 284px !important; top: 2px !important; width: 9px !important; height: 9px !important; }
+  .future__squares span:nth-child(8) { left: 18px !important; top: 133px !important; width: 16px !important; height: 15px !important; }
+  .future__squares span:nth-child(9) { left: 17px !important; top: 319px !important; width: 12px !important; height: 11px !important; display: none; }
+  .future__squares span:nth-child(10) { left: 24px !important; top: 271px !important; width: 18px !important; height: 16px !important; }
+  .future__squares span:nth-child(11) { left: 28px !important; top: 240px !important; width: 9px !important; height: 8px !important; }
+}
+
+.future__marquee {
+  position: absolute;
+  top: 62px;
+  left: -312px;
+  display: flex;
+  font-family: var(--ff-en);
+  font-weight: 500;
+  font-size: 62px;   /* Figma SP（新卒 470:2741 / 中途 474:8533）: 枠 793x62 = 146px の文字を 62px に。PC は 146px */
+  line-height: 1;
+  letter-spacing: 0;
+  color: rgba(199, 219, 236, 0.4);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* 横流れ（demo の .mq と同じ）: common.js が中身を .future__marquee-slide > .future__marquee-in で包んで 1 セット複製し、
+   72s で半分（1 セットぶん）動かして無限ループ。間隔は gap でなく各 span の margin-right（複製の継ぎ目も同じ間隔になる）。
+   登場（demo の .mq.in-view）: 視界に入ったら 右下 → 左上 へぬるっと（外側が上へ 10vw + フェード、内側が左へ 9vw。1.25s） */
+.future__marquee-slide {
+  display: flex;
+}
+
+.future__marquee-in {
+  display: flex;
+  animation: future-mq 72s linear infinite;
+  will-change: transform;
+}
+
+.future__marquee.is-fx {
+  opacity: 0;
+  transform: translateY(10vw);
+  transition: transform 1.25s cubic-bezier(0.2, 0.65, 0.2, 1), opacity 0.8s ease;
+}
+
+.future__marquee.is-fx .future__marquee-slide {
+  transform: translateX(9vw);
+  transition: transform 1.25s cubic-bezier(0.2, 0.65, 0.2, 1);
+}
+
+.future__marquee.is-fx.is-inview {
+  opacity: 1;
+  transform: none;
+}
+
+.future__marquee.is-fx.is-inview .future__marquee-slide {
+  transform: none;
+}
+
+.future__marquee span {
+  margin-right: 40px;
+}
+
+@keyframes future-mq {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .future__marquee-in {
+    animation: none;
+  }
+
+  .future__marquee.is-fx,
+  .future__marquee.is-fx .future__marquee-slide {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.future__box {
+  position: relative;
+  padding: 40px 24px;   /* Figma SP 470:2745: カッコ行 24 + 間 16 = 40、左右は中身の枠（470:2749）の余白 24。中途は career.css で左右 40 */
+}
+
+.future__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.future__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 0 24px 8px;
+}
+
+.future__title img {
+  width: 248px;
+}
+
+.future__sub {
+  font-size: var(--fs-tight-s);
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.future__text {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .future {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--section-margin-m) var(--side-margin) 0;
+  }
+
+  .future__squares {
+    top: 288px;
+    left: 50%;
+    width: 1440px;
+    height: 487px;
+    transform: translateX(-50%);
+  }
+
+  .future__marquee {
+    top: 134px;
+    left: 0;
+    font-size: 146px;
+  }
+
+  .future__box {
+    width: fit-content;
+    max-width: 100%;
+    padding: 24px 40px;
+  }
+
+  .future__content {
+    gap: 32px;
+  }
+
+  .future__title {
+    padding: 0 72px 8px;
+  }
+
+  .future__title img {
+    width: 369px;
+  }
+
+  .future__sub {
+    font-size: 24px;
+    line-height: 1.55;
+  }
+
+  .future__text {
+    white-space: nowrap;
+  }
+}
+
+/* ---- Future の登場（fv-future.js が .is-fx → .is-ready → .is-open を付ける。demo 準拠の動きのみ、見た目はデザインのまま） ----
+   カッコ: 枠の中央やや上に寄り集まった状態（--cx/--cy は JS が実寸から計算）から、0.3s 静止 → 0.32s で一気に四隅へ */
+.future.is-fx .bracket__corner {
+  --dx: var(--cx, 0px);
+  --dy: var(--cy, 0px);
+  transform: translate(var(--dx), var(--dy));
+}
+
+.future.is-fx .bracket__corner--tr { transform: translate(var(--dx), var(--dy)) scaleX(-1); }
+.future.is-fx .bracket__corner--bl { transform: translate(var(--dx), var(--dy)) scaleY(-1); }
+.future.is-fx .bracket__corner--br { transform: translate(var(--dx), var(--dy)) scale(-1, -1); }
+
+.future.is-ready .bracket__corner {
+  transition: transform 0.32s cubic-bezier(0.6, 0, 0.9, 0.5) 0.1s;   /* 静止 0.1s（demo は 0.3s）→ 0.32s で四隅へ */
+}
+
+.future.is-open .bracket__corner {
+  --dx: 0px;
+  --dy: 0px;
+}
+
+/* 中身: カッコ到着後（0.5s 後。到着 = 静止 0.1s + 0.32s）にフェード＋16px せり上がり（ボタンはフェードのみ） */
+.future.is-fx .future__content > * {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.future.is-fx .future__content > .btn {
+  transform: none;
+}
+
+.future.is-ready .future__content > * {
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.future.is-open .future__content > * {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.5s;
+}
+
+/* 飾りの四角: demo の写真と同じく 0.3 倍から跳ねながら拡大して登場（scale 0.9s、cubic-bezier(.34,1.56,.64,1)）＋フェード 0.55s。
+   登場の遅れは個体差（0.3〜0.95s。demo の 0.5〜1.15s から静止短縮ぶん 0.2s 前倒し）。以降は 2 種の浮遊（周期・位相は個体差）。浮遊は transform、拡大は scale で干渉しない */
+.future.is-fx .future__squares span {
+  opacity: 0;
+  scale: 0.3;
+  animation: ni-float 6s ease-in-out infinite alternate;
+}
+
+.future.is-ready .future__squares span {
+  transition: opacity 0.55s ease, scale 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.future.is-open .future__squares span { opacity: 0.14; scale: 1; }
+.future.is-open .future__squares span.is-navy { opacity: 0.1; }
+
+.future.is-fx .future__squares span:nth-child(1) { animation-duration: 5.6s; animation-delay: -1.2s; }
+.future.is-fx .future__squares span:nth-child(2) { animation-duration: 7.2s; animation-delay: -3s; animation-name: ni-float2; }
+.future.is-fx .future__squares span:nth-child(3) { animation-duration: 6.4s; animation-delay: -0.8s; }
+.future.is-fx .future__squares span:nth-child(4) { animation-duration: 8s; animation-delay: -2s; animation-name: ni-float2; }
+.future.is-fx .future__squares span:nth-child(5) { animation-duration: 5.8s; animation-delay: -1.4s; }
+.future.is-fx .future__squares span:nth-child(6) { animation-duration: 7.4s; animation-delay: -3.2s; animation-name: ni-float2; }
+.future.is-fx .future__squares span:nth-child(7) { animation-duration: 6.6s; animation-delay: -0.6s; }
+.future.is-fx .future__squares span:nth-child(8) { animation-duration: 8.2s; animation-delay: -2.4s; animation-name: ni-float2; }
+.future.is-fx .future__squares span:nth-child(9) { animation-duration: 5.4s; animation-delay: -4.2s; }
+.future.is-fx .future__squares span:nth-child(10) { animation-duration: 7s; animation-delay: -1.8s; animation-name: ni-float2; }
+.future.is-fx .future__squares span:nth-child(11) { animation-duration: 6.2s; animation-delay: -2.8s; }
+
+/* 登場の遅れ（transition を有効にする .is-ready 側に置く。.is-fx 側に置くと寄せ状態の反映自体が遅れてちらつく） */
+.future.is-ready .future__squares span:nth-child(1) { transition-delay: 0.3s; }
+.future.is-ready .future__squares span:nth-child(2) { transition-delay: 0.75s; }
+.future.is-ready .future__squares span:nth-child(3) { transition-delay: 0.45s; }
+.future.is-ready .future__squares span:nth-child(4) { transition-delay: 0.95s; }
+.future.is-ready .future__squares span:nth-child(5) { transition-delay: 0.6s; }
+.future.is-ready .future__squares span:nth-child(6) { transition-delay: 0.35s; }
+.future.is-ready .future__squares span:nth-child(7) { transition-delay: 0.5s; }
+.future.is-ready .future__squares span:nth-child(8) { transition-delay: 0.8s; }
+.future.is-ready .future__squares span:nth-child(9) { transition-delay: 0.4s; }
+.future.is-ready .future__squares span:nth-child(10) { transition-delay: 0.7s; }
+.future.is-ready .future__squares span:nth-child(11) { transition-delay: 0.55s; }
+
+@keyframes ni-float {
+  from { transform: translate(0, 0); }
+  to { transform: translate(11px, -26px); }
+}
+
+@keyframes ni-float2 {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-12px, -22px); }
+}
+
+/* ==========================================================================
+   Member's Voice
+   ========================================================================== */
+.voice {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;              /* Figma SP 470:2772: 見出し → カード → 矢印 → ボタンの間 32 */
+  padding: 80px 20px 64px;   /* 上 80 / 下 64 */
+  overflow: hidden;
+}
+
+/* SP: Figma 470:2772 / 474:8563 の Frame 1900（x -372 / y -77 / 1103x700。画像は SP 用 voice_bg_shape_sp.svg、
+   形は枠の中の x 191〜872 / y 108〜444 だけ）。2026-09-15 までは PC の SVG を 1103 幅に縮めていたので形が大きすぎた */
+.voice__bg {
+  position: absolute;
+  top: -77px;
+  left: -372px;
+  width: 1103px;
+  height: auto;
+  aspect-ratio: 1103 / 700;   /* SP 用 SVG の比率（img の width/height 属性に頼らない。PC は下で PC 用 SVG の比率） */
+  max-width: none;
+  pointer-events: none;
+}
+
+.voice__head,
+.voice__slider,
+.voice__nav,
+.voice__btn {
+  position: relative;
+}
+
+/* 背景の <picture> は flex の子にしない（display: contents だと中の <source> が空の flex アイテムになって gap ぶん見出しが下がる）。
+   セクション全面に絶対配置して、中の img の % はセクション幅基準のまま */
+.voice > picture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* スライダー（Splide、common.js）は SP のみ。PC は破棄して 3 枚並べる。間隔は SP は Splide の gap（20px）、PC は CSS */
+.voice__slider {
+  margin-right: -20px;
+  visibility: visible;
+}
+
+.voice__list {
+  display: flex;
+}
+
+.voice-card {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 16px;              /* Figma SP interview-card: 写真 295 → 16 → 本文（高さ 437） */
+  width: 240px;
+}
+
+.voice-card__img {
+  overflow: hidden;
+  aspect-ratio: 240 / 295;
+  border-radius: var(--radius);
+  background: #c9d7e8;
+}
+
+.voice-card__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.voice-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.voice-card__quote {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.voice-card__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.voice-card__arrow {
+  display: none;
+}
+
+.voice-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.voice-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.voice-card__chips li {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  padding: 1px 12px 0;
+  border-radius: 100px;
+  background: var(--c-back);
+  font-size: var(--fs-tight-2xs);
+  line-height: 1.4;
+}
+
+.voice-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--c-blue);
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .voice {
+    align-items: flex-end;
+    gap: 0;
+    padding: var(--section-margin-l) var(--side-margin) 72px;
+  }
+
+  /* 背景の形: 1440 基準（top 154 / left -145 / width 1762）を「写真（カード列）に対して同じ位置」に保つ（2026-09-15 指示）。
+     カード列は左 96 / 上 474（見出しの高さは PC で一定）で、幅はコンテナ（100% - 192、最大 1248）に比例して縮む。
+     形もその比率 k = コンテナ幅 / 1248 で縮め、カード列の左上からの距離（左 -241 / 上 -320）も k 倍にする:
+       幅 = 1762k = 141.186% - 271.08px、左 = 96 - 241k = 133.08px - 19.311%、上 = 474 - 320k（320 = 形の高さ 1229.3 の 26.03% なので translateY）
+     1440 以上はコンテンツと同じく広げず、1440 の枠を中央に置いた位置に固定（left は 50% - 720 - 145） */
+  .voice__bg {
+    top: 474px;
+    left: max(calc(133.08px - 19.311%), calc(50% - 865px));
+    width: min(calc(141.186% - 271.08px), 1762px);
+    aspect-ratio: 1763 / 1230;
+    transform: translateY(-26.03%);
+  }
+
+  /* デザイン幅（1248px）以上は広がらず中央固定 */
+  .voice__head,
+  .voice__slider {
+    width: 100%;
+    max-width: 1248px;
+    margin-inline: auto;
+  }
+
+  .voice__slider {
+    margin-right: auto;
+    padding: 56px 0 0;
+  }
+
+  .voice__slider .splide__track {
+    overflow: visible;
+  }
+
+  /* Splide を破棄した状態（core CSS は .splide__list を block にする）でも 3 枚横並び */
+  .voice__slider.is-initialized:not(.is-active) .splide__list {
+    display: flex;
+  }
+
+  .voice__list {
+    gap: 48px;
+  }
+
+  .voice__nav {
+    display: none;
+  }
+
+  .voice__btn {
+    margin-top: 0;
+    margin-right: max(0px, calc(50% - 624px)); /* 1248px コンテナの右端に揃える */
+  }
+
+  .voice-card {
+    flex: 1 1 0;
+    gap: 32px;
+    width: auto;
+    min-width: 0;
+  }
+
+  .voice-card--offset {
+    padding-top: 144px;
+  }
+
+  .voice-card__img {
+    aspect-ratio: 384 / 472;
+    border-radius: 8px;
+  }
+
+  .voice-card__body {
+    gap: 20px;
+  }
+
+  .voice-card__quote {
+    flex: 1 1 0;
+    font-size: 20px;
+  }
+
+  .voice-card__arrow {
+    display: flex;
+  }
+
+  .voice-card__chips li {
+    color: var(--c-blue);
+  }
+
+  .voice-card__tags {
+    font-size: var(--fs-tight-2xs);
+  }
+}
+
+/* ==========================================================================
+   Cross Talk（座談会）
+   ========================================================================== */
+.talk {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 20px 80px;   /* Figma SP 470:2773: 下 80 */
+}
+
+.talk__main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.talk__head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 4 件ぶんの見出しを同じ位置に重ね（高さは一番高いもの）、表示中だけ is-active。フェードで切り替え（common.js） */
+.talk__info {
+  display: grid;
+}
+
+.talk__info-item {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;   /* Figma SP Cross Talk Frame 1532: 見出し行とメンバーの間 8 */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0s 0.25s;
+}
+
+.talk__info-item.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.4s ease 0.1s;
+}
+
+.talk__no {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.talk__num {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  font-weight: 500;
+  line-height: 1;
+  background: var(--grd-blue70);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.talk__num small {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.talk__num b {
+  font-size: 29px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.talk__title {
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.talk__members {
+  font-size: var(--fs-body-2xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* 大きな写真: 4 件を重ね、表示中（is-active）が上にフェードイン。下の写真は入れ替わりが終わるまで残す（クロスフェードで抜けない） */
+.talk__img {
+  display: grid;
+  overflow: hidden;
+  aspect-ratio: 616 / 429;
+  border-radius: 8px;
+}
+
+.talk__img-item {
+  grid-area: 1 / 1;
+  z-index: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0s 0.5s, visibility 0s 0.5s;
+}
+
+.talk__img-item.is-active {
+  z-index: 1;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease;
+}
+
+.talk__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* SP: 見出し → メイン写真 → サムネ の順（Figma SP）。col を透過させて img を間に挟む */
+.talk__col {
+  display: contents;
+}
+
+.talk__thumbs {
+  display: flex;
+  order: 3;
+  gap: 10px;
+}
+
+.talk__thumbs > li {
+  flex: 1 1 0;   /* 3枚を等幅に（li が flex アイテム） */
+  min-width: 0;
+}
+
+/* JS が組み直したサムネ枠。4 件ぶんの複製を重ね、枠に割り当てた 1 件だけ is-active（写真と同じクロスフェード） */
+.talk__slot {
+  display: grid;
+}
+
+.talk__slot > .talk-thumb {
+  grid-area: 1 / 1;
+  z-index: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0s 0.5s, visibility 0s 0.5s;
+}
+
+.talk__slot > .talk-thumb.is-active {
+  z-index: 1;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .talk__info-item,
+  .talk__img-item,
+  .talk__slot > .talk-thumb {
+    transition: none;
+  }
+}
+
+.talk-thumb {
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  height: 88px;
+  padding: 20px 8px 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.15);
+  color: var(--c-white);
+  text-align: center;
+}
+
+.talk-thumb__img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.talk-thumb__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.talk-thumb__img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.talk-thumb__num,
+.talk-thumb__title {
+  position: relative;
+  z-index: 1;
+}
+
+.talk-thumb__num {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
+.talk-thumb__title {
+  font-size: var(--fs-tight-2xs);
+  line-height: 1.4;
+}
+
+.talk__foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  /* デザイン幅（1248px）のコンテナに収めて中央固定（Figma 930:14167、2026-09-13 変更: 以前は右の写真をウィンドウ右端まで伸ばしていた） */
+  .talk {
+    align-items: flex-end;
+    gap: 56px;
+    max-width: calc(1248px + var(--side-margin) * 2);
+    margin-inline: auto;
+    padding: 0 var(--side-margin) var(--section-margin-l);
+  }
+
+  .talk__main {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 88px;
+    width: 100%;
+  }
+
+  .talk__col {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: 56px;
+    width: 560px;
+  }
+
+  .talk__head {
+    gap: 56px;
+  }
+
+  .talk__info-item {
+    gap: 12px;
+  }
+
+  .talk__no {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .talk__num small {
+    font-size: 24px;
+  }
+
+  .talk__num b {
+    font-size: 40px;
+  }
+
+  .talk__title {
+    font-size: var(--fs-tight-s);
+  }
+
+  .talk__img {
+    flex: 1 1 0;
+    order: 2;
+    min-width: 0;
+    aspect-ratio: 616 / 429;   /* Figma Frame 1536: 599.57 × 417.48（同じ比率）。1248 − 560 − 88 = 600 */
+    border-radius: 16px;
+  }
+
+  .talk__thumbs {
+    order: 0;
+    gap: 15px;
+  }
+
+  .talk-thumb {
+    justify-content: center;
+    height: auto;
+    aspect-ratio: 228 / 152;
+    padding: 0 8px;
+  }
+
+  .talk-thumb__num {
+    font-size: 32px;
+  }
+
+  .talk__foot {
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+  }
+}
+
+/* ==========================================================================
+   People & Culture
+   ========================================================================== */
+.culture {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--c-white);
+  background: var(--grd-blue80);
+}
+
+.culture__bg {
+  position: absolute;
+  top: -180px;
+  left: -220px;
+  width: 1660px;
+  max-width: none;
+  pointer-events: none;
+}
+
+.culture__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 64px 20px;
+}
+
+.culture__list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+.culture__list > li {
+  width: 100%;
+}
+
+.culture__list > li + li {
+  padding-top: 24px;
+  border-top: 1px solid #72aad4;
+}
+
+.culture-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 89px;
+}
+
+.culture-item__body {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.culture-item__title {
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.culture-item__text {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.culture-item__divider {
+  flex: none;
+  width: 1px;
+  height: 20px;
+  background: var(--c-border);
+}
+
+/* SP: 375px 基準（列 117px × 3 + 隙間 12px）を vw で比例させ、常に幅いっぱいにする。Figma SP では写真はセクションの下 */
+.culture__photos {
+  position: relative;
+  order: 2;
+  height: 93.33vw; /* 350px @375 */
+  overflow: hidden;
+}
+
+.culture__cols {
+  position: absolute;
+  top: -21.6vw; /* -81px @375 */
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-start; /* 列の高さを揃えない（stretch だとループの半分の位置がずれる） */
+  gap: 3.2vw; /* 12px @375 */
+}
+
+/* 写真の列: 左は上へ、真ん中は下へ、右は上へ無限スクロール（JSで中身を2倍に複製し、半分だけ動かしてループ） */
+.culture__col {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 2.93vw; /* 11px @375 */
+  min-width: 0;
+  padding-bottom: 2.93vw; /* gap と同じ値: 2倍にした中身の継ぎ目も同じ間隔にする */
+  animation: culture-scroll-up 40s linear infinite;
+  /* iOS Safari 実機で、流れてきた写真が描画されず空白のまま来る対策（2026-09-18）:
+     列を最初から独立したレイヤーにして、帯全体を描画させる */
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.culture__col--offset {
+  margin-top: 17.07vw; /* 64px @375 */
+  animation-name: culture-scroll-down;
+}
+
+@keyframes culture-scroll-up {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, -50%, 0); }
+}
+
+@keyframes culture-scroll-down {
+  from { transform: translate3d(0, -50%, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .culture__col {
+    animation: none;
+  }
+}
+
+.culture__col li {
+  width: 100%;
+  aspect-ratio: 117 / 156;
+  border-radius: 8px;
+}
+
+.culture__col--l li {
+  border-radius: 0 8px 8px 0;
+}
+
+.culture__col--r li {
+  border-radius: 8px 0 0 8px;
+}
+
+/* 角丸は li の overflow: hidden で切らず、img 自身に付ける（iOS Safari は動くレイヤー内の角丸クリップで描画が欠けやすいため） */
+.culture__col img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+@media (min-width: 768px) {
+  .culture {
+    flex-direction: row;
+    min-height: 1166px;
+  }
+
+  .culture__bg {
+    top: -663px;
+    left: -470px;
+    width: 3022px;
+  }
+
+  .culture__photos {
+    flex: none;
+    order: 0;
+    width: min(493px, 34%);
+    height: auto;
+  }
+
+  .culture__cols {
+    top: -264px;
+    left: auto;
+    right: 0;   /* 右端基準: 幅が狭いときは左側から隠れる */
+    gap: 24px;
+  }
+
+  .culture__col {
+    flex: none;
+    gap: 24px;
+    padding-bottom: 24px;
+    animation-duration: 60s;
+  }
+
+  .culture__col--offset {
+    margin-top: var(--section-margin-l);
+  }
+
+  .culture__col--r {
+    display: none;
+  }
+
+  .culture__col li {
+    width: 235px;
+    height: 313px;
+    aspect-ratio: auto;
+    border-radius: var(--radius);
+  }
+
+  .culture__content {
+    flex: 1 1 0;
+    gap: 80px;
+    padding: var(--section-margin-l) 176px 104px;
+  }
+
+  .culture__list {
+    gap: 48px;
+  }
+
+  .culture__list > li + li {
+    padding-top: 48px;
+  }
+
+  .culture-item {
+    gap: 24px;
+    min-height: 101px;
+  }
+
+  .culture-item__body {
+    gap: 16px;
+  }
+
+  .culture-item__title {
+    font-size: var(--fs-tight-s);
+  }
+
+  .culture-item__divider {
+    height: 24px;
+  }
+}
+
+/* ==========================================================================
+   Job Openings（募集中の職種一覧）
+   ========================================================================== */
+.job {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;              /* Figma SP 470:2775: 見出し → 本文 32、上下 80 */
+  padding: 80px 20px;
+}
+
+.job__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.job__tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.job__tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px 12px 11px;
+  border-radius: 100px;
+  background: rgba(199, 219, 236, 0.4);
+  font-size: var(--fs-tight-xs);
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.job__tab::before {
+  content: "";
+  flex: none;
+  width: 20px;
+  height: 20px;
+  background: url("../img/common/icon_job_mid.svg") center / contain no-repeat;
+}
+
+.job__tab[aria-selected="true"]::before {
+  background-image: url("../img/common/icon_job_new.svg");
+}
+
+.job__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.job-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--radius);
+  background: rgba(199, 219, 236, 0.4);
+}
+
+.job-item__text {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 18px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.job-item__divider {
+  flex: none;
+  width: 1px;
+  height: 20px;
+  background: var(--c-border);
+}
+
+.job__more {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* SP（Figma 470:2775 / 中途 474:8566 の Frame 1384）: 項目は 16px × 1.4 + 余白 16 = 高さ 54、一覧とボタンの間 16 */
+@media (max-width: 767px) {
+  .job-item__text {
+    font-size: 16px;
+  }
+
+  .job__more {
+    margin-top: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  .job {
+    gap: 80px;
+    max-width: calc(1278px + 81px * 2);
+    margin-inline: auto;
+    padding: var(--section-margin-l) 81px;
+  }
+
+  .job__body {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 123px;
+  }
+
+  .job__tabs {
+    flex: none;
+    flex-direction: column;
+    gap: 16px;
+    width: 360px;
+  }
+
+  .job__tab {
+    gap: 16px;
+    padding: 20px 32px;
+  }
+
+  .job__tab::before {
+    width: 24px;
+    height: 24px;
+  }
+
+  .job__panel {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+  }
+
+  .job-item {
+    gap: 24px;
+    padding: 24px 32px;
+  }
+
+  .job-item__divider {
+    height: 24px;
+    margin-right: -4px;
+  }
+}
+
+/* ==========================================================================
+   Entry
+   ========================================================================== */
+.entry {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* demo と同じく 1 画面の高さで中身は上下中央 */
+  gap: 24px;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 64px 20px;
+  overflow: hidden;
+  background: #b5cbdc;
+  will-change: clip-path;   /* fv-entry.js: 登場時に縦バーの clip-path、その間は画面固定（inline） */
+}
+
+/* Entry のピン（fv-entry.js が高さ・マージンを設定）。直前セクションに重ねてスイープに直結させる。
+   SP は fv-entry.js が動かないので素の包みのまま（Entry は通常フロー） */
+.entry-pin {
+  position: relative;
+}
+
+/* 切り替えの一時停止スイッチ（上の About と同じ）: fv-entry.js が動かないぶん、直前セクションとの呼吸 200px（fv-entry.js の GAP）を CSS で付ける */
+@media (min-width: 768px) {
+  body[data-sweep="off"] .entry-pin {
+    margin-top: 200px;
+  }
+
+  body[data-sweep="off"] .entry {
+    will-change: auto;
+  }
+}
+
+.entry__bg {
+  position: absolute;
+  top: -22px;
+  left: -419px;
+  width: 1316px;
+  height: calc(100% + 22px);   /* Figma SP 474:7466 は 1316x991 を -419 / -22 に置いてセクション 969 にちょうど収まる。セクションが伸びても下が空かないよう高さは追従させ、cover で切る */
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 50%;
+  transform: scaleX(-1); /* Figma: 左右反転のみ（上下は反転しない） */
+  /* ソフトライト合成は entry_bg_blend.png に焼き込み済み（下地 #b5cbdc。理由は .about__bg img と同じ） */
+  pointer-events: none;
+}
+
+/* SP: Figma は高さ固定（969 = 上下 64 + 中身）で 1 画面に伸ばさない。PC は demo どおり 1 画面の高さで上下中央 */
+@media (max-width: 767px) {
+  .entry {
+    min-height: 0;
+  }
+}
+
+.entry__head {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--c-navy);
+}
+
+.entry__title {
+  font-size: var(--fs-en-2xl);
+  line-height: var(--lh-display-en);
+}
+
+.entry__lead {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.entry__cards {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.entry-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px 16px 16px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.entry-card__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.entry-card__head::before {
+  content: "";
+  flex: none;
+  width: 45px;
+  height: 56px;
+  background: url("../img/common/icon_cap.svg") center / contain no-repeat;
+}
+
+.entry-card__label {
+  font-size: var(--fs-tight-xs);
+  line-height: 1.4;
+  background: var(--grd-blue70);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.entry-card__title {
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.entry-card__body {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.entry-card__img {
+  flex: none;
+  width: 80px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--c-gray);
+}
+
+.entry-card__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.entry-card__text {
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.entry-card__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: var(--radius);
+  background: var(--c-navy);
+  color: var(--c-white);
+  font-size: var(--fs-tight-xs);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.entry-card__btn .btn__arrow {
+  border-left-color: #5d77c4;
+}
+
+@media (min-width: 768px) {
+  .entry {
+    gap: 24px;
+    padding: 104px var(--side-margin);
+  }
+
+  /* 背景写真はセクション全体を cover（ウィンドウが広くても切れない） */
+  .entry__bg {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 40%;
+  }
+
+  /* デザイン幅（1248px）以上は広がらず中央固定 */
+  .entry__head,
+  .entry__cards {
+    width: 100%;
+    max-width: 1248px;
+    margin-inline: auto;
+  }
+
+  .entry__head {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .entry__lead {
+    font-size: 24px;
+  }
+
+  .entry__cards {
+    flex-direction: row;
+    gap: 40px;
+  }
+
+  .entry-card {
+    flex: 1 1 0;
+    gap: 24px;
+    min-width: 0;
+    padding: 40px 32px 32px;
+  }
+
+  .entry-card__head {
+    gap: 13px;
+  }
+
+  .entry-card__title {
+    font-size: 24px;
+  }
+
+  .entry-card__body {
+    flex: 1 1 0;
+    gap: 40px;
+  }
+
+  .entry-card__img {
+    width: 136px;
+  }
+
+  .entry-card__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .entry-card__btn {
+    padding: 16px 32px;
+  }
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   ========================================================================== */
+@media (min-width: 768px) {
+  /* Message はウィンドウ幅比例（上の vw 指定）なので中間幅の調整なし */
+
+  .about__inner {
+    flex-wrap: nowrap;
+    gap: clamp(40px, 6.5vw, 96px);
+  }
+
+  .about__content {
+    flex: 1 1 447px;
+    min-width: 260px;
+    max-width: 447px;
+  }
+
+  /* 図が小さくなりすぎる幅（1024px未満）では縦に並べ、図は最大560pxで表示 */
+  @media (max-width: 1023px) {
+    .about {
+      min-height: 0;
+      padding-block: var(--section-margin-m);
+    }
+
+    .about__inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 96px;
+      min-height: 0;
+    }
+
+    .about__content {
+      flex: none;
+      width: 100%;
+      max-width: none;
+    }
+
+    .about__stats {
+      flex: none;
+      width: 100%;
+      max-width: 560px;
+      margin-inline: auto; /* 左右中央 */
+    }
+  }
+
+  .do__img {
+    width: min(562px, 45%);
+  }
+
+  .do__content {
+    gap: clamp(32px, 6vw, 88px);
+  }
+
+  .story {
+    gap: clamp(40px, 6vw, 88px);
+  }
+
+  .story-card {
+    width: min(696px, calc(100vw - var(--side-margin) - 380px));
+  }
+
+  /* 写真が縮む幅では、写真の上のタグ文字も写真幅（コンテナ幅 680px 基準）に比例させて
+     写真からはみ出さないようにする（PC 幅では Figma と同じ 16px / 20px） */
+  .story-card__visual {
+    container-type: inline-size;
+  }
+
+  .story-card__client {
+    padding: 0.3125em 1em;
+    font-size: clamp(11px, 2.353cqw, 16px);
+  }
+
+  .story-card__lead span {
+    padding: 0.1em 0.6em;
+    font-size: clamp(13px, 2.941cqw, 20px);
+  }
+
+  .future__text {
+    white-space: normal;
+  }
+
+  .voice__list {
+    gap: clamp(24px, 3.3vw, 48px);
+  }
+
+  .talk__main {
+    flex-wrap: wrap;
+    gap: clamp(40px, 6vw, 88px);
+  }
+
+  .talk__col {
+    flex: 1 1 420px;
+    width: auto;
+    max-width: 560px;
+  }
+
+  .talk__img {
+    flex: 1 1 420px;
+  }
+
+  .culture__photos {
+    width: min(493px, 34%);
+  }
+
+  .culture__content {
+    padding-inline: clamp(40px, 12vw, 176px);
+  }
+
+  .job {
+    padding-inline: clamp(24px, 5.6vw, 81px);
+  }
+
+  .job__body {
+    gap: clamp(40px, 8.5vw, 123px);
+  }
+
+  .job__tabs {
+    flex: 0 1 360px;
+    width: auto;
+  }
+
+  .entry__head {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .entry__cards {
+    gap: clamp(24px, 2.8vw, 40px);
+  }
+
+  .entry-card {
+    padding-inline: clamp(20px, 2.2vw, 32px);
+  }
+
+  .entry-card__body {
+    gap: clamp(20px, 2.8vw, 40px);
+  }
+}
+
+/* ---- FV（新卒。中途は career.css の .hero--career で通常フロー・固定高さに上書き）: demo 準拠で画面固定 ----
+   コピー・写真・ロゴはスクロールで流れず、演出（ni-logo.js / fv-copy.js / fv-havefun.js）が
+   スクロール量に応じて動く。.page-main（z 1）の中で z -1 → 波背景・3Dロゴ（body 直下, z 0）の上、後続セクションの下。
+   スクロール量は直後の .hero-spacer が担う（demo FIX 版の scroll-wrap 150vh と同じ長さ。
+   50vh ぶんスクロールする間に FV の演出が全部走り、その後に次のセクションが上がってくる）。
+   fv-scroll.js / common.js は [data-fv-scroll] を見る。 */
+.hero {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  min-height: 600px;
+  overflow: hidden;
+}
+
+.hero-spacer {
+  height: 150vh;
+  height: 150svh;
+}
+
+.is-capture .hero-spacer { height: 1000px; }   /* 667 * 1.5 */
+
+@media (min-width: 768px) {
+  .hero {
+    min-height: 640px;
+  }
+
+  /* PC は 250vh（2026-09-18）: FV → Have Fun! の切り替えを元（150vh）の 4 倍くらいゆっくりに。演出区間（進行度 0〜0.36）は
+     「余白 − 1 画面 − 終端 300px」なので 211px → 852px（768px 画面。200vh なら 468px、220vh なら 622px）。SP は 150svh のまま */
+  .hero-spacer {
+    height: 250vh;
+  }
+
+  .is-capture .hero-spacer { height: 1920px; }   /* 768 * 2.5 */
+}
+
+/* ---- 3D ロゴ（ni-logo.js が .page-bg の直後に差し込む画面固定の canvas） ----
+   位置・大きさ・動きはすべて JS 側（デモ準拠）。重なり順は波背景（.page-bg, z 0）の一つ上・本文（.page-main, z 1）の下。
+   本文のセクションや写真・コピーはロゴの上に重なる。WebGL が使えない環境・動き抑制時は canvas 自体が作られない。 */
+.ni-logo {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ni-logo.is-off {
+  visibility: hidden;
+}
