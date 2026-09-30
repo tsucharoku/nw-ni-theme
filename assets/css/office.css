@@ -927,3 +927,39 @@
   .office-branch__sub--1 { width: calc(175 / 335 * 100%); }
   .office-branch__sub--2 { top: calc(64 / 155 * 100%); width: calc(136 / 335 * 100%); }
 }
+
+/* ==========================================================================
+   Hero の流れる英字: どの画面幅でも、写真の下端に対してデザインどおりの縦位置に置く
+   写真の高さは幅で決まるので、写真の幅を枠（.office-hero）の幅から求め（cqw = 枠の中身の幅の 1%）、そこから英字の top を出す
+   - SP: 写真 = 枠 − 20。375px のとき写真の高さ 236 に対して top 164（英字 62 の下端が写真の下端の 10 上）
+   - 中間幅（768〜1439px）: 写真と本文の列（672 / 465）が同じ比率で縮む幅を、写真の幅として明示する（見た目は従来と同じ）。
+     英字の下端は写真の下端の 1 上
+   - 1440px 以上は写真の高さが 447.66 で固定なので、従来の top 300 のまま
+   コンテナクエリ単位が使えない古いブラウザでは従来の固定値・近似のまま
+   ========================================================================== */
+@supports (width: 1cqw) {
+  .office-hero {
+    container-type: inline-size;
+  }
+
+  @media (max-width: 767px) {
+    .office-hero__marquee {
+      top: calc((100cqw - 20px) * 236 / 355 - 72px);
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1439px) {
+    .office-hero {
+      --hero-photo-w: min(672px, calc((100cqw - clamp(24px, 4vw, 40px)) * 672 / 1137));
+    }
+
+    .office-hero__photo {
+      flex: none;
+      width: var(--hero-photo-w);
+    }
+
+    .office-hero__marquee {
+      top: calc(var(--hero-photo-w) * 447.66 / 672 - clamp(80px, 10.14vw, 146px) - 1px);
+    }
+  }
+}
