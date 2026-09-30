@@ -23,6 +23,9 @@ unset( $ni_links[ $ni_type ] );
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php if ( ! empty( ni_head()['description'] ) ) : ?>
+<meta name="description" content="<?php echo esc_attr( ni_head()['description'] ); ?>">
+<?php endif; ?>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

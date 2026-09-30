@@ -66,7 +66,7 @@ function ni_page_map() {
 		'casual-talk/thanks'  => array( 'css' => array( 'form' ) ),
 		'404'                 => array( 'body' => '404', 'css' => array( 'form' ) ),
 
-		/* ----- 下層: カスタム投稿（投稿タイプ・タクソノミーは未登録。スラッグはディレクトリマップの URL に合わせる前提） ----- */
+		/* ----- 下層: カスタム投稿（登録は inc/post-types.php） ----- */
 		'interview:archive'   => array( 'body' => 'interview', 'css' => array( 'interview' ), 'js' => array( 'interview' ) ),
 		'interview:single'    => array( 'body' => 'interview-detail', 'css' => array( 'interview' ) ),
 		'cross-talk:archive'  => array( 'body' => 'cross-talk', 'css' => array( 'cross-talk' ) ),

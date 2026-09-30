@@ -1,8 +1,8 @@
 <?php
 /**
  * 共通の枠（ヘッダー・フッターだけ）。
- * 各ページの中身（front-page.php / page-○○.php / archive-○○.php / single-○○.php / 404.php）は未着手で、
- * できるまではどのページもこのテンプレートで表示される。
+ * 専用のテンプレート（front-page.php / page-○○.php / archive-○○.php / single-○○.php / taxonomy-○○.php / 404.php）が
+ * 無いページは、このテンプレートで表示される。
  */
 
 get_header();
