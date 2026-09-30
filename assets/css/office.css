@@ -755,3 +755,46 @@
   .office-branch__sub--1 { width: 27.22vw; }
   .office-branch__sub--2 { top: 16.67vw; width: 14.72vw; }
 }
+
+/* ==========================================================================
+   広い画面（1441px〜）: 画面の端に付く写真と流れる英字は、端に付けたままにする
+   本文（文・数字・散らした小さい写真）の幅と位置は 1440px の枠のときと同じ。枠を画面幅いっぱいに戻し、
+   枠の外だったぶん = (画面幅 − 1440) / 2 を余白に足して本文を同じ位置に保ち、端の写真だけ外側へ伸ばす。
+   写真の高さは 1440px のときのまま固定（横に伸びたぶん上下が切れる。上限なし）
+   ========================================================================== */
+@media (min-width: 1441px) {
+  .office-hero {
+    max-width: none;
+    padding-right: calc(var(--side-margin) + max(0px, (100% - 1440px) / 2));
+  }
+
+  /* 左端から。右の辺（本文側）は 1440px の枠の左端から 672px の位置のまま */
+  .office-hero__photo {
+    width: max(672px, calc(100% - 672px));   /* 枠の内側 1344 + 伸びたぶん − 672 */
+    height: 447.66px;
+    aspect-ratio: auto;
+  }
+
+  /* 写真は右端まで（flex の残り幅）。文の位置は左の余白で保つ */
+  .office-library {
+    max-width: none;
+    padding-left: calc(var(--side-margin) + max(0px, (100% - 1440px) / 2));
+  }
+
+  .office-library__photo {
+    height: 606.67px;      /* 1440px のときの高さ（幅 910 × 606.77 / 910.15） */
+    aspect-ratio: auto;
+  }
+
+  /* 写真の列だけ右端まで伸ばす。文の列は 508px（1344 − 724 − 112）のまま */
+  .office-branch {
+    grid-template-columns: minmax(0, 1fr) minmax(724px, calc(100% - 620px));
+    max-width: none;
+    padding-left: calc(var(--side-margin) + max(0px, (100% - 1440px) / 2));
+  }
+
+  .office-branch__photo {
+    height: 482px;
+    aspect-ratio: auto;
+  }
+}
