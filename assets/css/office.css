@@ -892,3 +892,38 @@
     margin: 0 0 calc(13 * var(--u)) calc(1 * var(--u));
   }
 }
+
+/* ==========================================================================
+   SP（〜767px）: 散らした小さい写真（Lounge 3 枚・Snack Station 2 枚・Branch Office 2 枚）は画面幅に合わせて拡大する
+   （375px のとき Figma の SP と同じ）。左右に離して置いているので、幅が広い端末では写真の間が空きすぎる。
+   枠を幅基準の比率（375px のときの 335 × 高さ）にして、写真の幅・位置も枠に対する割合で置く。
+   数字ブロックに合わせて、480px より広いときは幅 440px のまま中央に置く
+   ========================================================================== */
+@media (max-width: 767px) {
+  .office-lounge__subs,
+  .office-snack__photos,
+  .office-branch__subs {
+    width: 100%;              /* 親が flex なので、margin auto で縮まないように */
+    max-width: 440px;         /* 480 − 左右 20 */
+    height: auto;
+    margin-inline: auto;
+  }
+
+  .office-lounge__subs { aspect-ratio: 335 / 349; }
+  .office-lounge__sub--1 { width: calc(205 / 335 * 100%); }
+  .office-lounge__sub--2 { top: calc(80 / 349 * 100%); width: calc(110 / 335 * 100%); }
+  .office-lounge__sub--3 { top: calc(201.5 / 349 * 100%); left: calc(57 / 335 * 100%); width: calc(221 / 335 * 100%); }
+
+  .office-snack__photos { aspect-ratio: 335 / 193; }
+  .office-snack__photo--1 { width: calc(220 / 335 * 100%); }
+  .office-snack__photo--2 { top: calc(56 / 193 * 100%); width: calc(91 / 335 * 100%); }
+
+  /* 親は左だけ余白がある（右は画面の端まで）ので、右の余白 20 を残しつつ、440px で止まったら画面の中央に来るようにする */
+  .office-branch__subs {
+    width: calc(100% - var(--side-margin));
+    aspect-ratio: 335 / 155;
+    margin-right: max(var(--side-margin), calc((100% - 440px) / 2 + var(--side-margin) / 2));
+  }
+  .office-branch__sub--1 { width: calc(175 / 335 * 100%); }
+  .office-branch__sub--2 { top: calc(64 / 155 * 100%); width: calc(136 / 335 * 100%); }
+}
