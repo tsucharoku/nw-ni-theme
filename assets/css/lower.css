@@ -95,7 +95,7 @@
 
 .page-head__en {
   font-family: var(--ff-en);
-  font-size: 46px;
+  font-size: clamp(46px, calc(46 / 375 * 100vw), 64px);   /* SP: 375px のとき 46。広い端末では画面幅に合わせて拡大し、64 で止める（PC は 80） */
   font-weight: 600;
   line-height: 1.12;
   letter-spacing: 0;
