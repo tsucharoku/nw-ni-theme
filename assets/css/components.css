@@ -103,6 +103,20 @@
   }
 }
 
+/* SP: 和文大見出し（--sub）は画面幅に合わせて拡大する（375px のとき 22。下層の英字タイトルと同じ伸び方で、30 で止める。PC は 32）
+   左のアイコンも文字に合わせて大きくする（375px のときの 20 × 25・上 5 を文字の大きさの比率に置き換え） */
+@media (max-width: 767px) {
+  .sec-head--sub .sec-head__title {
+    font-size: clamp(22px, calc(22 / 375 * 100vw), 30px);
+  }
+
+  .sec-head--sub .sec-head__title--cap::before {
+    width: calc(20em / 22);
+    height: calc(25em / 22);
+    margin-top: calc(5em / 22);
+  }
+}
+
 /* ==========================================================================
    Arrow pill（Figma: arrow navy m / s / white）
    ========================================================================== */
