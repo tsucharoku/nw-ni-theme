@@ -691,8 +691,53 @@
     white-space: normal;
   }
 
+  /* 数字ブロックは折り返さず、本文の列（1440px で 465px）に収まらなくなったら列の幅に合わせて縮める。
+     1440px のときの自然な幅 413px（文字の丸めぶん少し余裕をみて 420）を 1 倍にして、文字・吹き出し・単位・間隔を同じ比率で小さくする（cqw = 列の幅の 1%）。
+     コンテナクエリ単位（cqw）が使えない古いブラウザ（Safari 15 以前など）では、従来どおり折り返す */
   .office-stats {
     flex-wrap: wrap;
+  }
+
+  @supports (width: 1cqw) {
+    .office-hero__body {
+      container-type: inline-size;
+    }
+
+    .office-stats {
+      --u: min(1px, calc(100cqw / 420));
+      flex-wrap: nowrap;
+      gap: calc(20 * var(--u));
+    }
+
+    .office-stats__item {
+      gap: calc(16 * var(--u));
+    }
+
+    .office-stats__label {
+      padding-bottom: calc(8.5 * var(--u));
+    }
+
+    .office-stats__label span {
+      padding: calc(12 * var(--u)) calc(24 * var(--u));
+      border-radius: calc(32 * var(--u));
+      font-size: calc(16 * var(--u));
+    }
+
+    .office-stats__label::after {
+      width: calc(71 * var(--u));
+      height: calc(8.5 * var(--u));
+    }
+
+    .office-stats__num,
+    .office-stats__num--jp {
+      font-size: calc(56 * var(--u));
+    }
+
+    .office-stats__unit {
+      width: calc(48 * var(--u));
+      height: calc(27.6 * var(--u));
+      margin-bottom: calc(11 * var(--u));
+    }
   }
 
   .office-sec {

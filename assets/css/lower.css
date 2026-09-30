@@ -451,9 +451,7 @@
     padding-top: clamp(56px, 7.2vw, 104px);
   }
 
-  .page-head__en {
-    font-size: clamp(56px, 5.56vw, 80px);
-  }
+  /* 英字タイトルは縮めない（80px のまま。768px で「Work Environment & Benefits」だけ 3 行になる） */
 
   .page-ni__img {
     top: -17.7vw;
