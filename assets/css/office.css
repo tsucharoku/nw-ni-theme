@@ -798,3 +798,52 @@
     aspect-ratio: auto;
   }
 }
+
+/* ==========================================================================
+   SP（〜767px）: 冒頭の数字ブロックは画面幅に合わせて拡大する（375px のときを 1 倍、480px のときの 1.28 倍が上限）
+   2 つの数字が画面の半分ずつに置かれるので、幅が広い端末では間が空きすぎる。文字・吹き出し・単位の大きさを
+   すべて 375px 基準の比率で大きくして、幅に対する見え方を Figma の SP と同じに保つ。
+   480px より広いときは 480px のときの大きさ・幅（440px）のまま中央に置く
+   ========================================================================== */
+@media (max-width: 767px) {
+  .office-stats {
+    --u: min(calc(100vw / 375), calc(480px / 375));   /* デザインの 1px */
+    gap: calc(4 * var(--u));
+    width: 100%;              /* 親が flex なので、margin auto で縮まないように */
+    max-width: 440px;         /* 480 − 左右 20 */
+    margin-inline: auto;
+  }
+
+  .office-stats__item {
+    gap: calc(8 * var(--u));
+  }
+
+  .office-stats__label {
+    padding-bottom: calc(8.5 * var(--u));
+  }
+
+  .office-stats__label span {
+    padding: calc(12 * var(--u)) calc(16 * var(--u));
+    border-radius: calc(32 * var(--u));
+    font-size: calc(13 * var(--u));
+  }
+
+  .office-stats__label::after {
+    width: calc(71 * var(--u));
+    height: calc(8.5 * var(--u));
+  }
+
+  .office-stats__num {
+    font-size: calc(48 * var(--u));
+  }
+
+  .office-stats__num--jp {
+    font-size: calc(45 * var(--u));
+  }
+
+  .office-stats__unit {
+    width: calc(28.25 * var(--u));
+    height: calc(16.24 * var(--u));
+    margin: 0 0 calc(13 * var(--u)) calc(1 * var(--u));
+  }
+}
