@@ -690,9 +690,9 @@
     align-self: center;
   }
 
-  /* タイトルは 375px のときの 24 から画面幅に合わせて拡大し、PC と同じ 32 で止める */
+  /* タイトルは 375px のときの 24 から画面幅に合わせて拡大し、PC（32）より少し小さい 28 で止める */
   .msg__title {
-    font-size: clamp(24px, calc(24 / 375 * 100vw), 32px);
+    font-size: clamp(24px, calc(24 / 375 * 100vw), 28px);
   }
 }
 
