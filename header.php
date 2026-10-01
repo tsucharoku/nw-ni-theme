@@ -76,8 +76,8 @@ if ( $ni_has_fv ) {
     </ul>
 <?php if ( 'beginner' === $ni_type ) : ?>
     <div class="header__cta">
-      <?php /* TODO: マイナビ新卒 2028 の URL 未確定 */ ?>
-      <a class="header-btn header-btn--grd" href="#" target="_blank" rel="noopener">マイナビ新卒2028<span class="header-btn__arrow"><img src="<?php echo ni_img( 'common/arrow_header_btn.svg' ); ?>" alt="" width="9" height="16"></span></a>
+      <?php /* マイナビ新卒: 固定ページ beginner の ACF「新卒CTA」（ni_beginner_cta()） */ ?>
+      <a class="header-btn header-btn--grd" href="<?php echo esc_url( ni_beginner_cta()['url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( ni_beginner_cta()['text'] ); ?><span class="header-btn__arrow"><img src="<?php echo ni_img( 'common/arrow_header_btn.svg' ); ?>" alt="" width="9" height="16"></span></a>
       <a class="header-btn header-btn--navy" href="#job">募集職種一覧を見る<span class="header-btn__arrow"><img src="<?php echo ni_img( 'common/arrow_header_btn.svg' ); ?>" alt="" width="9" height="16"></span></a>
     </div>
 <?php endif; ?>

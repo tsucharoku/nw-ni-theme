@@ -450,10 +450,10 @@ get_header();
           <div class="entry-card__img"><img src="<?php echo ni_img( 'common/entry_photo_new.jpg' ); ?>" alt="" width="136" height="189"></div>
           <div class="entry-card__text">
             <p>文系・理系・業種問わず大歓迎。入社後は段階的な研修とOJTで、リサーチャーとして着実に育てます。まずは募集要項をご覧ください。</p>
-            <a class="entry-card__btn u-pc" href="#" target="_blank" rel="noopener">マイナビ新卒2028<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn_navy.svg' ); ?>" alt="" width="12" height="20"></span></a>
+            <a class="entry-card__btn u-pc" href="<?php echo esc_url( ni_beginner_cta()['url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( ni_beginner_cta()['text'] ); ?><span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn_navy.svg' ); ?>" alt="" width="12" height="20"></span></a>
           </div>
         </div>
-        <a class="entry-card__btn u-sp" href="#" target="_blank" rel="noopener">マイナビ新卒2028<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn_navy.svg' ); ?>" alt="" width="12" height="20"></span></a>
+        <a class="entry-card__btn u-sp" href="<?php echo esc_url( ni_beginner_cta()['url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( ni_beginner_cta()['text'] ); ?><span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn_navy.svg' ); ?>" alt="" width="12" height="20"></span></a>
       </div>
       <div class="entry-card">
         <div class="entry-card__head">

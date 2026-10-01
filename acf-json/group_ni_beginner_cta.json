@@ -1,0 +1,62 @@
+{
+    "key": "group_ni_beginner_cta",
+    "title": "新卒CTA",
+    "fields": [
+        {
+            "key": "field_ni_beginner_cta_text",
+            "label": "ボタンテキスト",
+            "name": "cta_text",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "新卒 TOP のヘッダーのボタンと、Entry の「新卒採用」のボタンに出ます。空なら「マイナビ新卒2028」。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "マイナビ新卒2028",
+            "maxlength": "",
+            "placeholder": "マイナビ新卒2028",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_ni_beginner_cta_url",
+            "label": "リンク先",
+            "name": "cta_url",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "別タブで開きます。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "https://job.mynavi.jp/…"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "beginner"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1790870000
+}

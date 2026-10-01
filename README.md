@@ -59,6 +59,8 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
 - **`<body>` のクラス**は静的 HTML と同じ `page-top` / `page-beginner` / `page-career` / `page-lower page-○○`（`inc/page.php`）。WP 標準のクラスも一緒に付く。
 - **`<title>` と meta description** は、各テンプレートが `get_header()` の前に `ni_head()` で渡している（静的 HTML の値のまま）。
 - **リンクと画像**: サイト内リンクは `ni_url( '/about/' )`、画像は `ni_img( 'common/logo_black.svg' )`（`assets/img/` 以下）。
+- **新卒 TOP の CTA（マイナビ新卒）は管理画面で編集**: 固定ページ `beginner` の ACF「新卒CTA」（ボタンテキスト `cta_text` / リンク先 `cta_url`。`acf-json/group_ni_beginner_cta.json`）。新卒 TOP のヘッダーのボタンと、Entry の新卒採用のボタン（PC / SP）の 3 か所で使う（`ni_beginner_cta()`）。空ならテキスト「マイナビ新卒2028」・リンク先 `#`。別タブで開く。隣の「募集職種一覧を見る」は固定。
+  - ACF の場所「固定ページ ==」は、acf-json にページ ID ではなくパス（`beginner`）を書いている（ID は環境ごとに変わるため。`functions.php` の `ni_acf_match_page_path()` がパスで照合する）。管理画面でこのフィールドグループを開くと場所の値が正しく表示されない。そこで保存すると場所が書き換わるので、保存したら acf-json の `value` を `beginner` に戻す。
 - **募集要項のカテゴリの URL**: `/job-opening/○○/` はカテゴリと詳細が同じ階層なので、タクソノミーには rewrite を付けず、○○ がカテゴリのスラッグならカテゴリ一覧に振り分けている（`ni_job_category_request()`）。同じスラッグの投稿があってもカテゴリが優先される。
 - **募集要項の一覧・カテゴリ一覧は WP の内容**（仕様書 43:3721 / 69:4352）。カテゴリの数・名前・スラッグ・並びはコードに書いていない。
   - 一覧（`archive-job-opening.php`）: カテゴリごとに、ページ内リンク `カテゴリ名（件数）` → `#スラッグ`、英語表記・カテゴリ名・説明、職種を 5 件まで。**5 件以上あるカテゴリ**には「○○の募集一覧をみる」（カテゴリ一覧へ）を出す（仕様書の付箋「5件以上でアーカイブ同線表示」）。投稿が 1 件も無いカテゴリは出さない。ページ頭の見出し・リード文は固定。

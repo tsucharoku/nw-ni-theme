@@ -59,3 +59,31 @@ function ni_url( $path = '/' ) {
 function ni_job_category_url( $key ) {
 	return ni_url( '/job-opening/' );
 }
+
+/* 新卒 TOP の CTA（マイナビ新卒）。固定ページ beginner の ACF「新卒CTA」（acf-json/group_ni_beginner_cta.json）。
+   ヘッダーのボタン（header.php）と Entry の新卒採用のボタン（page-beginner.php）で使う。
+   テキストが空なら「マイナビ新卒2028」、リンク先が空なら # */
+function ni_beginner_cta() {
+	static $cta = null;
+	if ( null === $cta ) {
+		$page = get_page_by_path( 'beginner' );
+		$text = $page && function_exists( 'get_field' ) ? (string) get_field( 'cta_text', $page->ID ) : '';
+		$url  = $page && function_exists( 'get_field' ) ? (string) get_field( 'cta_url', $page->ID ) : '';
+		$cta  = array(
+			'text' => '' !== $text ? $text : 'マイナビ新卒2028',
+			'url'  => '' !== $url ? $url : '#',
+		);
+	}
+	return $cta;
+}
+
+/* ACF のフィールドグループの場所「固定ページ ==」に、ページ ID ではなくパス（beginner など）を書けるようにする。
+   ID は Local とテスト・本番で変わるため（acf-json の location の value にパスを書く） */
+function ni_acf_match_page_path( $result, $rule, $screen ) {
+	if ( is_numeric( $rule['value'] ) || empty( $screen['post_id'] ) || 'page' !== get_post_type( $screen['post_id'] ) ) {
+		return $result;
+	}
+	$match = get_page_uri( $screen['post_id'] ) === $rule['value'];
+	return '==' === $rule['operator'] ? $match : ! $match;
+}
+add_filter( 'acf/location/match_rule/type=page', 'ni_acf_match_page_path', 10, 3 );
