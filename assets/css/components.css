@@ -2822,3 +2822,84 @@ button.arrow-pill:active {
 .ni-logo.is-off {
   visibility: hidden;
 }
+
+/* ==========================================================================
+   ホバー（Figma のプロトタイプ: Smart Animate 0.3s / ease-out）。矢印の入れ替わりの仕組みは common.css のホバーを参照
+   - プロジェクトストーリーのカード（item → PC hover 724:13561）: 写真が 1.05 倍
+   - 社員の声のカード（interview-card → PC hover 724:13594）: 写真が 1.05 倍、丸の中の矢印が入れ替わる、入社区分・職種の文字が黒
+   - 制度・環境などのカード（Frame 1549 → PC hover 724:14641）: 丸の中の矢印が入れ替わる
+   - 共通ボタンの大きさを vw で持つ箇所（メッセージ）は、矢印の動く距離も同じ比率に
+   ========================================================================== */
+.message .btn__arrow img {
+  --arrow-shift: 6.79vw;    /* 25.46 / 375 */
+}
+
+@media (min-width: 768px) {
+  .message .btn__arrow img {
+    --arrow-shift: 1.768vw; /* 25.46 / 1440 */
+  }
+}
+
+.story-card__img img,
+.voice-card__img img {
+  transition: transform 0.3s ease-out;
+}
+
+.voice-card__chips li {
+  transition: color 0.3s ease-out;
+}
+
+.voice-card__arrow img,
+.culture-item .arrow-pill img {
+  object-position: 0 0;
+  background: url("../img/common/arrow_pill_white_m.svg") no-repeat;
+  background-size: 100% 100%;
+  background-position: calc(-1 * var(--arrow-shift)) 0;
+  transition: object-position 0.3s ease-out, background-position 0.3s ease-out;
+}
+
+.voice-card__arrow img {
+  --arrow-shift: 16.8px;    /* SP の大きさ 14 × 20: 24 × 14 / 20 */
+  background-image: url("../img/common/arrow_pill_white_l.svg");
+}
+
+.culture-item .arrow-pill img {
+  --arrow-shift: 19.25px;   /* SP の大きさ 14 × 20: 22 × 14 / 16 */
+}
+
+@media (min-width: 768px) {
+  .voice-card__arrow img {
+    --arrow-shift: 24px;    /* 20 × 24 */
+  }
+
+  .culture-item .arrow-pill img {
+    --arrow-shift: 22px;    /* 16 × 24 */
+  }
+}
+
+@media (hover: hover) {
+  .story-card:hover .story-card__img img,
+  .voice-card:hover .voice-card__img img {
+    transform: scale(1.05);
+  }
+
+  .voice-card:hover .voice-card__chips li {
+    color: #000;
+  }
+
+  .voice-card:hover .voice-card__arrow img,
+  .culture-item:hover .arrow-pill img {
+    object-position: var(--arrow-shift) 0;
+    background-position: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-card__img img,
+  .voice-card__img img,
+  .voice-card__chips li,
+  .voice-card__arrow img,
+  .culture-item .arrow-pill img {
+    transition: none;
+  }
+}

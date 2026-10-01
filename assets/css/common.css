@@ -1016,3 +1016,100 @@
     }
   }
 }
+
+/* ==========================================================================
+   ホバー（Figma のプロトタイプ: マウスが乗ると別の見た目へ Smart Animate 0.3s / ease-out）
+   - 共通ボタン（Frame 1488 → PC navy 315:891）: 背景がグラデーション → 紺 #1b3a98、矢印の左の線 #7ab7e6 → #5d77c4、矢印が入れ替わる
+   - ヘッダーのリンク（header-link → hover 724:15543）: 不透明度 0.9、丸の中の矢印が入れ替わる
+   - ヘッダーのボタン（header-btn/マイナビ・募集職種 → hover）: 矢印が入れ替わる
+   - フッターのリンク（link → hover 724:14654）: 不透明度 0.6
+   矢印の入れ替わり: 矢印は <img> の SVG。img の中身（object-position）を右へ送り、同じ SVG を img の背景にして左から入れる。
+   どちらも img の箱の外には描かれないので、Figma と同じく矢印の枠の中だけが見える（2 本が同時に見えない）。
+   動く距離 --arrow-shift は Figma の矢印の間隔（SVG の中の 2 本目の位置）を表示の大きさに合わせたもの
+   ========================================================================== */
+.btn {
+  position: relative;
+  isolation: isolate;       /* ::before（紺の板）を背景の上・文字の下に置く */
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: #1b3a98;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.btn__arrow {
+  transition: border-color 0.3s ease-out;
+}
+
+.btn__arrow img,
+.header__link-arrow img,
+.header-btn__arrow img {
+  object-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: calc(-1 * var(--arrow-shift)) 0;
+  transition: object-position 0.3s ease-out, background-position 0.3s ease-out;
+}
+
+.btn__arrow img {
+  --arrow-shift: 25.46px;   /* 24 × 12 / 11.31 */
+  background-image: url("../img/common/arrow_btn.svg");
+}
+
+.header__link-arrow img {
+  --arrow-shift: 14.84px;   /* 14 × 6 / 5.66 */
+  background-image: url("../img/common/arrow_header_link.svg");
+}
+
+.header-btn__arrow img {
+  --arrow-shift: 21.2px;    /* 20 × 9 / 8.49 */
+  background-image: url("../img/common/arrow_header_btn.svg");
+}
+
+.header__link,
+.footer__list a {
+  transition: opacity 0.3s ease-out;
+}
+
+@media (hover: hover) {
+  .btn:hover::before {
+    opacity: 1;
+  }
+
+  .btn:hover .btn__arrow {
+    border-left-color: #5d77c4;
+  }
+
+  .btn:hover .btn__arrow img,
+  .header__link:hover .header__link-arrow img,
+  .header-btn:hover .header-btn__arrow img {
+    object-position: var(--arrow-shift) 0;
+    background-position: 0 0;
+  }
+
+  .header__link:hover {
+    opacity: 0.9;
+  }
+
+  .footer__list a:hover {
+    opacity: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn::before,
+  .btn__arrow,
+  .btn__arrow img,
+  .header__link-arrow img,
+  .header-btn__arrow img,
+  .header__link,
+  .footer__list a {
+    transition: none;
+  }
+}
