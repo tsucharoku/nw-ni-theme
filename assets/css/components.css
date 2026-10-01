@@ -2259,6 +2259,66 @@ button.arrow-pill:active {
   background: var(--c-border);
 }
 
+/* ホバー（Figma: Frame 1384 の「Property 1=PC hover」724:14629。Smart Animate 0.3s）:
+   背景 40% → 80%、丸の中の矢印が右へ抜けて、同じ矢印が左から入ってくる。
+   Figma は矢印の枠（16 × 24）の中だけが見えるので、2 本が同時に見えることはない。
+   <img> の SVG の中身は動かせないので、img は隠し、同じ大きさの ::before に同じ SVG を 2 枚重ねて背景の位置を動かす
+   （背景は箱の外に描かれないので、見えるのは枠の中だけ）。1 枚目: 0 → 右へ 22、2 枚目: 左 22 → 0（PC。SP は 14/16 倍） */
+.job-item {
+  transition: background-color 0.3s ease-out;
+}
+
+.job-item .arrow-pill {
+  --arrow-shift: 19.25px;   /* SP: 22 × 14 / 16 */
+  position: relative;
+}
+
+.job-item .arrow-pill img {
+  visibility: hidden;
+}
+
+.job-item .arrow-pill::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 14px;
+  height: 20px;
+  margin: auto;
+  background-image: url("../img/common/arrow_pill_white_m.svg"), url("../img/common/arrow_pill_white_m.svg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: 0 0, calc(-1 * var(--arrow-shift)) 0;
+  transition: background-position 0.3s ease-out;
+}
+
+@media (hover: hover) {
+  .job-item:hover {
+    background-color: rgba(199, 219, 236, 0.8);
+  }
+
+  .job-item:hover .arrow-pill::before {
+    background-position: var(--arrow-shift) 0, 0 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .job-item .arrow-pill {
+    --arrow-shift: 22px;
+  }
+
+  .job-item .arrow-pill::before {
+    width: 16px;
+    height: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .job-item,
+  .job-item .arrow-pill::before {
+    transition: none;
+  }
+}
+
 .job__more {
   display: flex;
   justify-content: flex-end;
