@@ -4,13 +4,12 @@
  *
  * 数字のカード（会社・事業規模 / 仕事・リサーチ環境 / 働き方・カルチャー）は固定ページの ACF「3分でわかるNI」
  * （acf-json/group_ni_about.json。設計書: NI採用サイト_ACFフィールド設計書_3分でわかるNI.xlsx）。カードの数と並びは固定。
- * テキストの初期値（ACF の default_value）は今の文言なので、未入力でも今の表示になる。画像は空なら今の画像。
- * 改行は入力した改行どおり（<br>）。
+ * 入力した内容だけを出す（初期値・ダミーは出さない。未入力の画像は出さない）。改行は入力した改行どおり（<br>）。
  * ページ頭・リード・各セクションの見出し・社員に聞きましたは固定。
  */
 
-/* このページの ACF の値。フィールドキー（field_ni_about_○○）で引く: 名前で引くと、一度も保存していないページでは
-   ACF がフィールドを特定できず初期値も返らないため */
+/* このページの ACF の値。フィールドキー（field_ni_about_○○）で引く（名前で引くと、一度も保存していないページでは
+   ACF がフィールドを特定できないため） */
 function ni_about( $name ) {
 	return function_exists( 'get_field' ) ? get_field( 'field_ni_about_' . $name, get_queried_object_id() ) : null;
 }
@@ -25,13 +24,11 @@ function ni_about_br( $name ) {
 	echo implode( '<br>', array_map( 'esc_html', preg_split( '/\R/u', trim( (string) ni_about( $name ) ) ) ) );
 }
 
-/* 画像（ACF の画像。空なら assets/img/ の今の画像）。$atts は width / height 以外の属性 */
-function ni_about_img( $name, $fallback, $width, $height, $atts = '' ) {
+/* 画像（ACF の画像。未入力なら何も出さない）。$atts は src / alt / width / height 以外の属性 */
+function ni_about_img( $name, $atts = '' ) {
 	$img = ni_about( $name );
 	if ( is_array( $img ) && ! empty( $img['url'] ) ) {
 		printf( '<img src="%s" alt="%s" width="%d" height="%d"%s>', esc_url( $img['url'] ), esc_attr( $img['alt'] ), (int) $img['width'], (int) $img['height'], $atts );
-	} else {
-		printf( '<img src="%s" alt="" width="%d" height="%d"%s>', ni_img( $fallback ), $width, $height, $atts );
 	}
 }
 
@@ -40,17 +37,12 @@ function ni_about_num( $prefix ) {
 	printf( '<p class="num-card__num"><span class="num-card__value">%s</span><span class="num-card__unit">%s</span></p>', esc_html( (string) ni_about( $prefix . '_number' ) ), esc_html( (string) ni_about( $prefix . '_unit' ) ) );
 }
 
-/* 年間調査件数の円グラフ: 手法内訳（リピーター）。空なら今の 4 つ。
+/* 年間調査件数の円グラフ: 手法内訳（リピーター）。未入力なら円グラフと内訳の文は出さない。
    扇は conic-gradient（割合の合計に対する比で描く）、色は 4 色を上から順に繰り返す。
    ラベルは扇の中央の角度、円の中心から 70px の位置（228 角の円グラフ） */
 $ni_pie_rows = ni_about( 'company_survey_breakdown' );
-if ( ! is_array( $ni_pie_rows ) || ! $ni_pie_rows ) {
-	$ni_pie_rows = array(
-		array( 'breakdown_method' => 'CLT', 'breakdown_percentage' => 40 ),
-		array( 'breakdown_method' => '定性', 'breakdown_percentage' => 22 ),
-		array( 'breakdown_method' => 'WEB', 'breakdown_percentage' => 20 ),
-		array( 'breakdown_method' => 'HUT', 'breakdown_percentage' => 18 ),
-	);
+if ( ! is_array( $ni_pie_rows ) ) {
+	$ni_pie_rows = array();
 }
 $ni_pie_colors = array( '#11296b', '#1f49b0', '#2e6fd0', '#4a94e8' );
 $ni_pie_total  = array_sum( array_map( 'floatval', wp_list_pluck( $ni_pie_rows, 'breakdown_percentage' ) ) );
@@ -144,8 +136,11 @@ get_header();
             <p class="num-card__label"><?php ni_about_text( 'company_survey_label' ); ?></p>
             <?php ni_about_num( 'company_survey' ); ?>
           </div>
+          <?php if ( $ni_pie ) : ?>
           <p class="num-card__note"><?php echo esc_html( $ni_pie_note ); ?></p>
+          <?php endif; ?>
         </div>
+        <?php if ( $ni_pie ) : ?>
         <!-- 円グラフ: 扇は手法内訳から conic-gradient、ラベルは扇の中央 -->
         <div class="pie" role="img" aria-label="調査手法の内訳 <?php echo esc_attr( implode( '、', $ni_pie_items ) ); ?>">
           <div class="pie__sectors" aria-hidden="true" style="background: <?php echo esc_attr( $ni_pie_bg ); ?>"></div>
@@ -154,6 +149,7 @@ get_header();
           <?php endforeach; ?>
           <span class="pie__hole" aria-hidden="true"></span>
         </div>
+        <?php endif; ?>
       </div>
       <div class="about-scale__side">
         <ul class="num-row">
@@ -165,7 +161,7 @@ get_header();
           </div>
           <p class="num-card__note"><?php ni_about_br( 'company_growth_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb num-card__thumb--icon"><?php ni_about_img( 'company_growth_graph', 'about/icon_growth.svg', 50, 50 ); ?></div>
+        <div class="num-card__thumb num-card__thumb--icon"><?php ni_about_img( 'company_growth_graph' ); ?></div>
       </li>
       <li class="num-card num-card--center" data-anim="inview">
         <div class="num-card__txt">
@@ -195,7 +191,7 @@ get_header();
           </div>
           <p class="num-card__note"><?php ni_about_br( 'company_founded_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb num-card__thumb--icon num-card__thumb--icon-l"><?php ni_about_img( 'company_founded_image', 'about/icon_building.svg', 50, 50 ); ?></div>
+        <div class="num-card__thumb num-card__thumb--icon num-card__thumb--icon-l"><?php ni_about_img( 'company_founded_image' ); ?></div>
       </li>
         </ul>
       </div>
@@ -241,7 +237,7 @@ get_header();
           </div>
           <p class="num-card__note"><?php ni_about_br( 'research_venues_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb"><?php ni_about_img( 'research_venues_image', 'about/num_venue.jpg', 744, 524, ' loading="lazy" style="object-position: 95% 50%"' ); ?></div>
+        <div class="num-card__thumb"><?php ni_about_img( 'research_venues_image', ' loading="lazy"' ); ?></div>
       </li>
       </ul>
       <ul class="num-row">
@@ -262,7 +258,7 @@ get_header();
           </div>
           <p class="num-card__note"><?php ni_about_br( 'research_shopper_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb"><?php ni_about_img( 'research_shopper_image', 'about/num_shopperlab.jpg', 744, 524, ' loading="lazy" style="object-position: 57% 50%"' ); ?></div>
+        <div class="num-card__thumb"><?php ni_about_img( 'research_shopper_image', ' loading="lazy"' ); ?></div>
       </li>
         <li class="num-card num-card--ai" data-anim="inview">
           <p class="num-card__label"><?php ni_about_text( 'research_ai_label' ); ?></p>
@@ -342,7 +338,7 @@ get_header();
           </div>
           <p class="num-card__note"><?php ni_about_br( 'culture_lunch_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb"><?php ni_about_img( 'culture_lunch_image', 'about/num_lunch.jpg', 800, 534, ' loading="lazy" style="object-position: 38% 50%"' ); ?></div>
+        <div class="num-card__thumb"><?php ni_about_img( 'culture_lunch_image', ' loading="lazy"' ); ?></div>
       </li>
       <li class="num-card num-card--media num-card--lead num-card--grow" data-anim="inview">
         <div class="num-card__txt">
@@ -352,7 +348,7 @@ get_header();
           </div>
           <p class="num-card__note"><?php ni_about_br( 'culture_party_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb"><?php ni_about_img( 'culture_party_image', 'about/num_party.jpg', 416, 556, ' loading="lazy" style="object-position: 50% 50%"' ); ?></div>
+        <div class="num-card__thumb"><?php ni_about_img( 'culture_party_image', ' loading="lazy"' ); ?></div>
       </li>
       <li class="num-card num-card--media num-card--lead num-card--grow" data-anim="inview">
         <div class="num-card__txt">
@@ -362,7 +358,7 @@ get_header();
           </div>
           <p class="num-card__note"><?php ni_about_br( 'culture_snack_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb"><?php ni_about_img( 'culture_snack_image', 'about/num_snack.jpg', 800, 534, ' loading="lazy" style="object-position: 67% 50%"' ); ?></div>
+        <div class="num-card__thumb"><?php ni_about_img( 'culture_snack_image', ' loading="lazy"' ); ?></div>
       </li>
       </ul>
     </div>

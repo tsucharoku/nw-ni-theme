@@ -34,7 +34,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "年間調査件数",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -54,7 +54,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "2,000",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -74,7 +74,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "件",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -86,7 +86,7 @@
             "name": "company_survey_breakdown",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "円グラフと、その下の内訳の文になります。割合の合計は 100 にしてください（100 でなくても円は割合の比で描きます）。色は上から濃い紺 → 明るい青の 4 色で、5 つ目からは 1 色目に戻ります。空なら CLT 40 / 定性 22 / WEB 20 / HUT 18。",
+            "instructions": "円グラフと、その下の内訳の文になります。割合の合計は 100 にしてください（100 でなくても円は割合の比で描きます）。色は上から濃い紺 → 明るい青の 4 色で、5 つ目からは 1 色目に戻ります。未入力なら円グラフと内訳の文は出ません。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -162,7 +162,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "業界成長率",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -182,7 +182,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "業界トップクラスの\n110%超の成長率を維持",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -202,7 +202,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "コロナ禍でも売上成長率110%超を記録。\n創業56年の独立系リサーチ会社として持続的な高成長を継続。",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -214,7 +214,7 @@
             "name": "company_growth_graph",
             "aria-label": "",
             "type": "image",
-            "instructions": "右のアイコン（正方形・SVG 可）。空なら今のアイコン。",
+            "instructions": "右のアイコン（正方形・SVG 可）。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -248,7 +248,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "取引社数",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -268,7 +268,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "800",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -288,7 +288,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "社超",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -308,7 +308,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "リピート希望率96%\n※当社お客様満足度調査調べ",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -328,7 +328,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "大手メーカーとの直接取引比率",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -348,7 +348,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "90",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -368,7 +368,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "％",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -388,7 +388,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "飲料・食品・化粧品・トイレタリーなど\n代理店を介さず直接対峙",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -408,7 +408,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "創業",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -428,7 +428,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "1969",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -448,7 +448,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "年",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -468,7 +468,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "独立系リサーチ専業会社として55年以上\nJMRA・ESOMAR加盟",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -480,7 +480,7 @@
             "name": "company_founded_image",
             "aria-label": "",
             "type": "image",
-            "instructions": "右のイラスト（正方形・SVG 可）。空なら今のイラスト。",
+            "instructions": "右のイラスト（正方形・SVG 可）。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -532,7 +532,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "パネルリーチ規模",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -552,7 +552,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "1,800",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -572,7 +572,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "万人にリーチ可能",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -592,7 +592,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "日本の15歳以上の約6人に1人にリーチできる規模のパネルネットワーク（自社600万人＋提携1,200万人）",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -612,7 +612,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "入社1年目に経験できる調査手法数",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -632,7 +632,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "4",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -652,7 +652,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "手法",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -672,7 +672,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "CLT・WEB・HUT・定性（GI）など\nバランスよく全手法を経験",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -692,7 +692,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "自社調査会場数",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -712,7 +712,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "8",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -732,7 +732,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "会場",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -752,7 +752,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "東京7・大阪1 同日7会場でCLT同時実施可能。オフィスと同ビルで移動ゼロ",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -764,7 +764,7 @@
             "name": "research_venues_image",
             "aria-label": "",
             "type": "image",
-            "instructions": "空なら今の写真。",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -798,7 +798,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "専属調査員数",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -818,7 +818,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "220",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -838,7 +838,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "名超",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -858,7 +858,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "業界最大級。機縁リクルーター150名と連携し、\n困難条件の対象者も確保可能",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -878,7 +878,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "NI Shopper Lab.",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -898,7 +898,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "業界唯一の\n模擬店舗型実査施設",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -918,7 +918,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "コンビニ／ドラッグストアに切替可\n店内カメラ完備・DIルーム2部屋併設",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -930,7 +930,7 @@
             "name": "research_shopper_image",
             "aria-label": "",
             "type": "image",
-            "instructions": "空なら今の写真。",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -964,7 +964,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "自社開発AIツール",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -984,7 +984,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "AI × 定量調査",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1004,7 +1004,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "自由回答の自動深掘り・\nチャットインタビュー",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1024,7 +1024,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "AI × 定性調査",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1044,7 +1044,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "インタビュー書き起こし・\nサマリー自動化",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1082,7 +1082,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "新卒入社社員の3年後定着率",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1102,7 +1102,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "85.7",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1122,7 +1122,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "%",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1142,7 +1142,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "入社後の定着率の高さを示す実績",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1162,7 +1162,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "離職率（2024年度）",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1182,7 +1182,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "7",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1202,7 +1202,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "%",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1222,7 +1222,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "日本全体平均 11.5% と比較して低水準",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1242,7 +1242,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "平均勤続年数",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1262,7 +1262,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "7",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1282,7 +1282,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "年11ヶ月",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1302,7 +1302,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "専門性が積み上がり、長く働ける環境",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1322,7 +1322,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "女性産休育休復職率",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1342,7 +1342,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "100",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1362,7 +1362,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "%",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1382,7 +1382,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "小学校就学まで時短OK\n遠隔地フルリモート制度あり",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1402,7 +1402,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "異業種からの活躍例",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1422,7 +1422,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "バスの運転手",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1442,7 +1442,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "集計部門ディレクター",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1462,7 +1462,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "アパレル販売",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1482,7 +1482,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "営業部部長",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1502,7 +1502,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "男女比（正社員）",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1522,7 +1522,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "57",
+            "default_value": "",
             "min": 0,
             "max": 100,
             "placeholder": "",
@@ -1544,7 +1544,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "43",
+            "default_value": "",
             "min": 0,
             "max": 100,
             "placeholder": "",
@@ -1566,7 +1566,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "多様なバックグラウンドを持つメンバーが活躍中",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1586,7 +1586,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "制度の柔軟性",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1606,7 +1606,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "ワーケーション／遠隔地勤務\n時短・出社日数制限",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1626,7 +1626,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "ライフステージに合わせた働き方が選択可",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1646,7 +1646,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "コミュニケーションランチ",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1666,7 +1666,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "1,500",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1686,7 +1686,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "円/月",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1706,7 +1706,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "部署ランチ代を毎月会社が負担\nチームの関係構築をサポート",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1718,7 +1718,7 @@
             "name": "culture_lunch_image",
             "aria-label": "",
             "type": "image",
-            "instructions": "空なら今の写真。",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1752,7 +1752,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "社内懇親会（年2回）",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1772,7 +1772,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "すし職人が\nオフィスに来社！？",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1792,7 +1792,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "かき氷・軽食もふるまい\nコミュニティチームが毎回企画",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1804,7 +1804,7 @@
             "name": "culture_party_image",
             "aria-label": "",
             "type": "image",
-            "instructions": "空なら今の写真。",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1838,7 +1838,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "無料軽食",
+            "default_value": "",
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
@@ -1858,7 +1858,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "スナックミー\n常時提供",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1878,7 +1878,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "人工甘味料・保存料・合成着色料不使用のヘルシー軽食",
+            "default_value": "",
             "maxlength": "",
             "rows": 2,
             "placeholder": "",
@@ -1890,7 +1890,7 @@
             "name": "culture_snack_image",
             "aria-label": "",
             "type": "image",
-            "instructions": "空なら今の写真。",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
