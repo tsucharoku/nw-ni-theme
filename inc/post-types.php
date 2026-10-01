@@ -8,7 +8,7 @@
  *
  * 社員インタビュー・座談会は、まだ URL とテンプレート（archive-○○.php / single-○○.php）を出すための最小限の登録。
  * 入力項目（supports・カスタムフィールド）は仕様を見て後から足す。
- * 募集要項は一覧・カテゴリ一覧が WP の内容を出している（カテゴリの英語表記は ACF: acf-json/group_ni_job_category.json）。
+ * 募集要項は一覧・カテゴリ一覧・詳細が WP の内容を出している（カテゴリの英語表記・詳細のリード文は ACF: acf-json/）。
  */
 
 function ni_register_post_types() {

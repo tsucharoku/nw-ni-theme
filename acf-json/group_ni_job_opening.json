@@ -1,14 +1,14 @@
 {
-    "key": "group_ni_job_category",
-    "title": "募集要項カテゴリ",
+    "key": "group_ni_job_opening",
+    "title": "募集要項",
     "fields": [
         {
-            "key": "field_ni_job_category_label_en",
-            "label": "英語表記",
-            "name": "label_en",
+            "key": "field_ni_job_opening_lead",
+            "label": "リード文",
+            "name": "lead",
             "aria-label": "",
-            "type": "text",
-            "instructions": "募集要項一覧（カテゴリ名の上）と募集要項詳細（その他の募集職種の見出しの上）に出る英語です。例: New Graduates",
+            "type": "textarea",
+            "instructions": "ページ上部の職種名の下に出る文です。空なら出ません。改行は PC だけで効きます（SP は画面幅で折り返します）。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -18,17 +18,17 @@
             },
             "default_value": "",
             "maxlength": "",
+            "rows": 3,
             "placeholder": "",
-            "prepend": "",
-            "append": ""
+            "new_lines": ""
         }
     ],
     "location": [
         [
             {
-                "param": "taxonomy",
+                "param": "post_type",
                 "operator": "==",
-                "value": "job-category"
+                "value": "job-opening"
             }
         ]
     ],

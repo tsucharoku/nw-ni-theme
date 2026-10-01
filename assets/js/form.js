@@ -1,6 +1,7 @@
 /* ==========================================================================
-   form.js — フォーム（静的 HTML 版）
+   form.js — フォーム
    Contact Form 7 の出力 DOM（.wpcf7 > form.wpcf7-form）に対して動く。
+   本物の CF7 のフォーム（隠し項目 _wpcf7 がある。募集要項詳細）と、静的なまま置いているフォーム（カジュアル面談）の両方がある。
 
    [A] 見た目の補助（WP 化しても残す）
        select / date が空の間 .is-empty を付ける（プレースホルダーと同じグレーにするため。form.css）
@@ -10,6 +11,8 @@
          .wpcf7-not-valid + <span class="wpcf7-not-valid-tip"> を出して送信を止め、form を invalid に
        - メールアドレス（確認用）が一致しているか（CF7 では追加のバリデーションで行う）
        - OK なら form の action（./thanks/）へ移動。入力値は URL に付けない（静的版は送信先が無いため）
+       本物の CF7 のフォームでは動かさない（CF7 本体と inc/cf7.php が同じことをする）
+   [C] 本物の CF7 のフォーム: 送信できたら完了ページ（form の data-thanks。inc/cf7.php が付ける）へ移動
    ========================================================================== */
 (function () {
   'use strict';
@@ -27,6 +30,13 @@
     sync();
   });
 
+  /* ---------- [C] 本物の CF7 のフォーム: 送信完了で完了ページへ ---------- */
+  document.addEventListener('wpcf7mailsent', function (e) {
+    var form = e.target.closest('form.wpcf7-form') || e.target.querySelector('form.wpcf7-form');   /* CF7 は form に投げる（版によっては外側の .wpcf7） */
+    var thanks = form && form.getAttribute('data-thanks');
+    if (thanks) window.location.href = thanks;
+  });
+
   /* ---------- [B] 静的版だけの代用 ---------- */
   var MSG_REQUIRED = '入力してください。';
   var MSG_EMAIL = 'メールアドレスの形式が正しくありません。';
@@ -34,6 +44,8 @@
   var MSG_INVALID = '入力内容に問題があります。確認して再度お試しください。';
 
   each(forms, function (form) {
+    if (form.querySelector('input[name="_wpcf7"]')) return;   /* 本物の CF7 のフォーム */
+
     var submit = form.querySelector('.wpcf7-submit');
     var accepts = form.querySelectorAll('.wpcf7-acceptance input[type="checkbox"]');
     var output = form.querySelector('.wpcf7-response-output');

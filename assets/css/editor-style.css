@@ -5,6 +5,8 @@
    規約
    - このファイル単体で完結する（base.css / common.css / lower.css のクラスに依存しない）。
      WP では add_editor_style() でも読み込む
+   - レイアウトの仕組み（画像＋テキストのグリッド、カラム・ボタンの並び、各ブロックの幅・寄せ・縦位置の設定）は
+     WP 標準のブロック CSS に任せ、ここでは上書きしない。ここで扱うのは見た目（色・文字・角丸・部品の中の余白）だけ
    - :root 以外の全ルールのセレクタは .entry-content で始める
      （エディタ側では .entry-content → .editor-styles-wrapper に機械的に置換できる）
    - SP（〜767px、375 基準）を先に書き、@media (min-width: 768px) で PC を上書き
@@ -184,7 +186,6 @@
    画像 core/image・動画 core/video / core/embed（565:17591）
    ========================================================================== */
 .entry-content .wp-block-image img {
-  width: 100%;
   border-radius: var(--radius);
 }
 
@@ -243,18 +244,8 @@
 }
 
 .entry-content .wp-block-embed__wrapper {
-  position: relative;
-  aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: var(--radius);
-}
-
-.entry-content .wp-block-embed__wrapper iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
 }
 
 /* ==========================================================================
@@ -262,13 +253,11 @@
    ul: 紺の点 6px、文字まで 18。ol: 紺の丸数字 20px、文字まで 32。項目の間 2
    ========================================================================== */
 .entry-content .wp-block-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
   padding: 0;
   list-style: none;
 }
 
+.entry-content .wp-block-list > li + li,
 .entry-content .wp-block-list .wp-block-list {
   margin-top: 2px;
 }
@@ -361,31 +350,15 @@
 
 /* ==========================================================================
    ボタン core/buttons（565:17665 / SP 1140:16469）
-   SP: 幅いっぱい・左右 20。PC: 文字 + 32 + [罫線 | 32 | 矢印]、左右 32。高さ 54
+   ボタンの中: SP 左右 20、PC 文字 + 32 + [罫線 | 32 | 矢印]、左右 32。高さ 54
    矢印の箱は ::after（罫線 1 + 余白 + アイコン）。is-style-external は別窓アイコン
+   並び（横 / 縦・寄せ）とボタンの幅は WP 標準（ブロックのレイアウト・幅の設定）に任せる
    ========================================================================== */
-.entry-content .wp-block-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-/* 縦並び（エディタの「垂直方向」= is-vertical） */
-.entry-content .wp-block-buttons.is-vertical {
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.entry-content .wp-block-button {
-  width: 100%;
-}
-
 .entry-content .wp-block-button__link {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  width: 100%;
   padding: 16px 20px;
   border: 0;
   border-radius: var(--radius);
@@ -420,30 +393,12 @@
 
 /* ==========================================================================
    画像＋テキスト core/media-text（565:17669 / SP 1140:16472）
-   SP: 縦積み（画像 → 16 → 文）。PC: 画像 300 + 32 + 文。文の中は 12 間隔
+   左右の分け方（グリッド）・画像の左右・メディアの幅・縦位置・モバイルで縦に並べるは WP 標準（ブロックの設定）に任せる。
+   ここは見た目だけ: 画像の角丸、文の中は 12 間隔
    ========================================================================== */
-.entry-content .wp-block-media-text {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
 .entry-content .wp-block-media-text__media {
-  flex: none;
   overflow: hidden;
   border-radius: var(--radius);
-}
-
-.entry-content .wp-block-media-text__media img {
-  width: 100%;
-  aspect-ratio: 335 / 166;   /* SP 1140:16473 */
-  object-fit: cover;
-}
-
-.entry-content .wp-block-media-text__content {
-  flex: 1 1 0;
-  min-width: 0;
-  padding: 0;
 }
 
 .entry-content .wp-block-media-text__content > * + * {
@@ -460,10 +415,8 @@
 }
 
 .entry-content .wp-block-table table {
-  width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
-  table-layout: fixed;
 }
 
 .entry-content .wp-block-table th,
@@ -501,19 +454,9 @@
 }
 
 /* ==========================================================================
-   カラム core/columns（素のカラム）: SP 縦積み 24 / PC 横並び 32
+   カラム core/columns
+   並び・列の幅・縦位置・モバイルで縦に並べる・列の間は WP 標準（ブロックの設定）に任せる。ここは列の中の間隔だけ
    ========================================================================== */
-.entry-content .wp-block-columns {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.entry-content .wp-block-column {
-  flex: 1 1 0;
-  min-width: 0;
-}
-
 .entry-content .wp-block-column > * + * {
   margin-top: var(--item-gap);
 }
@@ -560,9 +503,14 @@
 /* 白い丸タグ: 高さ 24、左右 12、青 #6378ae、間 4 */
 .entry-content .wp-block-list.is-style-pills,
 .entry-content .wp-block-list.is-style-hashtags {
-  flex-direction: row;
+  display: flex;
   flex-wrap: wrap;
   align-items: center;
+}
+
+.entry-content .wp-block-list.is-style-pills > li + li,
+.entry-content .wp-block-list.is-style-hashtags > li + li {
+  margin-top: 0;
 }
 
 .entry-content .wp-block-list.is-style-pills {
@@ -607,19 +555,8 @@
 /* ==========================================================================
    プロフィール行 core/columns + is-style-profile（968:10580 / SP 1140:16534）
    1 列目: core/image（丸写真 SP 64 / PC 80）+ キャプション = 氏名（12px）。2 列目: 本文
-   SP でも横並び（エディタでは「モバイルでは縦に並べる」をオフ = is-not-stacked-on-mobile）
+   並びと列の幅はブロックの設定で決める（入稿時: 「モバイルでは縦に並べる」をオフ、1 列目の幅 80px、縦位置は上）
    ========================================================================== */
-.entry-content .wp-block-columns.is-style-profile {
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 16px;
-}
-
-.entry-content .is-style-profile .wp-block-column:first-child {
-  flex: none;
-  width: 75px;
-}
-
 .entry-content .is-style-profile .wp-block-image img {
   width: 64px;
   height: 64px;
@@ -636,19 +573,16 @@
 
 /* ==========================================================================
    コメント core/media-text + is-style-comment（565:17733 / SP 1140:16535）
-   白ベタ、内側 24 / 28。丸写真 SP 64 / PC 88、本文まで SP 24 / PC 32。本文 80% 黒、肩書きまで 8
+   白ベタ、内側 24 / 28、丸写真。本文 80% 黒、肩書きまで 8
+   並び・写真の幅（メディアの幅）・縦位置は画像＋テキストと同じく WP 標準（ブロックの設定）に任せる
    ========================================================================== */
 .entry-content .wp-block-media-text.is-style-comment {
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 24px;
   padding: 24px 28px;
   border-radius: var(--radius);
   background: var(--c-white);
 }
 
 .entry-content .is-style-comment .wp-block-media-text__media {
-  width: 64px;
   border-radius: 50%;
 }
 
@@ -886,42 +820,13 @@
     padding-left: 49px;
   }
 
-  .entry-content .wp-block-button {
-    width: auto;
-  }
-
   .entry-content .wp-block-button__link {
     gap: 32px;
-    width: auto;
     padding-inline: 32px;
   }
 
   .entry-content .wp-block-button__link::after {
     width: 44.31px;
-  }
-
-  .entry-content .wp-block-media-text {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 32px;
-  }
-
-  .entry-content .wp-block-media-text__media {
-    width: 300px;
-  }
-
-  .entry-content .wp-block-media-text__media img {
-    aspect-ratio: 300 / 169;
-  }
-
-  .entry-content .wp-block-media-text.has-media-on-the-right {
-    flex-direction: row-reverse;
-  }
-
-  .entry-content .wp-block-columns {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 32px;
   }
 
   .entry-content .is-style-cards .wp-block-image img {
@@ -932,25 +837,9 @@
     margin-top: 24px;
   }
 
-  .entry-content .wp-block-columns.is-style-profile {
-    gap: 32px;
-  }
-
-  .entry-content .is-style-profile .wp-block-column:first-child {
-    width: 80px;
-  }
-
   .entry-content .is-style-profile .wp-block-image img {
     width: 80px;
     height: 80px;
-  }
-
-  .entry-content .wp-block-media-text.is-style-comment {
-    gap: 32px;
-  }
-
-  .entry-content .is-style-comment .wp-block-media-text__media {
-    width: 88px;
   }
 
   .entry-content .is-style-byline {
@@ -968,19 +857,11 @@
 
 /* ==========================================================================
    中間幅（768〜1439px）の流動化
-   本文の箱が狭くなるので、固定幅の画像列と 3 列カードの間隔を縮める
+   本文の箱が狭くなるので、ブロック間とボタンの左右を縮める
    ========================================================================== */
 @media (min-width: 768px) and (max-width: 1439px) {
   .entry-content {
     --block-gap: clamp(32px, 3.89vw, 56px);
-  }
-
-  .entry-content .wp-block-media-text__media {
-    width: clamp(200px, 20.83vw, 300px);
-  }
-
-  .entry-content .wp-block-columns {
-    gap: clamp(16px, 2.22vw, 32px);
   }
 
   .entry-content .wp-block-button__link {

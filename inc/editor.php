@@ -1,0 +1,78 @@
+<?php
+/**
+ * ブロックエディタ（募集要項の本文）
+ *
+ * - editor-style.css 冒頭の一覧のブロックスタイル（is-style-○○）を登録する
+ * - editor-style.css を募集要項の編集画面に読み込む。
+ *   ファイルは全セレクタが .entry-content 始まりなので、エディタ用に置き換えてから渡す（add_editor_style だと
+ *   .editor-styles-wrapper .entry-content … になって当たらないため）。エディタは渡したセレクタの頭に .editor-styles-wrapper を付ける
+ */
+
+function ni_register_block_styles() {
+	$styles = array(
+		'core/button'     => array( 'external' => '外部リンク' ),
+		'core/columns'    => array(
+			'cards'   => '社員カード',
+			'profile' => 'プロフィール',
+		),
+		'core/media-text' => array( 'comment' => 'コメント' ),
+		'core/paragraph'  => array(
+			'byline'   => 'コメントの肩書き',
+			'name'     => '社員カードの氏名',
+			'en-label' => '英字ラベル',
+		),
+		'core/list'       => array(
+			'pills'    => '丸タグ',
+			'hashtags' => '# タグ',
+		),
+		'core/group'      => array(
+			'question' => '質問見出し',
+			'steps'    => '選考ステップ（全体）',
+			'step'     => '選考ステップ（1 件）',
+		),
+	);
+	foreach ( $styles as $block => $names ) {
+		foreach ( $names as $name => $label ) {
+			register_block_style(
+				$block,
+				array(
+					'name'  => $name,
+					'label' => $label,
+				)
+			);
+		}
+	}
+}
+add_action( 'init', 'ni_register_block_styles' );
+
+function ni_block_editor_styles( $settings, $context ) {
+	if ( empty( $context->post ) || 'job-opening' !== $context->post->post_type ) {
+		return $settings;
+	}
+	$path = 'assets/css/editor-style.css';
+	$css  = file_get_contents( get_theme_file_path( $path ) );
+	$css  = preg_replace(
+		array(
+			'/\.entry-content(?=\s*[{,])/',   /* .entry-content 自体 → body（エディタが .editor-styles-wrapper に置き換える） */
+			'/\.entry-content > /',            /* 直下のブロック → エディタのブロックの親 */
+			'/\.entry-content /',              /* 子孫 → 頭を外す（エディタが .editor-styles-wrapper を付ける） */
+		),
+		array( 'body', '.is-root-container > ', '' ),
+		$css
+	);
+	$settings['styles'][] = array(
+		'css'     => $css,
+		'baseURL' => get_theme_file_uri( $path ),   /* url(../img/…) をテーマの assets/img/ に解決させる */
+	);
+	return $settings;
+}
+add_filter( 'block_editor_settings_all', 'ni_block_editor_styles', 10, 2 );
+
+/* エディタの中（iframe）でもフロントと同じ和文フォント Gen Interface JP を読む（読み込み元は inc/assets.php と同じ） */
+function ni_block_editor_fonts() {
+	$screen = is_admin() && function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( $screen && 'job-opening' === $screen->post_type ) {
+		wp_enqueue_style( 'ni-font-gen-interface', 'https://cdn.jsdelivr.net/npm/gen-interface-jp@0.8.0/cdn/all.css', array(), null );
+	}
+}
+add_action( 'enqueue_block_assets', 'ni_block_editor_fonts' );

@@ -1,0 +1,18 @@
+採用サイトからエントリーがありました。
+
+応募職種: [_post_title]
+応募ページ: [_post_url]
+
+お名前: [your-name]
+フリガナ: [your-kana]
+生年月日: [birth]
+性別: [gender]
+メールアドレス: [your-email]
+住所: [address]
+
+その他ご質問:
+[your-message]
+
+--
+[_site_title] [_site_url]
+送信日時: [_date] [_time]

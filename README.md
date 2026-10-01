@@ -5,9 +5,9 @@ https://recruit.n-info.co.jp/ のテーマ。静的 HTML（リポジトリ `tsuc
 
 ## いまの状態（2026-10-01）
 
-**全 18 ページを静的なままテーマ化し、募集要項の一覧・カテゴリ一覧だけ WP の内容を出している段階。** ヘッダー・メニュー・フッターは共通化し、ほかのテンプレートの `<main>` は静的 HTML の内容を固定で出している（WP の投稿内容はまだ出していない）。静的 HTML と全ページ・PC / SP で、要素の寸法と位置・リンク先・画像・文言が一致することを確認済み。
+**全 18 ページを静的なままテーマ化し、募集要項（一覧・カテゴリ一覧・詳細）だけ WP の内容を出している段階。** ヘッダー・メニュー・フッターは共通化し、ほかのテンプレートの `<main>` は静的 HTML の内容を固定で出している（WP の投稿内容はまだ出していない）。静的 HTML と全ページ・PC / SP で、要素の寸法と位置・リンク先・画像・文言が一致することを確認済み。
 
-これから: 残りのページの投稿のループ、カスタムフィールド（ACF Pro）、フォーム（Contact Form 7）、ヘッダー・メニュー・フッターの募集要項カテゴリへのリンク、エディタ用スタイル。ページの種類は `制作進行資料.xlsx`「ディレクトリマップ」、入稿項目は仕様書の Figma を見て決める。
+これから: 残りのページの投稿のループ、カスタムフィールド（ACF Pro）、カジュアル面談のフォーム（Contact Form 7）、ヘッダー・メニュー・フッターの募集要項カテゴリへのリンク。ページの種類は `制作進行資料.xlsx`「ディレクトリマップ」、入稿項目は仕様書の Figma を見て決める。
 
 ## ページとテンプレート
 
@@ -42,6 +42,9 @@ functions.php            テーマの設定、ni_img() / ni_url() / ni_job_categ
 inc/post-types.php       カスタム投稿 interview / cross-talk / job-opening とタクソノミー job-category の登録、/job-opening/○○/ の振り分け、募集要項の並び順
 inc/page.php             いまのページの種類（top / beginner / career / lower）と、ページごとの CSS・JS の対応表。<body> のクラス
 inc/assets.php           CSS・JS の読み込み、three.js の import map、ES モジュール
+inc/editor.php           ブロックエディタ: ブロックスタイル（is-style-○○）の登録、editor-style.css とフォントをエディタに読み込む
+inc/cf7.php              Contact Form 7: 自動 <p> を切る、メールアドレス（確認用）の一致チェック、完了ページの URL、CSS・JS を読むページ
+cf7/                     CF7 のフォームの中身（entry-form.txt）とメール本文（entry-mail.txt）。管理画面の CF7 に貼る元
 header.php               <head> 〜 ハンバーガーメニューまで
 template-parts/menu.php      ハンバーガーメニュー
 template-parts/fv-frame.php  FV の青いフレーム（新卒 TOP・中途 TOP）
@@ -62,7 +65,13 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
   - カテゴリ一覧（`taxonomy-job-category.php`）: そのカテゴリの職種を全件出し、`lower.js` の `.js-more` が 10 件ずつ見せる（Ajax・ページ送りはしていない）。h1・パンくず・`<title>` は `カテゴリ名 + の募集一覧`。投稿が無いカテゴリの URL を直接開くと空の一覧になる（デザインなし）。
   - カテゴリの入稿項目: 名前 / スラッグ / 説明（WP 標準）/ 英語表記（ACF `label_en`。`acf-json/group_ni_job_category.json`）。英語表記・説明は空ならその行を出さない。
   - 並び順: 管理画面の並び替え（Intuitive Custom Post Order）の順。投稿は `menu_order` の小さい順 → 公開日の新しい順（`ni_job_orderby()`）、カテゴリはプラグインが付ける順。
-  - **未対応**: ヘッダー「アルバイト」とメニュー・フッター「募集中の職種一覧」の 4 つのリンク。どれをどのカテゴリに向けるかが未定で、`ni_job_category_url()` が 4 つとも一覧（`/job-opening/`）に向けている。詳細（`single-job-opening.php`）もまだ静的。
+  - **未対応**: ヘッダー「アルバイト」とメニュー・フッター「募集中の職種一覧」の 4 つのリンク。どれをどのカテゴリに向けるかが未定で、`ni_job_category_url()` が 4 つとも一覧（`/job-opening/`）に向けている。
+- **募集要項詳細も WP の内容**（`single-job-opening.php`。仕様書 732:3342「全ブロック包含」。青文字 = CMS で編集、黒文字 = 固定）
+  - カテゴリ = 投稿に付いた `job-category` の 1 つ目。ページ頭の小見出し・パンくず（→ カテゴリ一覧）・その他の募集職種に使う。
+  - 職種名 = タイトル。リード文 = ACF `lead`（`acf-json/group_ni_job_opening.json`。仕様書には無くデザインにある。空なら出さない。改行は PC だけ `<br class="u-pc">`）。meta description はリード文、無ければ「日本インフォメーション株式会社 {カテゴリ}「{職種名}」の募集要項です。」
+  - 本文 = Gutenberg。**エントリーフォームも本文の中**（仕様書・デザインともエディタの範囲内）: h2「エントリー」（HTML アンカー `entry`）+ CF7 本体の「Contact Form 7」ブロック（プルダウンでフォームを選ぶ）。白い箱は `job-opening.css` の `.job-detail .entry-content .wpcf7`。アルバイト用など別のフォームを作れば投稿ごとに選べる。
+  - 左のアンカーナビ = 本文の h2 から自動で作る（仕様書でナビは青文字）。リンク先は h2 の「HTML アンカー」、空なら `job-sec-1` から順に付ける。h2 が無ければナビを出さない。
+  - その他の募集職種 = 同じカテゴリの他の職種を**全件**（表示中の職種は除く、並びは `ni_job_orderby()`）。英字はカテゴリの英語表記（デザイン 576:7609。空なら出さない）。0 件なら一覧だけ出さず、見出しと「募集中の職種一覧に戻る」は出す。
 - **WP の絵文字スクリプトは止めている**: 本文の絵文字（🎉 🏆）が `<img class="emoji">` に置き換わって文字幅が変わるため。
 
 ## WP 側に必要なデータ
@@ -70,8 +79,9 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
 テンプレートは URL（スラッグ）で決まるので、次のものが WP に無いとページが出ない。Local では WP-CLI で作成済み。テストサーバーでも同じものを作る。
 
 - 固定ページ: `beginner` / `career` / `about` / `chart` / `development` / `work-style` / `office` / `casual-talk` / `casual-talk` の子の `thanks`
-- 静的なあいだのサンプル（静的 HTML の `detail/` と同じ URL にするため）: `interview` / `cross-talk` / `job-opening` にスラッグ `detail` の投稿を 1 件ずつ
-- プラグイン: **Advanced Custom Fields PRO**（有効化するとテーマの `acf-json/` の項目が出る）、**Intuitive Custom Post Order**（設定 → 並び替え設定 で、投稿タイプ「募集要項」とタクソノミー「募集要項カテゴリ」にチェック）
+- 静的なあいだのサンプル（静的 HTML の `detail/` と同じ URL にするため）: `interview` / `cross-talk` / `job-opening` にスラッグ `detail` の投稿を 1 件ずつ。Local の `job-opening` の `detail`（アルバイト「定性調査のモデレーター」）には、静的 HTML の本文と同じブロック一式とエントリーフォーム、リード文を入れてある
+- プラグイン: **Advanced Custom Fields PRO**（有効化するとテーマの `acf-json/` の項目が出る）、**Intuitive Custom Post Order**（設定 → 並び替え設定 で、投稿タイプ「募集要項」とタクソノミー「募集要項カテゴリ」にチェック）、**Contact Form 7**（日本語の翻訳も入れる: `wp language plugin install contact-form-7 ja`）
+- CF7 のフォーム「エントリーフォーム」: 新規作成し、「フォーム」タブに `cf7/entry-form.txt`、「メール」タブの本文に `cf7/entry-mail.txt` を貼る。メールの宛先 `[_site_admin_email]`、件名 `[_site_title] エントリー：[_post_title]（[your-name] 様）`、追加ヘッダー `Reply-To: [your-email]`、ファイル添付 `[resume]`（改行して）`[cv]`。メール (2)（自動返信）は使っていない。送信できたら `/casual-talk/thanks/` へ移る（`form.js` の [C]）。各募集要項の本文の最後に h2「エントリー」+ Contact Form 7 ブロックでこのフォームを置く
 - 募集要項のカテゴリ（`job-category`）と投稿。Local にはサンプルとして、静的 HTML と同じ内容を入れてある: カテゴリ 4 つ（新卒採用 `new-graduate` / 中途採用(未経験) `mid-beginner` / 中途採用(経験者) `mid-career` / アルバイト `part-time`）、投稿 1 / 4 / 4 / 24 件
 - パーマリンク設定は「投稿名」（`/%postname%/`）。投稿タイプを変えたらパーマリンクを保存し直す（`wp rewrite flush`）
 - サイトの言語は日本語（`<html lang="ja">` になる）
@@ -103,8 +113,8 @@ Local（Flywheel）のサイト `http://ni.localhost/`。WP-CLI は案件フォ�
 - **ページ頭の背景のガラスの NI ロゴ**: Figma は白地の動画ポスター（ni-logo-only）を重ねたもの。白を透過に直した PNG（`assets/img/lower/pagehead_ni.png`）を静止画で置いている（下層では WebGL を使わない）。
   - **置き場所**: `.page-head` の中ではなく、`header.php` が `<main>` の前に 1 回だけ出す（`.page-ni`）。位置の基準は本文の枠（PC は最大 1440px で中央寄せ）の右上で、1440px より広い画面でも本文と同じ位置関係を保つ。横のはみ出しだけ画面の端で切り、縦は切らない（ページ頭が短いページでは本文の背後まで見える）。`.page-head` 自体も本文（`.lower-sec`）と同じ最大 1440px・中央寄せ。
   - **出すページ**は `inc/page.php` の `ni_logo`。Figma の見出し部品（H2）の中のロゴが非表示のページに合わせている（2026-10-01 に全ページ PC / SP を確認）: 募集要項カテゴリ・募集要項詳細は PC / SP とも出さない。社員インタビュー詳細・座談会詳細は PC は出さず SP だけ出す（Figma の PC と SP で違う。要確認）。それ以外の下層は出す。
-- **募集要項詳細の本文 = Gutenberg**: `<div class="entry-content">` の中は Gutenberg が実際に出すマークアップ（`wp-block-heading` / `wp-block-image` / `wp-block-video` / `wp-block-list` / `wp-block-quote` / `wp-block-buttons` / `wp-block-media-text` / `wp-block-table` / `wp-block-columns` / `wp-block-details`）。コアに無い部品は `is-style-*` のブロックスタイル想定（HTML 内のコメントに「core/○○ + is-style-○○」と書いてある）。CSS は **`assets/css/editor-style.css` だけで完結**（先頭で base.css と同じトークンを `:root` に再掲、それ以外の全セレクタが `.entry-content` 始まり）。**未対応**: エディタ側にはまだ読み込んでいない。`add_editor_style` に渡す（エディタ側は接頭辞 `.entry-content` を外す / `.editor-styles-wrapper` に置換して読み込む）。base.css のトークンを変えたらこのファイル先頭も合わせる。左の追従アンカーナビ・ページ頭・エントリーフォームの箱・その他の募集職種はテンプレート側（`job-opening.css`）。
-- **フォーム = Contact Form 7 想定**（**未対応**: いまは静的なフォームのまま）: `.wpcf7` 以下は CF7 の出力 DOM に合わせてある（`span.wpcf7-form-control-wrap` / `.wpcf7-checkbox > .wpcf7-list-item` / `.wpcf7-acceptance` / `.wpcf7-file` / `.wpcf7-submit` / `.wpcf7-not-valid-tip` / `.wpcf7-response-output`）。行の構造（`.form__row` / `__label` / `__req` / `__field`）は CF7 のフォームテンプレートに書く部分。CF7 の自動 `<p>` / `<br>` は切る（`wpcf7_autop_or_not`）。`form.js` の [B]（必須チェック・同意で送信可・完了ページへ移動）は CF7 を入れたら不要、[A]（select / date が空の間グレーにする）は残す。
+- **募集要項詳細の本文 = Gutenberg**: `<div class="entry-content">` の中は Gutenberg が実際に出すマークアップ（`wp-block-heading` / `wp-block-image` / `wp-block-video` / `wp-block-list` / `wp-block-quote` / `wp-block-buttons` / `wp-block-media-text` / `wp-block-table` / `wp-block-columns` / `wp-block-details`）。コアに無い部品は `is-style-*` のブロックスタイル想定（HTML 内のコメントに「core/○○ + is-style-○○」と書いてある）。**レイアウトの仕組みは WP 標準のブロック CSS に任せる**（画像＋テキストのグリッド・画像の左右・メディアの幅・縦位置、カラムの並び・列の幅・モバイルで縦に並べる、ボタンの並び・幅、画像の幅、表の固定幅セル、埋め込みの縦横比 = `responsive-embeds`）。`assets/css/editor-style.css` は見た目（色・文字・角丸・部品の中の余白）だけを足す。デザインに近づけるのはブロックの設定で行う（サンプル投稿: 画像＋テキストのメディアの幅 35%・縦位置 上、コメントは 11%・モバイルでも横並び、プロフィールは 1 列目 80px・縦位置 上・モバイルでも横並び）。2026-10-01 にそれまで editor-style.css で flex や固定幅に組み直していたのを外した（左右の入れ替えや幅の設定が効かなかったため）。editor-style.css は先頭で base.css と同じトークンを `:root` に再掲、それ以外の全セレクタが `.entry-content` 始まり。エディタには `inc/editor.php` が読み込む（募集要項の編集画面だけ。`.entry-content` 自体 → `body`、`.entry-content > ` → `.is-root-container > `、それ以外の `.entry-content ` は外して渡し、エディタが `.editor-styles-wrapper` を付ける。エディタの見え方は近いが完全一致ではない）。ブロックスタイルは `inc/editor.php` で登録（ラベルは日本語）。フロントでは WP 標準のブロック CSS（`wp-block-*` / `global-styles` / `classic-theme-styles`）も読まれる。**未対応**: 標準 CSS の見た目でデザインとずれる箇所がある（画像キャプションの下余白 12px、表の thead の下の 3px の線、画像＋テキストの文の左右の余白 8% など）。見た目のずれだけ editor-style.css で上書きする予定（レイアウトの仕組みは上書きしない）。base.css のトークンを変えたらこのファイル先頭も合わせる。左の追従アンカーナビ・ページ頭・エントリーフォームの箱・その他の募集職種はテンプレート側（`job-opening.css`）。
+- **フォーム = Contact Form 7**（募集要項詳細は本物の CF7。**未対応**: カジュアル面談はまだ静的なフォームのまま。CF7 の CSS・JS は募集要項詳細だけで読む（`inc/cf7.php`）。静的なフォームで読むと CF7 の JS が送信を横取りするため）: `.wpcf7` 以下は CF7 の出力 DOM に合わせてある（`span.wpcf7-form-control-wrap` / `.wpcf7-checkbox > .wpcf7-list-item` / `.wpcf7-acceptance` / `.wpcf7-file` / `.wpcf7-submit` / `.wpcf7-not-valid-tip` / `.wpcf7-response-output`）。行の構造（`.form__row` / `__label` / `__req` / `__field`）は CF7 のフォームテンプレートに書く部分。CF7 の自動 `<p>` / `<br>` は切る（`wpcf7_autop_or_not`）。`form.js` の [B]（必須チェック・同意で送信可・完了ページへ移動）は静的なフォームだけで動く（本物の CF7 のフォーム = 隠し項目 `_wpcf7` がある form では動かさない。カジュアル面談を CF7 にしたら [B] は消す）、[A]（select / date が空の間グレーにする）は残す、[C]（送信できたら form の `data-thanks` へ移動）は本物の CF7 のフォーム用。メールアドレス（確認用）の一致チェックは `inc/cf7.php`。**要確認**: CF7 のメールの宛先・件名・本文・自動返信の有無（いまは仮でサイト管理者宛て）。
 - **ギミック**: 制度・環境の「社内コミュニケーション」= 中央 1 枚 → 背後のカードが左右にゆっくり開く → クリック / ドラッグ / 左右キーで入れ替え（`work-style.js`、Figma 付箋 1370:17451、参考 https://ni-communication.pages.dev ）。教育・研修の成長ステップ = 横スクロール + ヒント（PC マウス / SP 指のアイコン、バーのループ。付箋 1370:17427）。3分でわかるNI = 数字のカウントアップと円グラフ。インタビュー一覧 = 絞り込み（年次・職種は単一、タグは複数、グループ間 AND）。動きは `prefers-reduced-motion` で止まる。
 - **仕事の相関図（`page-chart.php`）**: 図は `.chart` = Figma の img（722:8368）と同じ 1248×2372px 固定の「ステージ」。カードとラベルは HTML で、`style="--x:…;--y:…"`（Figma の座標そのまま）で絶対配置。線と矢印は `assets/img/chart/lines.svg`、イラストは `illust_*.svg`。どちらも Figma で図全体を SVG 書き出し（`download_assets` で 722:8368 を svg 指定。レイヤー名が id に残る）したものから、スクリプトでレイヤー単位に切り出した（ラベルと文字は除く）。デザインが変わったら同じ手順で切り出し直し、HTML の座標を直す。
   - PC: `chart.js` がステージを枠の幅に合わせて縮小するだけ（1440px 以上で等倍）。
