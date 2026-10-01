@@ -2,7 +2,8 @@
 /**
  * 教育・研修・キャリアパス（固定ページ /development/）
  *
- * 静的 HTML（HTML/development/index.html）の <main> をそのまま入れたもの。中身はまだ固定の文言・画像で、WP の投稿内容は出していない。
+ * 静的 HTML（HTML/development/index.html）の <main> から起こしたもの。キャリアパスの路線・CASE だけ ACF（下のキャリアパスの節）、
+ * それ以外は固定の文言・画像。
  */
 
 ni_head(
@@ -252,7 +253,17 @@ get_header();
     </div>
   </section>
 
-  <!-- キャリアパス（Figma 557:12580 / SP）。タブ 3 つ + 右に追従する Interview カード（PC は sticky） -->
+  <?php
+  /* キャリアパス: 固定ページ development の ACF「キャリアパス」（acf-json/group_ni_development.json。
+     設計書: NI採用サイト_ACFフィールド設計書_キャリアパス.xlsx）。入力した内容だけを出す。
+     路線（リピーター）= タブ 1 つ、その中の CASE（リピーター）を縦に並べる。CASE 番号は路線ごとに 1 から */
+  $ni_routes = function_exists( 'get_field' ) ? get_field( 'field_ni_development_route_list', get_queried_object_id() ) : null;
+  $ni_routes = is_array( $ni_routes ) ? $ni_routes : array();
+  $ni_br     = function ( $text ) {
+  	return implode( '<br>', array_map( 'esc_html', preg_split( '/\R/u', trim( (string) $text ) ) ) );
+  };
+  ?>
+  <!-- キャリアパス（Figma 557:12580 / SP）。路線のタブ + 路線ごとの CASE（本文 + 右に追従する Interview カード。PC は sticky） -->
   <section class="lower-sec dev-sec career-path js-tabs">
     <div class="sec-head sec-head--sub">
       <p class="sec-head__label u-grd-text">Training</p>
@@ -261,185 +272,67 @@ get_header();
         <p class="sec-head__read">入社区分（新卒・中途）に関係なく、実績と意向次第でキャリアを選べます。<br class="u-pc">年1回の自己申告書制度で、希望の方向性を会社に相談できます。</p>
       </div>
     </div>
+    <?php if ( $ni_routes ) : ?>
     <div class="dev-tabs dev-tabs--wrap" role="tablist" aria-label="キャリアの路線">
-      <button type="button" class="job__tab" role="tab" id="career-tab-1" aria-controls="career-panel-1" aria-selected="true">マネジメント路線</button>
-      <button type="button" class="job__tab" role="tab" id="career-tab-2" aria-controls="career-panel-2" aria-selected="false">スペシャリスト路線</button>
-      <button type="button" class="job__tab" role="tab" id="career-tab-3" aria-controls="career-panel-3" aria-selected="false">キャリアチェンジ路線</button>
+      <?php foreach ( $ni_routes as $ni_r => $ni_route ) : ?>
+      <button type="button" class="job__tab" role="tab" id="career-tab-<?php echo $ni_r + 1; ?>" aria-controls="career-panel-<?php echo $ni_r + 1; ?>" aria-selected="<?php echo 0 === $ni_r ? 'true' : 'false'; ?>"><?php echo esc_html( $ni_route['route_label'] ); ?></button>
+      <?php endforeach; ?>
     </div>
     <div class="career-path__panels">
-      <div class="career-case" role="tabpanel" id="career-panel-1" aria-labelledby="career-tab-1">
-        <div class="career-case__main">
-          <div class="career-case__intro">
-            <div class="career-case__head">
-              <p class="career-case__label u-grd-text">Case1</p>
-              <p class="career-case__route"><span class="career-case__role">リサーチャー</span><img src="<?php echo ni_img( 'development/icon_tri.svg' ); ?>" alt="から" width="9" height="11"><span class="career-case__role">マネージャー</span></p>
+      <?php foreach ( $ni_routes as $ni_r => $ni_route ) : ?>
+      <div class="career-path__panel" role="tabpanel" id="career-panel-<?php echo $ni_r + 1; ?>" aria-labelledby="career-tab-<?php echo $ni_r + 1; ?>"<?php echo $ni_r ? ' hidden' : ''; ?>>
+        <?php
+        foreach ( (array) $ni_route['route_case_list'] as $ni_c => $ni_case ) :
+        	$ni_interview = $ni_case['case_interview_post'] ? get_post( $ni_case['case_interview_post'] ) : null;
+        	?>
+        <div class="career-case">
+          <div class="career-case__main">
+            <div class="career-case__intro">
+              <div class="career-case__head">
+                <p class="career-case__label u-grd-text">Case<?php echo $ni_c + 1; ?></p>
+                <p class="career-case__route"><span class="career-case__role"><?php echo esc_html( $ni_case['case_from'] ); ?></span><img src="<?php echo ni_img( 'development/icon_tri.svg' ); ?>" alt="から" width="9" height="11"><span class="career-case__role"><?php echo esc_html( $ni_case['case_to'] ); ?></span></p>
+              </div>
+              <?php if ( '' !== trim( (string) $ni_case['case_description'] ) ) : ?>
+              <p class="career-case__lead"><?php echo $ni_br( $ni_case['case_description'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- $ni_br がエスケープ済み ?></p>
+              <?php endif; ?>
             </div>
-            <p class="career-case__lead">リサーチャーとして実績を積み、チームのマネジメントへ。<br class="u-pc">副課長・課長・部長と段階的にポジションが上がります。<br class="u-pc">新卒・中途の区別はなく、実績次第でマネジメントへの道が開かれています。</p>
+            <?php if ( ! empty( $ni_case['case_timeline'] ) ) : ?>
+            <ul class="career-case__stages">
+              <?php foreach ( $ni_case['case_timeline'] as $ni_step ) : ?>
+              <li class="career-stage">
+                <div class="career-stage__head">
+                  <p class="career-stage__badge"><?php echo esc_html( $ni_step['step_badge'] ); ?></p>
+                  <h4 class="career-stage__title"><?php echo esc_html( $ni_step['step_title'] ); ?></h4>
+                </div>
+                <p class="career-stage__txt"><?php echo $ni_br( $ni_step['step_body'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+              </li>
+              <?php endforeach; ?>
+            </ul>
+            <?php endif; ?>
           </div>
-          <ul class="career-case__stages">
-            <li class="career-stage">
-              <div class="career-stage__head">
-                <p class="career-stage__badge">入社1〜3年目</p>
-                <h4 class="career-stage__title">基礎を固め、一人前のリサーチャーへ</h4>
-              </div>
-              <p class="career-stage__txt">バディ制OJTのもと、先輩のサブ担当として実案件に関わる。6か月でメイン担当を経験し、2〜3年目には大手メーカーの案件を複数担当。後輩への指導も始まる。</p>
-            </li>
-            <li class="career-stage">
-              <div class="career-stage__head">
-                <p class="career-stage__badge">4〜5年目</p>
-                <h4 class="career-stage__title">S等級昇格・バディトレーナーに</h4>
-              </div>
-              <p class="career-stage__txt">担当案件数が増加。S等級（S1〜）に昇格し、新入社員のバディとして指導役に。複雑な案件にも自力で対応できるようになる。</p>
-            </li>
-            <li class="career-stage">
-              <div class="career-stage__head">
-                <p class="career-stage__badge">6〜7年目</p>
-                <h4 class="career-stage__title">ディレクターとして多数の案件を主導</h4>
-              </div>
-              <p class="career-stage__txt">大手クライアントの主担当を複数並行して担当。後輩の育成にも注力しながら、マネージャー候補としてチームを引っ張る。</p>
-            </li>
-            <li class="career-stage">
-              <div class="career-stage__head">
-                <p class="career-stage__badge">8年目〜</p>
-                <h4 class="career-stage__title">サブリーダー → 課長 → 部長へ</h4>
-              </div>
-              <p class="career-stage__txt">サブリーダーを経て管理職へ昇格。チームマネジメントを担いながらも、プレイングマネージャーとしてクライアントと向き合い続ける。</p>
-            </li>
-          </ul>
-        </div>
-        <div class="career-case__voice">
+          <?php if ( $ni_interview && 'publish' === $ni_interview->post_status ) : ?>
+          <!-- 関連インタビュー（記事を選んだときだけ）。TODO: 写真・名前・入社区分・職種・ハッシュタグは社員インタビューの入力項目が決まってからつなぐ。いまはタイトルとリンクだけ -->
+          <div class="career-case__voice">
             <p class="career-case__label u-grd-text">Interview</p>
             <div class="voice-card">
-              <a class="voice-card__img" href="<?php echo ni_url( '/interview/detail/' ); ?>"><img src="<?php echo ni_img( 'common/voice_card_01.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"><span class="career-case__name u-pc"><span class="career-case__name-jp">田中 太郎</span><span class="career-case__name-en">Taro Tanaka</span></span></a>
+              <?php if ( has_post_thumbnail( $ni_interview ) ) : ?>
+              <a class="voice-card__img" href="<?php echo esc_url( get_permalink( $ni_interview ) ); ?>"><?php echo get_the_post_thumbnail( $ni_interview, 'large', array( 'loading' => 'lazy' ) ); ?></a>
+              <?php endif; ?>
               <div class="voice-card__body">
                 <div class="voice-card__row">
-                  <p class="voice-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-                  <a class="arrow-pill arrow-pill--l voice-card__arrow" href="<?php echo ni_url( '/interview/detail/' ); ?>" aria-label="記事を読む"><img src="<?php echo ni_img( 'common/arrow_pill_white_l.svg' ); ?>" alt="" width="20" height="24"></a>
-                </div>
-                <div class="voice-card__meta">
-                  <ul class="voice-card__chips"><li>新卒入社</li><li>リサーチャー</li></ul>
-                  <ul class="voice-card__tags"><li># フルリモート</li><li># 時短勤務</li></ul>
+                  <p class="voice-card__quote"><?php echo esc_html( get_the_title( $ni_interview ) ); ?></p>
+                  <a class="arrow-pill arrow-pill--l voice-card__arrow" href="<?php echo esc_url( get_permalink( $ni_interview ) ); ?>" aria-label="記事を読む"><img src="<?php echo ni_img( 'common/arrow_pill_white_l.svg' ); ?>" alt="" width="20" height="24"></a>
                 </div>
               </div>
             </div>
           </div>
-      </div>
-      <!-- TODO: Case2 / Case3 の内容は Figma に無いためダミー -->
-      <div class="career-case" role="tabpanel" id="career-panel-2" aria-labelledby="career-tab-2" hidden>
-        <div class="career-case__main">
-          <div class="career-case__intro">
-            <div class="career-case__head">
-              <p class="career-case__label u-grd-text">Case2</p>
-              <p class="career-case__route"><span class="career-case__role">リサーチャー</span><img src="<?php echo ni_img( 'development/icon_tri.svg' ); ?>" alt="から" width="9" height="11"><span class="career-case__role">スペシャリスト</span></p>
-            </div>
-            <p class="career-case__lead">テキストが入りますテキストが入りますテキストが入りますテキストが入りますテキストが入ります。</p>
-          </div>
-          <ul class="career-case__stages">
-            <li class="career-stage">
-              <div class="career-stage__head">
-                <p class="career-stage__badge">入社1〜3年目</p>
-                <h4 class="career-stage__title">見出しテキストが入ります</h4>
-              </div>
-              <p class="career-stage__txt">テキストが入りますテキストが入りますテキストが入りますテキストが入りますテキストが入ります。</p>
-            </li>
-            <li class="career-stage">
-              <div class="career-stage__head">
-                <p class="career-stage__badge">4〜5年目</p>
-                <h4 class="career-stage__title">見出しテキストが入ります</h4>
-              </div>
-              <p class="career-stage__txt">テキストが入りますテキストが入りますテキストが入りますテキストが入りますテキストが入ります。</p>
-            </li>
-            <li class="career-stage">
-              <div class="career-stage__head">
-                <p class="career-stage__badge">6〜7年目</p>
-                <h4 class="career-stage__title">見出しテキストが入ります</h4>
-              </div>
-              <p class="career-stage__txt">テキストが入りますテキストが入りますテキストが入りますテキストが入りますテキストが入ります。</p>
-            </li>
-            <li class="career-stage">
-              <div class="career-stage__head">
-                <p class="career-stage__badge">8年目〜</p>
-                <h4 class="career-stage__title">見出しテキストが入ります</h4>
-              </div>
-              <p class="career-stage__txt">テキストが入りますテキストが入りますテキストが入りますテキストが入りますテキストが入ります。</p>
-            </li>
-          </ul>
+          <?php endif; ?>
         </div>
-        <div class="career-case__voice">
-            <p class="career-case__label u-grd-text">Interview</p>
-            <div class="voice-card">
-              <a class="voice-card__img" href="<?php echo ni_url( '/interview/detail/' ); ?>"><img src="<?php echo ni_img( 'common/voice_card_01.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"><span class="career-case__name u-pc"><span class="career-case__name-jp">田中 太郎</span><span class="career-case__name-en">Taro Tanaka</span></span></a>
-              <div class="voice-card__body">
-                <div class="voice-card__row">
-                  <p class="voice-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-                  <a class="arrow-pill arrow-pill--l voice-card__arrow" href="<?php echo ni_url( '/interview/detail/' ); ?>" aria-label="記事を読む"><img src="<?php echo ni_img( 'common/arrow_pill_white_l.svg' ); ?>" alt="" width="20" height="24"></a>
-                </div>
-                <div class="voice-card__meta">
-                  <ul class="voice-card__chips"><li>新卒入社</li><li>リサーチャー</li></ul>
-                  <ul class="voice-card__tags"><li># フルリモート</li><li># 時短勤務</li></ul>
-                </div>
-              </div>
-            </div>
-          </div>
+        <?php endforeach; ?>
       </div>
-      <div class="career-case" role="tabpanel" id="career-panel-3" aria-labelledby="career-tab-3" hidden>
-        <div class="career-case__main">
-          <div class="career-case__intro">
-            <div class="career-case__head">
-              <p class="career-case__label u-grd-text">Case3</p>
-              <p class="career-case__route"><span class="career-case__role">リサーチャー</span><img src="<?php echo ni_img( 'development/icon_tri.svg' ); ?>" alt="から" width="9" height="11"><span class="career-case__role">他職種</span></p>
-            </div>
-            <p class="career-case__lead">テキストが入りますテキストが入りますテキストが入りますテキストが入りますテキストが入ります。</p>
-          </div>
-          <ul class="career-case__stages">
-            <li class="career-stage">
-              <div class="career-stage__head">
-                <p class="career-stage__badge">入社1〜3年目</p>
-                <h4 class="career-stage__title">見出しテキストが入ります</h4>
-              </div>
-              <p class="career-stage__txt">テキストが入りますテキストが入りますテキストが入りますテキストが入りますテキストが入ります。</p>
-            </li>
-            <li class="career-stage">
-              <div class="career-stage__head">
-                <p class="career-stage__badge">4〜5年目</p>
-                <h4 class="career-stage__title">見出しテキストが入ります</h4>
-              </div>
-              <p class="career-stage__txt">テキストが入りますテキストが入りますテキストが入りますテキストが入りますテキストが入ります。</p>
-            </li>
-            <li class="career-stage">
-              <div class="career-stage__head">
-                <p class="career-stage__badge">6〜7年目</p>
-                <h4 class="career-stage__title">見出しテキストが入ります</h4>
-              </div>
-              <p class="career-stage__txt">テキストが入りますテキストが入りますテキストが入りますテキストが入りますテキストが入ります。</p>
-            </li>
-            <li class="career-stage">
-              <div class="career-stage__head">
-                <p class="career-stage__badge">8年目〜</p>
-                <h4 class="career-stage__title">見出しテキストが入ります</h4>
-              </div>
-              <p class="career-stage__txt">テキストが入りますテキストが入りますテキストが入りますテキストが入りますテキストが入ります。</p>
-            </li>
-          </ul>
-        </div>
-        <div class="career-case__voice">
-            <p class="career-case__label u-grd-text">Interview</p>
-            <div class="voice-card">
-              <a class="voice-card__img" href="<?php echo ni_url( '/interview/detail/' ); ?>"><img src="<?php echo ni_img( 'common/voice_card_01.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"><span class="career-case__name u-pc"><span class="career-case__name-jp">田中 太郎</span><span class="career-case__name-en">Taro Tanaka</span></span></a>
-              <div class="voice-card__body">
-                <div class="voice-card__row">
-                  <p class="voice-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-                  <a class="arrow-pill arrow-pill--l voice-card__arrow" href="<?php echo ni_url( '/interview/detail/' ); ?>" aria-label="記事を読む"><img src="<?php echo ni_img( 'common/arrow_pill_white_l.svg' ); ?>" alt="" width="20" height="24"></a>
-                </div>
-                <div class="voice-card__meta">
-                  <ul class="voice-card__chips"><li>新卒入社</li><li>リサーチャー</li></ul>
-                  <ul class="voice-card__tags"><li># フルリモート</li><li># 時短勤務</li></ul>
-                </div>
-              </div>
-            </div>
-          </div>
-      </div>
+      <?php endforeach; ?>
     </div>
+    <?php endif; ?>
   </section>
 
 </main>

@@ -663,21 +663,28 @@
 }
 
 /* ==========================================================================
-   キャリアパス（557:12580）: タブ → 罫線 → [Case の本文 744 | Interview 384（sticky）]
+   キャリアパス（557:12580）: タブ → 罫線 → 路線のパネル（CASE を縦に）→ CASE = [本文 744 | Interview 384（sticky）]
    ========================================================================== */
 .career-path__panels {
   padding-top: 48px;         /* SP: 罫線 → 32 + 16 */
   border-top: 1px solid var(--c-border);
 }
 
+/* 路線のタブ 1 つ分。CASE が複数あれば縦に並べる（間はデザインに無いので、CASE の中の間 40 の倍） */
+.career-path__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.career-path__panel[hidden] {
+  display: none;
+}
+
 .career-case {
   display: flex;
   flex-direction: column;
   gap: 40px;
-}
-
-.career-case[hidden] {
-  display: none;
 }
 
 .career-case__main,

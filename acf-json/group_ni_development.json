@@ -1,0 +1,275 @@
+{
+    "key": "group_ni_development",
+    "title": "キャリアパス",
+    "fields": [
+        {
+            "key": "field_ni_development_route_list",
+            "label": "路線リスト",
+            "name": "route_list",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "路線ごとにタブが 1 つできます。上から順にタブが並び、最初の路線が開いた状態で表示されます。路線が 1 つも無ければキャリアパスの見出しだけ出ます。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "路線を追加",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_ni_development_route_label",
+                    "label": "路線タイトル",
+                    "name": "route_label",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "タブのラベルになります。",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_ni_development_route_list",
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "例：マネジメント路線",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_ni_development_route_case_list",
+                    "label": "CASE リスト",
+                    "name": "route_case_list",
+                    "aria-label": "",
+                    "type": "repeater",
+                    "instructions": "CASE 番号（Case1, Case2 …）は路線ごとに上から自動で付きます。複数あると縦に並びます。",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "parent_repeater": "field_ni_development_route_list",
+                    "layout": "block",
+                    "pagination": 0,
+                    "min": 0,
+                    "max": 0,
+                    "collapsed": "",
+                    "button_label": "CASE を追加",
+                    "rows_per_page": 20,
+                    "sub_fields": [
+                        {
+                            "key": "field_ni_development_case_from",
+                            "label": "出発職種（From）",
+                            "name": "case_from",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "parent_repeater": "field_ni_development_route_case_list",
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "例：リサーチャー",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_ni_development_case_to",
+                            "label": "到達職種（To）",
+                            "name": "case_to",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "parent_repeater": "field_ni_development_route_case_list",
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "例：マネージャー",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_ni_development_case_description",
+                            "label": "CASE 説明文",
+                            "name": "case_description",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "parent_repeater": "field_ni_development_route_case_list",
+                            "default_value": "",
+                            "maxlength": "",
+                            "rows": 3,
+                            "placeholder": "",
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_ni_development_case_timeline",
+                            "label": "タイムラインステップ",
+                            "name": "case_timeline",
+                            "aria-label": "",
+                            "type": "repeater",
+                            "instructions": "年次ごとのステップ。上から順に出ます。",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "parent_repeater": "field_ni_development_route_case_list",
+                            "layout": "block",
+                            "pagination": 0,
+                            "min": 0,
+                            "max": 0,
+                            "collapsed": "",
+                            "button_label": "ステップを追加",
+                            "rows_per_page": 20,
+                            "sub_fields": [
+                                {
+                                    "key": "field_ni_development_step_badge",
+                                    "label": "年次バッジ",
+                                    "name": "step_badge",
+                                    "aria-label": "",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "parent_repeater": "field_ni_development_case_timeline",
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "例：入社1〜3年目",
+                                    "prepend": "",
+                                    "append": ""
+                                },
+                                {
+                                    "key": "field_ni_development_step_title",
+                                    "label": "ステップタイトル",
+                                    "name": "step_title",
+                                    "aria-label": "",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "parent_repeater": "field_ni_development_case_timeline",
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": ""
+                                },
+                                {
+                                    "key": "field_ni_development_step_body",
+                                    "label": "ステップ本文",
+                                    "name": "step_body",
+                                    "aria-label": "",
+                                    "type": "textarea",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "parent_repeater": "field_ni_development_case_timeline",
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "rows": 3,
+                                    "placeholder": "",
+                                    "new_lines": ""
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_ni_development_case_interview_post",
+                            "label": "関連インタビュー記事",
+                            "name": "case_interview_post",
+                            "aria-label": "",
+                            "type": "post_object",
+                            "instructions": "社員インタビューの記事を選ぶと、右にカードが出ます。未選択ならカードは出ません。",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "parent_repeater": "field_ni_development_route_case_list",
+                            "post_type": [
+                                "interview"
+                            ],
+                            "post_status": [
+                                "publish"
+                            ],
+                            "taxonomy": "",
+                            "return_format": "id",
+                            "multiple": 0,
+                            "allow_null": 1,
+                            "bidirectional": 0,
+                            "ui": 1,
+                            "bidirectional_target": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "development"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1790910000
+}
