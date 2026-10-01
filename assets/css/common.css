@@ -1023,6 +1023,7 @@
    - ヘッダーのリンク（header-link → hover 724:15543）: 不透明度 0.9、丸の中の矢印が入れ替わる
    - ヘッダーのボタン（header-btn/マイナビ・募集職種 → hover）: 矢印が入れ替わる
    - フッターのリンク（link → hover 724:14654）: 不透明度 0.6
+   - メニューのリンク: Figma（PC_Menu）にホバーは無いが、中身がほぼ同じフッターに合わせて不透明度 0.6
    矢印の入れ替わり: 矢印は <img> の SVG。img の中身（object-position）を右へ送り、同じ SVG を img の背景にして左から入れる。
    どちらも img の箱の外には描かれないので、Figma と同じく矢印の枠の中だけが見える（2 本が同時に見えない）。
    動く距離 --arrow-shift は Figma の矢印の間隔（SVG の中の 2 本目の位置）を表示の大きさに合わせたもの
@@ -1073,7 +1074,8 @@
 }
 
 .header__link,
-.footer__list a {
+.footer__list a,
+.menu a {
   transition: opacity 0.3s ease-out;
 }
 
@@ -1097,7 +1099,8 @@
     opacity: 0.9;
   }
 
-  .footer__list a:hover {
+  .footer__list a:hover,
+  .menu a:hover {
     opacity: 0.6;
   }
 }
@@ -1109,7 +1112,8 @@
   .header__link-arrow img,
   .header-btn__arrow img,
   .header__link,
-  .footer__list a {
+  .footer__list a,
+  .menu a {
     transition: none;
   }
 }
