@@ -841,3 +841,34 @@
     gap: 48px clamp(20px, 2.78vw, 40px);
   }
 }
+
+/* ==========================================================================
+   SP: 一覧の「Cross Talk」と番号（#01）は、下の見出し（sec-head--sub の 22 → 30）と同じ比率で拡大する
+   （見出しとの大きさの比率を 375px のデザインのまま保つ）。--u = 見出しの今の大きさ ÷ 22
+   ========================================================================== */
+@media (max-width: 767px) {
+  .ct-row__head {
+    --u: clamp(1px, calc(100vw / 375), calc(30px / 22));
+    gap: calc(16 * var(--u));
+  }
+
+  .ct-row__label {
+    font-size: calc(13 * var(--u));
+  }
+
+  .ct-row__num small {
+    font-size: calc(28 * var(--u));
+  }
+
+  .ct-row__num b {
+    font-size: calc(56 * var(--u));
+  }
+}
+
+/* SP: 「記事をよむ」ボタンは幅 440（480 − 左右 20）で止めて右に寄せる */
+@media (max-width: 767px) {
+  .ct-row__btn.btn {
+    max-width: 440px;
+    align-self: flex-end;
+  }
+}
