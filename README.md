@@ -3,11 +3,11 @@
 https://recruit.n-info.co.jp/ のテーマ。静的 HTML（リポジトリ `tsucharoku/nw-nihoninfo-recruit-html`、案件フォルダの `HTML/`）から起こした。
 この README の「下層ページの実装メモ」以降は、静的 HTML の README をテーマ向けに直して持ってきたもの（演出と CSS / JS の説明）。
 
-## いまの状態（2026-09-30）
+## いまの状態（2026-10-01）
 
-**全 18 ページを静的なままテーマ化した段階。** ヘッダー・メニュー・フッターは共通化し、各テンプレートの `<main>` は静的 HTML の内容を固定で出している（WP の投稿内容はまだ出していない）。静的 HTML と全ページ・PC / SP で、要素の寸法と位置・リンク先・画像・文言が一致することを確認済み。
+**全 18 ページを静的なままテーマ化し、募集要項の一覧・カテゴリ一覧だけ WP の内容を出している段階。** ヘッダー・メニュー・フッターは共通化し、ほかのテンプレートの `<main>` は静的 HTML の内容を固定で出している（WP の投稿内容はまだ出していない）。静的 HTML と全ページ・PC / SP で、要素の寸法と位置・リンク先・画像・文言が一致することを確認済み。
 
-これから: 投稿のループ、カスタムフィールド（ACF Pro）、フォーム（Contact Form 7）、募集要項カテゴリの本当のスラッグ、エディタ用スタイル。ページの種類は `制作進行資料.xlsx`「ディレクトリマップ」、入稿項目は仕様書の Figma を見て決める。
+これから: 残りのページの投稿のループ、カスタムフィールド（ACF Pro）、フォーム（Contact Form 7）、ヘッダー・メニュー・フッターの募集要項カテゴリへのリンク、エディタ用スタイル。ページの種類は `制作進行資料.xlsx`「ディレクトリマップ」、入稿項目は仕様書の Figma を見て決める。
 
 ## ページとテンプレート
 
@@ -37,13 +37,15 @@ https://recruit.n-info.co.jp/ のテーマ。静的 HTML（リポジトリ `tsuc
 ## テーマの構成
 
 ```
+acf-json/                ACF のフィールドグループの定義（管理画面で編集すると ACF がここに保存する）
 functions.php            テーマの設定、ni_img() / ni_url() / ni_job_category_url()、<title>・description の受け渡し（ni_head()）、WP の絵文字スクリプトの停止
-inc/post-types.php       カスタム投稿 interview / cross-talk / job-opening とタクソノミー job-category の登録、/job-opening/○○/ の振り分け
+inc/post-types.php       カスタム投稿 interview / cross-talk / job-opening とタクソノミー job-category の登録、/job-opening/○○/ の振り分け、募集要項の並び順
 inc/page.php             いまのページの種類（top / beginner / career / lower）と、ページごとの CSS・JS の対応表。<body> のクラス
 inc/assets.php           CSS・JS の読み込み、three.js の import map、ES モジュール
 header.php               <head> 〜 ハンバーガーメニューまで
 template-parts/menu.php      ハンバーガーメニュー
 template-parts/fv-frame.php  FV の青いフレーム（新卒 TOP・中途 TOP）
+template-parts/job-item.php  募集要項の 1 行（一覧・カテゴリ一覧の共通）
 footer.php               フッター 〜 </html>
 front-page.php ほか      上の表のテンプレート（<main> の中身）
 index.php                専用のテンプレートが無いページ用（ヘッダー・フッターだけ）
@@ -54,7 +56,13 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
 - **`<body>` のクラス**は静的 HTML と同じ `page-top` / `page-beginner` / `page-career` / `page-lower page-○○`（`inc/page.php`）。WP 標準のクラスも一緒に付く。
 - **`<title>` と meta description** は、各テンプレートが `get_header()` の前に `ni_head()` で渡している（静的 HTML の値のまま）。
 - **リンクと画像**: サイト内リンクは `ni_url( '/about/' )`、画像は `ni_img( 'common/logo_black.svg' )`（`assets/img/` 以下）。
-- **募集要項のカテゴリ**: `/job-opening/○○/` はカテゴリと詳細が同じ階層なので、タクソノミーには rewrite を付けず、○○ がカテゴリのスラッグならカテゴリ一覧に振り分けている（`ni_job_category_request()`）。カテゴリのスラッグは未定で、ヘッダー・メニュー・フッターのカテゴリのリンクは 4 つとも `ni_job_category_url()` がサンプル（`/job-opening/category/`）に向けている。
+- **募集要項のカテゴリの URL**: `/job-opening/○○/` はカテゴリと詳細が同じ階層なので、タクソノミーには rewrite を付けず、○○ がカテゴリのスラッグならカテゴリ一覧に振り分けている（`ni_job_category_request()`）。同じスラッグの投稿があってもカテゴリが優先される。
+- **募集要項の一覧・カテゴリ一覧は WP の内容**（仕様書 43:3721 / 69:4352）。カテゴリの数・名前・スラッグ・並びはコードに書いていない。
+  - 一覧（`archive-job-opening.php`）: カテゴリごとに、ページ内リンク `カテゴリ名（件数）` → `#スラッグ`、英語表記・カテゴリ名・説明、職種を 5 件まで。**5 件以上あるカテゴリ**には「○○の募集一覧をみる」（カテゴリ一覧へ）を出す（仕様書の付箋「5件以上でアーカイブ同線表示」）。投稿が 1 件も無いカテゴリは出さない。ページ頭の見出し・リード文は固定。
+  - カテゴリ一覧（`taxonomy-job-category.php`）: そのカテゴリの職種を全件出し、`lower.js` の `.js-more` が 10 件ずつ見せる（Ajax・ページ送りはしていない）。h1・パンくず・`<title>` は `カテゴリ名 + の募集一覧`。投稿が無いカテゴリの URL を直接開くと空の一覧になる（デザインなし）。
+  - カテゴリの入稿項目: 名前 / スラッグ / 説明（WP 標準）/ 英語表記（ACF `label_en`。`acf-json/group_ni_job_category.json`）。英語表記・説明は空ならその行を出さない。
+  - 並び順: 管理画面の並び替え（Intuitive Custom Post Order）の順。投稿は `menu_order` の小さい順 → 公開日の新しい順（`ni_job_orderby()`）、カテゴリはプラグインが付ける順。
+  - **未対応**: ヘッダー「アルバイト」とメニュー・フッター「募集中の職種一覧」の 4 つのリンク。どれをどのカテゴリに向けるかが未定で、`ni_job_category_url()` が 4 つとも一覧（`/job-opening/`）に向けている。詳細（`single-job-opening.php`）もまだ静的。
 - **WP の絵文字スクリプトは止めている**: 本文の絵文字（🎉 🏆）が `<img class="emoji">` に置き換わって文字幅が変わるため。
 
 ## WP 側に必要なデータ
@@ -62,7 +70,9 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
 テンプレートは URL（スラッグ）で決まるので、次のものが WP に無いとページが出ない。Local では WP-CLI で作成済み。テストサーバーでも同じものを作る。
 
 - 固定ページ: `beginner` / `career` / `about` / `chart` / `development` / `work-style` / `office` / `casual-talk` / `casual-talk` の子の `thanks`
-- 静的なあいだのサンプル（静的 HTML の `detail/` `category/` と同じ URL にするため）: `interview` / `cross-talk` / `job-opening` にスラッグ `detail` の投稿を 1 件ずつ、`job-category` にスラッグ `category` のカテゴリ（アルバイト）を 1 件
+- 静的なあいだのサンプル（静的 HTML の `detail/` と同じ URL にするため）: `interview` / `cross-talk` / `job-opening` にスラッグ `detail` の投稿を 1 件ずつ
+- プラグイン: **Advanced Custom Fields PRO**（有効化するとテーマの `acf-json/` の項目が出る）、**Intuitive Custom Post Order**（設定 → 並び替え設定 で、投稿タイプ「募集要項」とタクソノミー「募集要項カテゴリ」にチェック）
+- 募集要項のカテゴリ（`job-category`）と投稿。Local にはサンプルとして、静的 HTML と同じ内容を入れてある: カテゴリ 4 つ（新卒採用 `new-graduate` / 中途採用(未経験) `mid-beginner` / 中途採用(経験者) `mid-career` / アルバイト `part-time`）、投稿 1 / 4 / 4 / 24 件
 - パーマリンク設定は「投稿名」（`/%postname%/`）。投稿タイプを変えたらパーマリンクを保存し直す（`wp rewrite flush`）
 - サイトの言語は日本語（`<html lang="ja">` になる）
 

@@ -47,10 +47,10 @@ function ni_url( $path = '/' ) {
 	return esc_url( home_url( $path ) );
 }
 
-/* 募集要項のカテゴリ一覧の URL（ヘッダー「アルバイト」、メニュー・フッター「募集中の職種一覧」の 4 つ）。
-   TODO: カテゴリのスラッグが決まったら /job-opening/{カテゴリのスラッグ}/ を返す。
-   それまでは静的 HTML と同じく、4 つともサンプルのカテゴリ（スラッグ category）に向ける
+/* ヘッダー・メニュー・フッターの、募集要項のカテゴリへのリンク（ヘッダー「アルバイト」、メニュー・フッター「募集中の職種一覧」の 4 つ）。
+   TODO: カテゴリは WP の内容（スラッグも管理画面で決まる）なので、どのリンクをどのカテゴリに向けるかが未定。
+   決まるまでは 4 つとも募集要項一覧（/job-opening/）に向ける
    $key: new-graduate（新卒採用）/ mid-beginner（中途・未経験）/ mid-career（中途・経験者）/ part-time（アルバイト） */
 function ni_job_category_url( $key ) {
-	return ni_url( '/job-opening/category/' );
+	return ni_url( '/job-opening/' );
 }

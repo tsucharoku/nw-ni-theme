@@ -2,8 +2,21 @@
 /**
  * 募集要項一覧（カスタム投稿 job-opening の一覧 /job-opening/）
  *
- * 静的 HTML（HTML/job-opening/index.html）の <main> をそのまま入れたもの。中身はまだ固定の文言・画像で、WP の投稿内容は出していない。
+ * ページ頭（パンくず・見出し・リード文）は固定。その下は WP の内容:
+ *   - カテゴリ（タクソノミー job-category）: 名前・スラッグ（ページ内リンクの #○○）・説明・英語表記（ACF の label_en）
+ *   - 職種: カテゴリごとに 5 件まで。5 件以上あるカテゴリには「○○の募集一覧をみる」（カテゴリ一覧へ）を出す
+ * 投稿が 1 件も無いカテゴリは出さない。カテゴリと投稿の並び順は管理画面の並び替え（Intuitive Custom Post Order）。
  */
+
+$ni_terms = get_terms(
+	array(
+		'taxonomy'   => 'job-category',
+		'hide_empty' => true,
+	)
+);
+if ( is_wp_error( $ni_terms ) ) {
+	$ni_terms = array();
+}
 
 ni_head(
 	array(
@@ -27,84 +40,64 @@ get_header();
     <p class="page-head__read">東京・銀座の中心地に構える日本インフォメーションのオフィス。<br class="u-pc">仕事に集中できる環境と、人とつながれる場所が共存しています。</p>
   </div>
 
-  <!-- カテゴリへのページ内リンク（件数は WP で出力） -->
+  <?php if ( $ni_terms ) : ?>
+  <!-- カテゴリへのページ内リンク -->
   <ul class="anchor-nav">
-    <li><a class="anchor-nav__link" href="#new-graduates">新卒採用（1）</a></li>
-    <li><a class="anchor-nav__link" href="#mid-career-beginner">中途採用(未経験)（5）</a></li>
-    <li><a class="anchor-nav__link" href="#mid-career-experienced">中途採用(経験者)（5）</a></li>
-    <li><a class="anchor-nav__link" href="#part-time">アルバイト（10）</a></li>
+    <?php foreach ( $ni_terms as $ni_term ) : ?>
+    <li><a class="anchor-nav__link" href="#<?php echo esc_attr( $ni_term->slug ); ?>"><?php echo esc_html( $ni_term->name ); ?>（<?php echo (int) $ni_term->count; ?>）</a></li>
+    <?php endforeach; ?>
   </ul>
 
-  <!-- カテゴリごとの職種一覧（多いカテゴリは 5 件まで + カテゴリアーカイブへのボタン） -->
+  <!-- カテゴリごとの職種一覧（5 件まで。5 件以上あるカテゴリには、カテゴリ一覧へのボタンを出す） -->
   <div class="lower-sec job-cats">
-    <section class="job-cat" id="new-graduates">
+    <?php
+    foreach ( $ni_terms as $ni_term ) :
+    	$ni_label_en = function_exists( 'get_field' ) ? get_field( 'label_en', $ni_term ) : '';
+    	$ni_jobs     = new WP_Query(
+    		array(
+    			'post_type'      => 'job-opening',
+    			'tax_query'      => array(
+    				array(
+    					'taxonomy' => 'job-category',
+    					'terms'    => $ni_term->term_id,
+    				),
+    			),
+    			'posts_per_page' => 5,
+    			'orderby'        => ni_job_orderby(),
+    			'no_found_rows'  => true,
+    		)
+    	);
+    	?>
+    <section class="job-cat" id="<?php echo esc_attr( $ni_term->slug ); ?>">
       <div class="job-cat__head">
         <div class="sec-head sec-head--sub">
-          <p class="sec-head__label u-grd-text">New Graduates</p>
-          <h2 class="sec-head__title sec-head__title--cap">新卒採用</h2>
+          <?php if ( $ni_label_en ) : ?>
+          <p class="sec-head__label u-grd-text"><?php echo esc_html( $ni_label_en ); ?></p>
+          <?php endif; ?>
+          <h2 class="sec-head__title sec-head__title--cap"><?php echo esc_html( $ni_term->name ); ?></h2>
         </div>
-        <p class="job-cat__desc">カテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入ります</p>
+        <?php if ( $ni_term->description ) : ?>
+        <p class="job-cat__desc"><?php echo nl2br( esc_html( $ni_term->description ) ); ?></p>
+        <?php endif; ?>
       </div>
       <div class="job-cat__body">
         <ul class="job__list">
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">2028年度新卒採用　募集要項</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
+          <?php
+          while ( $ni_jobs->have_posts() ) :
+          	$ni_jobs->the_post();
+          	get_template_part( 'template-parts/job-item' );
+          endwhile;
+          wp_reset_postdata();
+          ?>
         </ul>
+        <?php if ( $ni_term->count >= 5 ) : ?>
+        <a class="btn" href="<?php echo esc_url( get_term_link( $ni_term ) ); ?>"><?php echo esc_html( $ni_term->name ); ?>の募集一覧をみる<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a>
+        <?php endif; ?>
       </div>
     </section>
-    <section class="job-cat" id="mid-career-beginner">
-      <div class="job-cat__head">
-        <div class="sec-head sec-head--sub">
-          <p class="sec-head__label u-grd-text">Mid-Career (No Experience)</p>
-          <h2 class="sec-head__title sec-head__title--cap">中途採用(未経験)</h2>
-        </div>
-        <p class="job-cat__desc">カテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入ります</p>
-      </div>
-      <div class="job-cat__body">
-        <ul class="job__list">
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">プランナー（営業企画）</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">フィールドワーク（FW）</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">インターネットリサーチ</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">アナリスト（NIマーケティング研究所）</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-        </ul>
-      </div>
-    </section>
-    <section class="job-cat" id="mid-career-experienced">
-      <div class="job-cat__head">
-        <div class="sec-head sec-head--sub">
-          <p class="sec-head__label u-grd-text">Mid-Career (Experienced)</p>
-          <h2 class="sec-head__title sec-head__title--cap">中途採用(経験者)</h2>
-        </div>
-        <p class="job-cat__desc">カテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入ります</p>
-      </div>
-      <div class="job-cat__body">
-        <ul class="job__list">
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">プランナー（営業企画）</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">フィールドワーク（FW）</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">インターネットリサーチ</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">アナリスト（NIマーケティング研究所）</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-        </ul>
-      </div>
-    </section>
-    <section class="job-cat" id="part-time">
-      <div class="job-cat__head">
-        <div class="sec-head sec-head--sub">
-          <p class="sec-head__label u-grd-text">Part-Time</p>
-          <h2 class="sec-head__title sec-head__title--cap">アルバイト</h2>
-        </div>
-        <p class="job-cat__desc">カテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入りますカテゴリの説明が入ります</p>
-      </div>
-      <div class="job-cat__body">
-        <ul class="job__list">
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">定性調査のモデレーター</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">定性調査の書記</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">社内作業スタッフ</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">リクルーター（マーケティング・リサーチ協力者招集作業、在宅作業）</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">グループインタビュー会場アシスタント</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-        </ul>
-        <a class="btn" href="<?php echo ni_url( '/job-opening/category/' ); ?>">アルバイトの募集一覧をみる<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a>
-      </div>
-    </section>
+    <?php endforeach; ?>
   </div>
+  <?php endif; ?>
 
 </main>
 <?php

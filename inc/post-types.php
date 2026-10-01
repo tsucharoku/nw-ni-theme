@@ -6,8 +6,9 @@
  *   座談会           cross-talk   /cross-talk/   /cross-talk/{パーマリンク}/
  *   募集要項         job-opening  /job-opening/  /job-opening/{パーマリンク}/  /job-opening/{カテゴリのスラッグ}/
  *
- * いまは URL とテンプレート（archive-○○.php / single-○○.php / taxonomy-job-category.php）を出すための最小限の登録。
+ * 社員インタビュー・座談会は、まだ URL とテンプレート（archive-○○.php / single-○○.php）を出すための最小限の登録。
  * 入力項目（supports・カスタムフィールド）は仕様を見て後から足す。
+ * 募集要項は一覧・カテゴリ一覧が WP の内容を出している（カテゴリの英語表記は ACF: acf-json/group_ni_job_category.json）。
  */
 
 function ni_register_post_types() {
@@ -60,3 +61,21 @@ function ni_job_category_link( $url, $term, $taxonomy ) {
 	return 'job-category' === $taxonomy ? home_url( '/job-opening/' . $term->slug . '/' ) : $url;
 }
 add_filter( 'term_link', 'ni_job_category_link', 10, 3 );
+
+/* 募集要項の並び順: 管理画面の並び替え（Intuitive Custom Post Order が menu_order に入れる）の順。同じ値なら公開日の新しい順 */
+function ni_job_orderby() {
+	return array(
+		'menu_order' => 'ASC',
+		'date'       => 'DESC',
+	);
+}
+
+/* カテゴリ一覧（taxonomy-job-category.php）は全件を並び順どおりに出す。10 件ずつ見せるのは lower.js の .js-more。
+   カテゴリ一覧のクエリには post_type が入らず、プラグインの自動の並び替えが効かないので、ここで指定する */
+function ni_job_category_query( $query ) {
+	if ( ! is_admin() && $query->is_main_query() && $query->is_tax( 'job-category' ) ) {
+		$query->set( 'posts_per_page', -1 );
+		$query->set( 'orderby', ni_job_orderby() );
+	}
+}
+add_action( 'pre_get_posts', 'ni_job_category_query' );

@@ -1,0 +1,45 @@
+{
+    "key": "group_ni_job_category",
+    "title": "募集要項カテゴリ",
+    "fields": [
+        {
+            "key": "field_ni_job_category_label_en",
+            "label": "英語表記",
+            "name": "label_en",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "募集要項一覧で、カテゴリ名の上に出る英語です。例: New Graduates",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "taxonomy",
+                "operator": "==",
+                "value": "job-category"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1790855000
+}
