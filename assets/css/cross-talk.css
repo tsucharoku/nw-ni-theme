@@ -510,20 +510,20 @@
   }
 }
 
-/* 768〜1023 は 2 カラムに足りないので SP と同じ縦積み（メンバーは 416 幅のまま左寄せ、本文は 680 まで） */
+/* 〜1023（縦積み）: メンバーの箱は 600 で止めて中央に置く */
+@media (max-width: 1023px) {
+  .ct-members {
+    width: 100%;              /* 親が flex なので、margin auto で縮まないように */
+    max-width: 600px;
+    margin-inline: auto;
+  }
+}
+
+/* 768〜1023 は 2 カラムに足りないので SP と同じ縦積み（本文は幅いっぱい） */
 @media (min-width: 768px) and (max-width: 1023px) {
   .ct-article__main {
     gap: 56px;
     padding-top: 80px;
-  }
-
-  .ct-members {
-    width: 416px;
-    max-width: 100%;
-  }
-
-  .cross-talk-body {
-    max-width: 680px;
   }
 }
 
