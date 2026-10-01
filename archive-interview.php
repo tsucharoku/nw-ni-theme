@@ -2,8 +2,36 @@
 /**
  * 社員インタビュー一覧（カスタム投稿 interview の一覧 /interview/）
  *
- * 静的 HTML（HTML/interview/index.html）の <main> をそのまま入れたもの。中身はまだ固定の文言・画像で、WP の投稿内容は出していない。
+ * ページ頭（パンくず・見出し・リード文）は固定。その下は WP の内容（仕様書 35:362）:
+ *   - 絞り込み: 公開記事があるタームだけ出す。年次 = 入社区分（interview_entry_type）/ 職種（interview_job_type）は件数つき、タグ（interview_tag）
+ *   - カード: 全件を出力し（inc/post-types.php の ni_interview_archive_query()）、12 件ずつ見せるのと絞り込みは assets/js/interview.js。
+ *     カードの data-type / data-job / data-tags はタームの ID（空白区切り）
+ * タームの並び順は管理画面の並び替え（Intuitive Custom Post Order）、投稿は公開日の新しい順。
  */
+
+$ni_per_page = 12;
+$ni_total    = (int) $GLOBALS['wp_query']->post_count;
+$ni_shown    = min( $ni_per_page, $ni_total );
+
+/* 絞り込みのグループ: data-filter-group => 見出し・タクソノミー・複数選択か（タグ: 「すべて」と件数は無し、名前の前に #） */
+$ni_filters = array(
+	'type' => array( '年次', 'interview_entry_type', false ),
+	'job'  => array( '職種', 'interview_job_type', false ),
+	'tags' => array( 'タグ', 'interview_tag', true ),
+);
+foreach ( $ni_filters as $ni_key => $ni_filter ) {
+	$ni_terms = get_terms(
+		array(
+			'taxonomy'   => $ni_filter[1],
+			'hide_empty' => true,
+		)
+	);
+	if ( is_wp_error( $ni_terms ) || ! $ni_terms ) {
+		unset( $ni_filters[ $ni_key ] );
+		continue;
+	}
+	$ni_filters[ $ni_key ][] = $ni_terms;
+}
 
 ni_head(
 	array(
@@ -27,318 +55,51 @@ get_header();
     <p class="page-head__read">テキストが入りますテキストが入りますテキストが入りますテキストが入ります<br class="u-pc">テキストが入りますテキストが入りますテキストが入ります</p>
   </div>
 
-  <!-- 絞り込み（855:25742 / SP 1140:19173）。WP ではタクソノミー（年次 / 職種 / タグ）のターム一覧を出力。
-       静的版は interview.js が data-type / data-job / data-tags で絞り込む（グループ間は AND。年次・職種は単一選択、タグは複数選択で AND）。件数 (n) も JS が数えて入れる -->
+  <?php if ( $ni_filters ) : ?>
+  <!-- 絞り込み（855:25742 / SP 1140:19173）。interview.js がカードの data-type / data-job / data-tags で絞り込む
+       （グループ間は AND。年次・職種は単一選択、タグは複数選択で AND）。件数 (n) は絞り込むたびに JS が数え直す -->
   <div class="lower-sec">
     <div class="interview-filter js-interview-filter">
-      <div class="interview-filter__group" role="group" aria-labelledby="filter-type" data-filter-group="type">
-        <p class="interview-filter__label" id="filter-type">年次</p>
+      <?php foreach ( $ni_filters as $ni_key => list( $ni_label, , $ni_multi, $ni_terms ) ) : ?>
+      <div class="interview-filter__group" role="group" aria-labelledby="filter-<?php echo esc_attr( $ni_key ); ?>" data-filter-group="<?php echo esc_attr( $ni_key ); ?>"<?php echo $ni_multi ? ' data-filter-multi' : ''; ?>>
+        <p class="interview-filter__label" id="filter-<?php echo esc_attr( $ni_key ); ?>"><?php echo esc_html( $ni_label ); ?></p>
         <ul class="interview-filter__list">
+          <?php if ( ! $ni_multi ) : ?>
           <li><button type="button" class="interview-filter__btn is-active" data-filter-value="" aria-pressed="true">すべて</button></li>
-          <li><button type="button" class="interview-filter__btn" data-filter-value="new" aria-pressed="false">新卒入社 <span class="interview-filter__count js-filter-count"></span></button></li>
-          <li><button type="button" class="interview-filter__btn" data-filter-value="mid-beginner" aria-pressed="false">中途入社(未経験) <span class="interview-filter__count js-filter-count"></span></button></li>
-          <li><button type="button" class="interview-filter__btn" data-filter-value="mid-experienced" aria-pressed="false">中途入社(経験者) <span class="interview-filter__count js-filter-count"></span></button></li>
-          <li><button type="button" class="interview-filter__btn" data-filter-value="part-time" aria-pressed="false">アルバイト <span class="interview-filter__count js-filter-count"></span></button></li>
+          <?php endif; ?>
+          <?php foreach ( $ni_terms as $ni_term ) : ?>
+          <?php if ( $ni_multi ) : ?>
+          <li><button type="button" class="interview-filter__btn" data-filter-value="<?php echo (int) $ni_term->term_id; ?>" aria-pressed="false"># <?php echo esc_html( $ni_term->name ); ?></button></li>
+          <?php else : ?>
+          <li><button type="button" class="interview-filter__btn" data-filter-value="<?php echo (int) $ni_term->term_id; ?>" aria-pressed="false"><?php echo esc_html( $ni_term->name ); ?> <span class="interview-filter__count js-filter-count">(<?php echo (int) $ni_term->count; ?>)</span></button></li>
+          <?php endif; ?>
+          <?php endforeach; ?>
         </ul>
       </div>
-      <div class="interview-filter__group" role="group" aria-labelledby="filter-job" data-filter-group="job">
-        <p class="interview-filter__label" id="filter-job">職種</p>
-        <ul class="interview-filter__list">
-          <li><button type="button" class="interview-filter__btn is-active" data-filter-value="" aria-pressed="true">すべて</button></li>
-          <li><button type="button" class="interview-filter__btn" data-filter-value="sales" aria-pressed="false">営業 <span class="interview-filter__count js-filter-count"></span></button></li>
-          <li><button type="button" class="interview-filter__btn" data-filter-value="researcher" aria-pressed="false">リサーチャー <span class="interview-filter__count js-filter-count"></span></button></li>
-          <li><button type="button" class="interview-filter__btn" data-filter-value="fw" aria-pressed="false">FW <span class="interview-filter__count js-filter-count"></span></button></li>
-          <li><button type="button" class="interview-filter__btn" data-filter-value="irg" aria-pressed="false">IRG <span class="interview-filter__count js-filter-count"></span></button></li>
-          <li><button type="button" class="interview-filter__btn" data-filter-value="ni-lab" aria-pressed="false">NI研 <span class="interview-filter__count js-filter-count"></span></button></li>
-        </ul>
-      </div>
-      <div class="interview-filter__group" role="group" aria-labelledby="filter-tags" data-filter-group="tags" data-filter-multi>
-        <p class="interview-filter__label" id="filter-tags">タグ</p>
-        <ul class="interview-filter__list">
-          <li><button type="button" class="interview-filter__btn" data-filter-value="remote" aria-pressed="false"># フルリモート</button></li>
-          <li><button type="button" class="interview-filter__btn" data-filter-value="short-time" aria-pressed="false"># 時短勤務</button></li>
-        </ul>
-      </div>
+      <?php endforeach; ?>
     </div>
   </div>
+  <?php endif; ?>
 
-  <!-- カード一覧（855:25428 / SP 1140:19198）。12 件ずつ表示 -->
+  <!-- カード一覧（855:25428 / SP 1140:19198）。12 件ずつ表示（13 件目からは hidden で出し、interview.js が出し入れする） -->
   <div class="lower-sec interview-list">
-    <ul class="interview-list__grid js-interview-list" data-per-page="12" aria-live="polite">
-      <li class="interview-list__item js-interview-item" data-type="new" data-job="sales" data-tags="remote">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_01.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">田中 太郎</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>新卒入社</li><li>営業</li></ul>
-              <ul class="interview-card__tags"><li># フルリモート</li></ul>
-            </div>
-          </div>
-        </a>
+    <ul class="interview-list__grid js-interview-list" data-per-page="<?php echo (int) $ni_per_page; ?>" aria-live="polite">
+      <?php
+      while ( have_posts() ) :
+      	the_post();
+      	$ni_data = '';
+      	foreach ( array( 'type' => 'interview_entry_type', 'job' => 'interview_job_type', 'tags' => 'interview_tag' ) as $ni_key => $ni_taxonomy ) {
+      		$ni_data .= sprintf( ' data-%s="%s"', $ni_key, esc_attr( implode( ' ', wp_list_pluck( ni_interview_terms( $ni_taxonomy ), 'term_id' ) ) ) );
+      	}
+      	?>
+      <li class="interview-list__item js-interview-item"<?php echo $ni_data; ?><?php echo $GLOBALS['wp_query']->current_post >= $ni_per_page ? ' hidden' : ''; ?>>
+        <?php get_template_part( 'template-parts/interview-card' ); ?>
       </li>
-      <li class="interview-list__item js-interview-item" data-type="new" data-job="researcher" data-tags="remote short-time">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_02.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">山田 花子</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>新卒入社</li><li>リサーチャー</li></ul>
-              <ul class="interview-card__tags"><li># フルリモート</li><li># 時短勤務</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="mid-beginner" data-job="fw" data-tags="short-time">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_03.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">佐藤 健</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>中途入社(未経験)</li><li>FW</li></ul>
-              <ul class="interview-card__tags"><li># 時短勤務</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="mid-experienced" data-job="irg" data-tags="remote">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_01.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">田中 太郎</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>中途入社(経験者)</li><li>IRG</li></ul>
-              <ul class="interview-card__tags"><li># フルリモート</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="new" data-job="ni-lab" data-tags="remote short-time">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_02.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">山田 花子</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>新卒入社</li><li>NI研</li></ul>
-              <ul class="interview-card__tags"><li># フルリモート</li><li># 時短勤務</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="mid-beginner" data-job="sales" data-tags="short-time">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_03.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">佐藤 健</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>中途入社(未経験)</li><li>営業</li></ul>
-              <ul class="interview-card__tags"><li># 時短勤務</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="part-time" data-job="researcher" data-tags="remote">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_01.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">田中 太郎</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>アルバイト</li><li>リサーチャー</li></ul>
-              <ul class="interview-card__tags"><li># フルリモート</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="mid-experienced" data-job="fw" data-tags="remote short-time">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_02.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">山田 花子</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>中途入社(経験者)</li><li>FW</li></ul>
-              <ul class="interview-card__tags"><li># フルリモート</li><li># 時短勤務</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="new" data-job="irg" data-tags="short-time">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_03.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">佐藤 健</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>新卒入社</li><li>IRG</li></ul>
-              <ul class="interview-card__tags"><li># 時短勤務</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="mid-beginner" data-job="ni-lab" data-tags="remote">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_01.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">田中 太郎</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>中途入社(未経験)</li><li>NI研</li></ul>
-              <ul class="interview-card__tags"><li># フルリモート</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="mid-experienced" data-job="sales" data-tags="remote short-time">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_02.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">山田 花子</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>中途入社(経験者)</li><li>営業</li></ul>
-              <ul class="interview-card__tags"><li># フルリモート</li><li># 時短勤務</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="new" data-job="researcher" data-tags="short-time">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_03.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">佐藤 健</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>新卒入社</li><li>リサーチャー</li></ul>
-              <ul class="interview-card__tags"><li># 時短勤務</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="part-time" data-job="fw" data-tags="remote">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_01.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">田中 太郎</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>アルバイト</li><li>FW</li></ul>
-              <ul class="interview-card__tags"><li># フルリモート</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="new" data-job="irg" data-tags="remote short-time">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_02.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">山田 花子</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>新卒入社</li><li>IRG</li></ul>
-              <ul class="interview-card__tags"><li># フルリモート</li><li># 時短勤務</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="mid-beginner" data-job="ni-lab" data-tags="short-time">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_03.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">佐藤 健</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>中途入社(未経験)</li><li>NI研</li></ul>
-              <ul class="interview-card__tags"><li># 時短勤務</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="mid-experienced" data-job="sales" data-tags="remote">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_01.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">田中 太郎</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>中途入社(経験者)</li><li>営業</li></ul>
-              <ul class="interview-card__tags"><li># フルリモート</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="new" data-job="researcher" data-tags="remote short-time">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_02.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">山田 花子</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>新卒入社</li><li>リサーチャー</li></ul>
-              <ul class="interview-card__tags"><li># フルリモート</li><li># 時短勤務</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="interview-list__item js-interview-item" data-type="mid-beginner" data-job="fw" data-tags="short-time">
-        <a class="interview-card" href="<?php echo ni_url( '/interview/detail/' ); ?>">
-          <div class="interview-card__img"><img src="<?php echo ni_img( 'common/voice_card_03.jpg' ); ?>" alt="" width="384" height="472" loading="lazy"></div>
-          <div class="interview-card__body">
-            <div class="interview-card__txt">
-              <p class="interview-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-              <p class="interview-card__name">佐藤 健</p>
-            </div>
-            <div class="interview-card__meta">
-              <ul class="interview-card__chips"><li>中途入社(未経験)</li><li>FW</li></ul>
-              <ul class="interview-card__tags"><li># 時短勤務</li></ul>
-            </div>
-          </div>
-        </a>
-      </li>
+      <?php endwhile; ?>
     </ul>
-    <p class="interview-list__empty js-interview-empty" hidden>条件に合うインタビューはありません。</p>
-    <div class="interview-list__more">
-      <button type="button" class="more-btn js-interview-more"><span class="more-btn__txt"><span class="js-interview-more-next">次の12件をみる</span><span class="more-btn__line" aria-hidden="true"></span><span class="js-interview-more-status">12 / 18件表示中</span></span><img class="more-btn__icon" src="<?php echo ni_img( 'lower/icon_more.svg' ); ?>" alt="" width="20" height="20"></button>
+    <p class="interview-list__empty js-interview-empty"<?php echo $ni_total ? ' hidden' : ''; ?>>条件に合うインタビューはありません。</p>
+    <div class="interview-list__more"<?php echo $ni_shown >= $ni_total ? ' hidden' : ''; ?>>
+      <button type="button" class="more-btn js-interview-more"><span class="more-btn__txt"><span class="js-interview-more-next">次の<?php echo (int) min( $ni_per_page, $ni_total - $ni_shown ); ?>件をみる</span><span class="more-btn__line" aria-hidden="true"></span><span class="js-interview-more-status"><?php echo (int) $ni_shown; ?> / <?php echo (int) $ni_total; ?>件表示中</span></span><img class="more-btn__icon" src="<?php echo ni_img( 'lower/icon_more.svg' ); ?>" alt="" width="20" height="20"></button>
     </div>
   </div>
 

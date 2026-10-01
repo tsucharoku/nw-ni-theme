@@ -3,9 +3,9 @@
 https://recruit.n-info.co.jp/ のテーマ。静的 HTML（リポジトリ `tsucharoku/nw-nihoninfo-recruit-html`、案件フォルダの `HTML/`）から起こした。
 この README の「下層ページの実装メモ」以降は、静的 HTML の README をテーマ向けに直して持ってきたもの（演出と CSS / JS の説明）。
 
-## いまの状態（2026-10-01）
+## いまの状態（2026-10-02）
 
-**全 18 ページを静的なままテーマ化し、募集要項（一覧・カテゴリ一覧・詳細）だけ WP の内容を出している段階。** ヘッダー・メニュー・フッターは共通化し、ほかのテンプレートの `<main>` は静的 HTML の内容を固定で出している（WP の投稿内容はまだ出していない）。静的 HTML と全ページ・PC / SP で、要素の寸法と位置・リンク先・画像・文言が一致することを確認済み。
+**全 18 ページを静的なままテーマ化し、募集要項（一覧・カテゴリ一覧・詳細）と社員インタビュー一覧、固定ページの一部（ACF）が WP の内容を出している段階。** ヘッダー・メニュー・フッターは共通化し、ほかのテンプレートの `<main>` は静的 HTML の内容を固定で出している（WP の投稿内容はまだ出していない）。静的 HTML と全ページ・PC / SP で、要素の寸法と位置・リンク先・画像・文言が一致することを確認済み。
 
 これから: 残りのページの投稿のループ、カスタムフィールド（ACF Pro）、カジュアル面談のフォーム（Contact Form 7）、ヘッダー・メニュー・フッターの募集要項カテゴリへのリンク。ページの種類は `制作進行資料.xlsx`「ディレクトリマップ」、入稿項目は仕様書の Figma を見て決める。
 
@@ -39,7 +39,7 @@ https://recruit.n-info.co.jp/ のテーマ。静的 HTML（リポジトリ `tsuc
 ```
 acf-json/                ACF のフィールドグループの定義（管理画面で編集すると ACF がここに保存する）
 functions.php            テーマの設定、ni_img() / ni_url() / ni_job_category_url()、<title>・description の受け渡し（ni_head()）、WP の絵文字スクリプトの停止
-inc/post-types.php       カスタム投稿 interview / cross-talk / job-opening とタクソノミー job-category の登録、/job-opening/○○/ の振り分け、募集要項の並び順
+inc/post-types.php       カスタム投稿 interview / cross-talk / job-opening とタクソノミー（job-category、社員インタビューの interview_entry_type / interview_job_type / interview_tag）の登録、/job-opening/○○/ の振り分け、募集要項の並び順、社員インタビュー一覧の全件出力
 inc/page.php             いまのページの種類（top / beginner / career / lower）と、ページごとの CSS・JS の対応表。<body> のクラス
 inc/assets.php           CSS・JS の読み込み、three.js の import map、ES モジュール
 inc/editor.php           ブロックエディタ: ブロックスタイル（is-style-○○）の登録、editor-style.css とフォントをエディタに読み込む
@@ -87,6 +87,12 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
   - 本文 = Gutenberg。**エントリーフォームも本文の中**（仕様書・デザインともエディタの範囲内）: h2「エントリー」（HTML アンカー `entry`）+ CF7 本体の「Contact Form 7」ブロック（プルダウンでフォームを選ぶ）。白い箱は `job-opening.css` の `.job-detail .entry-content .wpcf7`。アルバイト用など別のフォームを作れば投稿ごとに選べる。
   - 左のアンカーナビ = 本文の h2 から自動で作る（仕様書でナビは青文字）。リンク先は h2 の「HTML アンカー」、空なら `job-sec-1` から順に付ける。h2 が無ければナビを出さない。
   - その他の募集職種 = 同じカテゴリの他の職種を**全件**（表示中の職種は除く、並びは `ni_job_orderby()`）。英字はカテゴリの英語表記（デザイン 576:7609。空なら出さない）。0 件なら一覧だけ出さず、見出しと「募集中の職種一覧に戻る」は出す。
+- **社員インタビュー一覧は WP の内容**（`archive-interview.php`。仕様書 35:362、設計書は「NI採用サイト_ACFフィールド設計書_社員インタビュー.xlsx」）。ページ頭（見出し・リード文）は固定。**詳細（`single-interview.php`）はまだ静的**。
+  - タクソノミー 3 つ: 入社区分 `interview_entry_type` / 職種 `interview_job_type` / タグ `interview_tag`。絞り込みとカードの表示に使うだけで、ターム別の一覧ページは無い（`public => false`）。タームはコードに書いていない。
+  - ACF「社員インタビュー」（`acf-json/group_ni_interview.json`）: 氏名 `interview_name` / サムネイル用画像 `interview_thumbnail`。**一覧で使う 2 つだけ**。設計書にある詳細用の項目（アイキャッチ・サイド追従画像 `interview_side_image`・スケジュール `interview_schedule`）は詳細を作るときに足す。画像の戻り値は設計書の URL ではなく配列（width / height を出すため）。
+  - 絞り込み: 公開記事があるタームだけ出す。見出しはデザインどおり「年次」（= 入社区分）/「職種」/「タグ」。年次・職種は件数つき（絞り込むたびに `interview.js` が数え直す）。タームの並びは管理画面の並び替え（Intuitive Custom Post Order）。
+  - カード（`template-parts/interview-card.php`）: 一言 = 投稿タイトル、氏名、写真、入社区分 + 職種（丸チップ）、タグ（`# 名前`）。入力した内容だけ出す（写真が無ければ枠だけ）。
+  - 全件を出力し（`ni_interview_archive_query()`、公開日の新しい順）、12 件ずつ見せるのと絞り込みは `interview.js`（Ajax・ページ送りはしていない）。カードの `data-type` / `data-job` / `data-tags` はタームの ID。件数は仕様書では 6 件ずつだが、デザイン（3 列・12 件ずつ）に合わせている。
 - **WP の絵文字スクリプトは止めている**: 本文の絵文字（🎉 🏆）が `<img class="emoji">` に置き換わって文字幅が変わるため。
 
 ## WP 側に必要なデータ
@@ -95,9 +101,10 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
 
 - 固定ページ: `beginner` / `career` / `about` / `chart` / `development` / `work-style` / `office` / `casual-talk` / `casual-talk` の子の `thanks`
 - 静的なあいだのサンプル（静的 HTML の `detail/` と同じ URL にするため）: `interview` / `cross-talk` / `job-opening` にスラッグ `detail` の投稿を 1 件ずつ。Local の `job-opening` の `detail`（アルバイト「定性調査のモデレーター」）には、静的 HTML の本文と同じブロック一式とエントリーフォーム、リード文を入れてある
-- プラグイン: **Advanced Custom Fields PRO**（有効化するとテーマの `acf-json/` の項目が出る）、**Intuitive Custom Post Order**（設定 → 並び替え設定 で、投稿タイプ「募集要項」とタクソノミー「募集要項カテゴリ」にチェック）、**Contact Form 7**（日本語の翻訳も入れる: `wp language plugin install contact-form-7 ja`）
+- プラグイン: **Advanced Custom Fields PRO**（有効化するとテーマの `acf-json/` の項目が出る）、**Intuitive Custom Post Order**（設定 → 並び替え設定 で、投稿タイプ「募集要項」とタクソノミー「募集要項カテゴリ」、社員インタビューの「入社区分」「職種」「タグ（ハッシュタグ）」にチェック）、**Contact Form 7**（日本語の翻訳も入れる: `wp language plugin install contact-form-7 ja`）
 - CF7 のフォーム「エントリーフォーム」: 新規作成し、「フォーム」タブに `cf7/entry-form.txt`、「メール」タブの本文に `cf7/entry-mail.txt` を貼る。メールの宛先 `[_site_admin_email]`、件名 `[_site_title] エントリー：[_post_title]（[your-name] 様）`、追加ヘッダー `Reply-To: [your-email]`、ファイル添付 `[resume]`（改行して）`[cv]`。メール (2)（自動返信）は使っていない。送信できたら `/casual-talk/thanks/` へ移る（`form.js` の [C]）。各募集要項の本文の最後に h2「エントリー」+ Contact Form 7 ブロックでこのフォームを置く
 - 募集要項のカテゴリ（`job-category`）と投稿。Local にはサンプルとして、静的 HTML と同じ内容を入れてある: カテゴリ 4 つ（新卒採用 `new-graduate` / 中途採用(未経験) `mid-beginner` / 中途採用(経験者) `mid-career` / アルバイト `part-time`）、投稿 1 / 4 / 4 / 24 件
+- 社員インタビューのターム（入社区分・職種・タグ）と投稿。Local にはサンプルとして、静的 HTML の一覧と同じ 18 件を入れてある: 入社区分 4 つ（新卒入社 / 中途入社(未経験) / 中途入社(経験者) / アルバイト）、職種 5 つ（営業 / リサーチャー / FW / IRG / NI研）、タグ 2 つ（フルリモート / 時短勤務）、写真はテーマの `assets/img/common/voice_card_01〜03.jpg` をメディアに取り込んだもの。1 件目はスラッグ `detail`（静的な詳細の URL）、ほかは `sample-02`〜`sample-18`
 - 教育・研修・キャリアパス（固定ページ `development`）のキャリアパスは Local に Figma の 3 路線（各 CASE1・4 ステップ、関連インタビューはサンプルの `detail`）を入力済み。テストサーバーでも入れる
 - 制度・環境（固定ページ `work-style`）の ACF は今のページと同じ内容を入力済み（Local。福利厚生はデザインの 7 枚、画像はテーマの `assets/img/work-style/` をメディアに取り込んだもの）
 - 3分でわかるNI（固定ページ `about`）の ACF は全項目入力済み（Local）。写真・アイコンはテーマの `assets/img/about/` の今の画像をメディアライブラリに取り込んだもの。テストサーバーでも同じ内容を入れる（未入力の項目は何も出ない）

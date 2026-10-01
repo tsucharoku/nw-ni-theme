@@ -1,9 +1,9 @@
 /* ==========================================================================
-   interview.js — 社員インタビュー一覧の絞り込み + もっと見る（静的版。WP ではアーカイブ + タクソノミーに置き換え）
+   interview.js — 社員インタビュー一覧の絞り込み + もっと見る（カードは archive-interview.php が全件出力する）
    - .js-interview-filter の [data-filter-group] ごとに条件を持つ。グループ間は AND
      - 通常のグループ（年次 / 職種）: 単一選択。「すべて」（data-filter-value=""）で解除
      - data-filter-multi のグループ（タグ）: 複数選択のトグル。選んだタグをすべて持つカードだけ残す
-   - カード（.js-interview-item）は data-type / data-job / data-tags（空白区切り）で判定
+   - カード（.js-interview-item）は data-type / data-job / data-tags（タームの ID、空白区切り）で判定
    - .js-interview-list の data-per-page 件ずつ表示し、.js-interview-more で追加。条件を変えたら先頭に戻す
    ========================================================================== */
 (function () {

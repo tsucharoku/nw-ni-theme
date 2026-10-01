@@ -1,0 +1,70 @@
+{
+    "key": "group_ni_interview",
+    "title": "社員インタビュー",
+    "fields": [
+        {
+            "key": "field_ni_interview_name",
+            "label": "氏名（イニシャル）",
+            "name": "interview_name",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "例: 田中 太郎（フルネームまたはイニシャル）。一覧のカードに出ます。",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": 20,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_ni_interview_thumbnail",
+            "label": "サムネイル用画像",
+            "name": "interview_thumbnail",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "一覧のカードに出る写真です。縦長のポートレート推奨（例: 400×500px）。上寄せで切り抜いて表示します。",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "",
+            "preview_size": "medium"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "interview"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1790890000
+}
