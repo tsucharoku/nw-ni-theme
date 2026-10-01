@@ -683,6 +683,19 @@
   line-height: 1.65;
 }
 
+/* SP: ボタンは画面幅いっぱいだと広い端末で長くなりすぎるので 440（480 − 左右 20。SP のほかの箇所と同じ）で止めて中央に置く */
+@media (max-width: 767px) {
+  .msg .btn {
+    max-width: 440px;
+    align-self: center;
+  }
+
+  /* タイトルは 375px のときの 24 から画面幅に合わせて拡大し、PC と同じ 32 で止める */
+  .msg__title {
+    font-size: clamp(24px, calc(24 / 375 * 100vw), 32px);
+  }
+}
+
 @media (min-width: 768px) {
   .msg {
     gap: 32px;
