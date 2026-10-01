@@ -99,6 +99,10 @@
   font-weight: 600;
   line-height: 1.12;
   letter-spacing: 0;
+  /* background-clip: text の塗りは箱の中だけなので、行の高さ 1.12 だと g・p などの下の出っ張りが欠ける。
+     下に余白を足して塗りを伸ばし、同じだけ margin で詰めて位置は変えない */
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
 }
 
 .page-head__en,
