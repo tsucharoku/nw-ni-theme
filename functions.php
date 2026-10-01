@@ -87,3 +87,27 @@ function ni_acf_match_page_path( $result, $rule, $screen ) {
 	return '==' === $rule['operator'] ? $match : ! $match;
 }
 add_filter( 'acf/location/match_rule/type=page', 'ni_acf_match_page_path', 10, 3 );
+
+/* SVG のアップロードを管理者（manage_options）だけ許可する（3分でわかるNI のアイコン・イラストなど。設計書「SVG 可」）。
+   SVG は中にスクリプトを書けるので、管理者以外には許可しない */
+function ni_upload_mimes_svg( $mimes ) {
+	if ( current_user_can( 'manage_options' ) ) {
+		$mimes['svg'] = 'image/svg+xml';
+	}
+	return $mimes;
+}
+add_filter( 'upload_mimes', 'ni_upload_mimes_svg' );
+
+/* WP のファイル種別チェックは SVG の中身を判定できず弾くので、拡張子が .svg で中身が SVG なら通す（管理者のみ） */
+function ni_check_filetype_svg( $data, $file, $filename, $mimes ) {
+	if ( empty( $data['type'] ) && current_user_can( 'manage_options' ) && 'svg' === strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) ) ) {
+		$head = (string) file_get_contents( $file, false, null, 0, 1024 );
+		if ( false !== stripos( $head, '<svg' ) ) {
+			$data['ext']  = 'svg';
+			$data['type'] = 'image/svg+xml';
+		}
+	}
+	return $data;
+}
+add_filter( 'wp_check_filetype_and_ext', 'ni_check_filetype_svg', 10, 4 );
+

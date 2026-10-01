@@ -28,7 +28,8 @@ function ni_about_br( $name ) {
 function ni_about_img( $name, $atts = '' ) {
 	$img = ni_about( $name );
 	if ( is_array( $img ) && ! empty( $img['url'] ) ) {
-		printf( '<img src="%s" alt="%s" width="%d" height="%d"%s>', esc_url( $img['url'] ), esc_attr( $img['alt'] ), (int) $img['width'], (int) $img['height'], $atts );
+		$size = $img['width'] && $img['height'] ? sprintf( ' width="%d" height="%d"', $img['width'], $img['height'] ) : '';   /* SVG は寸法が無い（大きさは CSS） */
+		printf( '<img src="%s" alt="%s"%s%s>', esc_url( $img['url'] ), esc_attr( $img['alt'] ), $size, $atts );
 	}
 }
 
