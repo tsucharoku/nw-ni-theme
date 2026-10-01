@@ -2,8 +2,99 @@
 /**
  * 3分でわかるNI（固定ページ /about/）
  *
- * 静的 HTML（HTML/about/index.html）の <main> をそのまま入れたもの。中身はまだ固定の文言・画像で、WP の投稿内容は出していない。
+ * 数字のカード（会社・事業規模 / 仕事・リサーチ環境 / 働き方・カルチャー）は固定ページの ACF「3分でわかるNI」
+ * （acf-json/group_ni_about.json。設計書: NI採用サイト_ACFフィールド設計書_3分でわかるNI.xlsx）。カードの数と並びは固定。
+ * テキストの初期値（ACF の default_value）は今の文言なので、未入力でも今の表示になる。画像は空なら今の画像。
+ * 改行は入力した改行どおり（<br>）。
+ * ページ頭・リード・各セクションの見出し・社員に聞きましたは固定。
  */
+
+/* このページの ACF の値。フィールドキー（field_ni_about_○○）で引く: 名前で引くと、一度も保存していないページでは
+   ACF がフィールドを特定できず初期値も返らないため */
+function ni_about( $name ) {
+	return function_exists( 'get_field' ) ? get_field( 'field_ni_about_' . $name, get_queried_object_id() ) : null;
+}
+
+/* 1 行のテキスト（エスケープして出力） */
+function ni_about_text( $name ) {
+	echo esc_html( (string) ni_about( $name ) );
+}
+
+/* 複数行のテキスト（改行 → <br>） */
+function ni_about_br( $name ) {
+	echo implode( '<br>', array_map( 'esc_html', preg_split( '/\R/u', trim( (string) ni_about( $name ) ) ) ) );
+}
+
+/* 画像（ACF の画像。空なら assets/img/ の今の画像）。$atts は width / height 以外の属性 */
+function ni_about_img( $name, $fallback, $width, $height, $atts = '' ) {
+	$img = ni_about( $name );
+	if ( is_array( $img ) && ! empty( $img['url'] ) ) {
+		printf( '<img src="%s" alt="%s" width="%d" height="%d"%s>', esc_url( $img['url'] ), esc_attr( $img['alt'] ), (int) $img['width'], (int) $img['height'], $atts );
+	} else {
+		printf( '<img src="%s" alt="" width="%d" height="%d"%s>', ni_img( $fallback ), $width, $height, $atts );
+	}
+}
+
+/* 数値 + 単位の見出し行（.num-card__num） */
+function ni_about_num( $prefix ) {
+	printf( '<p class="num-card__num"><span class="num-card__value">%s</span><span class="num-card__unit">%s</span></p>', esc_html( (string) ni_about( $prefix . '_number' ) ), esc_html( (string) ni_about( $prefix . '_unit' ) ) );
+}
+
+/* 年間調査件数の円グラフ: 手法内訳（リピーター）。空なら今の 4 つ。
+   扇は conic-gradient（割合の合計に対する比で描く）、色は 4 色を上から順に繰り返す。
+   ラベルは扇の中央の角度、円の中心から 70px の位置（228 角の円グラフ） */
+$ni_pie_rows = ni_about( 'company_survey_breakdown' );
+if ( ! is_array( $ni_pie_rows ) || ! $ni_pie_rows ) {
+	$ni_pie_rows = array(
+		array( 'breakdown_method' => 'CLT', 'breakdown_percentage' => 40 ),
+		array( 'breakdown_method' => '定性', 'breakdown_percentage' => 22 ),
+		array( 'breakdown_method' => 'WEB', 'breakdown_percentage' => 20 ),
+		array( 'breakdown_method' => 'HUT', 'breakdown_percentage' => 18 ),
+	);
+}
+$ni_pie_colors = array( '#11296b', '#1f49b0', '#2e6fd0', '#4a94e8' );
+$ni_pie_total  = array_sum( array_map( 'floatval', wp_list_pluck( $ni_pie_rows, 'breakdown_percentage' ) ) );
+$ni_pie        = array();
+$ni_pie_from   = 0;
+foreach ( array_values( $ni_pie_rows ) as $ni_i => $ni_row ) {
+	$ni_share    = $ni_pie_total > 0 ? (float) $ni_row['breakdown_percentage'] / $ni_pie_total * 100 : 0;
+	$ni_angle    = deg2rad( ( $ni_pie_from + $ni_share / 2 ) * 3.6 );
+	$ni_pie[]    = array(
+		'name'  => (string) $ni_row['breakdown_method'],
+		'value' => (string) $ni_row['breakdown_percentage'] . '%',
+		'color' => $ni_pie_colors[ $ni_i % count( $ni_pie_colors ) ],
+		'from'  => $ni_pie_from,
+		'to'    => $ni_pie_from + $ni_share,
+		'x'     => round( 114 + 70 * sin( $ni_angle ), 1 ),
+		'y'     => round( 114 - 70 * cos( $ni_angle ), 1 ),
+	);
+	$ni_pie_from += $ni_share;
+}
+$ni_pie_bg = 'conic-gradient(' . implode(
+	', ',
+	array_map(
+		function ( $s ) {
+			return $s['color'] . ' ' . round( $s['from'], 2 ) . '% ' . round( $s['to'], 2 ) . '%';
+		},
+		$ni_pie
+	)
+) . ')';
+$ni_pie_items = array_map(
+	function ( $s ) {
+		return $s['name'] . ' ' . $s['value'];
+	},
+	$ni_pie
+);
+/* 下の内訳の文: 2 つずつ「／」でつなぐ（例: CLT 40% ／ 定性 22% WEB 20% ／ HUT 18%） */
+$ni_pie_note = implode(
+	' ',
+	array_map(
+		function ( $pair ) {
+			return implode( ' ／ ', $pair );
+		},
+		array_chunk( $ni_pie_items, 2 )
+	)
+);
 
 ni_head(
 	array(
@@ -33,7 +124,7 @@ get_header();
     <p class="about-lead__txt">1969年創業の独立系マーケティングリサーチ専業会社。飲料・食品・化粧品・トイレタリーなど大手消費財メーカーを中心に、<br class="u-pc">年間約2,000件・800社超の調査を手がけています。</p>
   </div>
 
-  <!-- 会社・事業規模（Figma 522:9633 / SP 1140:12198）。数字は data-count でカウントアップ（about.js） -->
+  <!-- 会社・事業規模（Figma 522:9633 / SP 1140:12198） -->
   <section class="lower-sec about-sec about-sec--scale">
     <div class="about-sec__head">
       <div class="sec-head sec-head--sub">
@@ -50,23 +141,17 @@ get_header();
       <div class="num-card num-card--pie" data-anim="inview">
         <div class="num-card__txt">
           <div class="num-card__head">
-            <p class="num-card__label">年間調査件数</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="2000">2,000</span><span class="num-card__unit">件</span></p>
+            <p class="num-card__label"><?php ni_about_text( 'company_survey_label' ); ?></p>
+            <?php ni_about_num( 'company_survey' ); ?>
           </div>
-          <p class="num-card__note">CLT 40% ／ 定性 22% WEB 20% ／ HUT 18%</p>
+          <p class="num-card__note"><?php echo esc_html( $ni_pie_note ); ?></p>
         </div>
-        <!-- 円グラフ: 扇は Figma のベクター（662:6986）、ラベルは HTML テキスト -->
-        <div class="pie" role="img" aria-label="調査手法の内訳 CLT 40%、定性 22%、WEB 20%、HUT 18%">
-          <div class="pie__sectors" aria-hidden="true">
-            <img class="pie__sector pie__sector--clt" src="<?php echo ni_img( 'about/pie_clt.svg' ); ?>" alt="" width="114" height="206">
-            <img class="pie__sector pie__sector--teisei" src="<?php echo ni_img( 'about/pie_teisei.svg' ); ?>" alt="" width="145" height="114">
-            <img class="pie__sector pie__sector--web" src="<?php echo ni_img( 'about/pie_web.svg' ); ?>" alt="" width="114" height="132">
-            <img class="pie__sector pie__sector--hut" src="<?php echo ni_img( 'about/pie_hut.svg' ); ?>" alt="" width="103" height="114">
-          </div>
-          <p class="pie__label pie__label--clt" aria-hidden="true"><span class="pie__name">CLT</span><span class="pie__val u-en">40%</span></p>
-          <p class="pie__label pie__label--teisei" aria-hidden="true"><span class="pie__name">定性</span><span class="pie__val u-en">22%</span></p>
-          <p class="pie__label pie__label--web" aria-hidden="true"><span class="pie__name">WEB</span><span class="pie__val u-en">20%</span></p>
-          <p class="pie__label pie__label--hut" aria-hidden="true"><span class="pie__name">HUT</span><span class="pie__val u-en">18%</span></p>
+        <!-- 円グラフ: 扇は手法内訳から conic-gradient、ラベルは扇の中央 -->
+        <div class="pie" role="img" aria-label="調査手法の内訳 <?php echo esc_attr( implode( '、', $ni_pie_items ) ); ?>">
+          <div class="pie__sectors" aria-hidden="true" style="background: <?php echo esc_attr( $ni_pie_bg ); ?>"></div>
+          <?php foreach ( $ni_pie as $ni_slice ) : ?>
+          <p class="pie__label" aria-hidden="true" style="top: <?php echo esc_attr( $ni_slice['y'] ); ?>px; left: <?php echo esc_attr( $ni_slice['x'] ); ?>px"><span class="pie__name"><?php echo esc_html( $ni_slice['name'] ); ?></span><span class="pie__val u-en"><?php echo esc_html( $ni_slice['value'] ); ?></span></p>
+          <?php endforeach; ?>
           <span class="pie__hole" aria-hidden="true"></span>
         </div>
       </div>
@@ -75,20 +160,20 @@ get_header();
       <li class="num-card num-card--media num-card--lead" data-anim="inview">
         <div class="num-card__txt num-card__txt--w207">
           <div class="num-card__head">
-            <p class="num-card__label">業界成長率</p>
-            <p class="num-card__lead">業界トップクラスの<br>110%超の成長率を維持</p>
+            <p class="num-card__label"><?php ni_about_text( 'company_growth_label' ); ?></p>
+            <p class="num-card__lead"><?php ni_about_br( 'company_growth_title' ); ?></p>
           </div>
-          <p class="num-card__note">コロナ禍でも売上成長率110%超を記録。<br class="u-pc">創業56年の独立系リサーチ会社として持続的な高成長を継続。</p>
+          <p class="num-card__note"><?php ni_about_br( 'company_growth_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb num-card__thumb--icon"><img src="<?php echo ni_img( 'about/icon_growth.svg' ); ?>" alt="" width="50" height="50"></div>
+        <div class="num-card__thumb num-card__thumb--icon"><?php ni_about_img( 'company_growth_graph', 'about/icon_growth.svg', 50, 50 ); ?></div>
       </li>
       <li class="num-card num-card--center" data-anim="inview">
         <div class="num-card__txt">
           <div class="num-card__head">
-            <p class="num-card__label">取引社数</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="800">800</span><span class="num-card__unit">社超</span></p>
+            <p class="num-card__label"><?php ni_about_text( 'company_clients_label' ); ?></p>
+            <?php ni_about_num( 'company_clients' ); ?>
           </div>
-          <p class="num-card__note">リピート希望率96%<br>※当社お客様満足度調査調べ</p>
+          <p class="num-card__note"><?php ni_about_br( 'company_clients_desc' ); ?></p>
         </div>
       </li>
         </ul>
@@ -96,21 +181,21 @@ get_header();
       <li class="num-card num-card--center" data-anim="inview">
         <div class="num-card__txt">
           <div class="num-card__head">
-            <p class="num-card__label">大手メーカーとの直接取引比率</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="90">90</span><span class="num-card__unit">％</span></p>
+            <p class="num-card__label"><?php ni_about_text( 'company_direct_label' ); ?></p>
+            <?php ni_about_num( 'company_direct' ); ?>
           </div>
-          <p class="num-card__note">飲料・食品・化粧品・トイレタリーなど<br>代理店を介さず直接対峙</p>
+          <p class="num-card__note"><?php ni_about_br( 'company_direct_desc' ); ?></p>
         </div>
       </li>
       <li class="num-card num-card--media num-card--start" data-anim="inview">
         <div class="num-card__txt">
           <div class="num-card__head">
-            <p class="num-card__label">創業</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="1969">1969</span><span class="num-card__unit">年</span></p>
+            <p class="num-card__label"><?php ni_about_text( 'company_founded_label' ); ?></p>
+            <?php ni_about_num( 'company_founded' ); ?>
           </div>
-          <p class="num-card__note">独立系リサーチ専業会社として55年以上<br>JMRA・ESOMAR加盟</p>
+          <p class="num-card__note"><?php ni_about_br( 'company_founded_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb num-card__thumb--icon num-card__thumb--icon-l"><img src="<?php echo ni_img( 'about/icon_building.svg' ); ?>" alt="" width="50" height="50"></div>
+        <div class="num-card__thumb num-card__thumb--icon num-card__thumb--icon-l"><?php ni_about_img( 'company_founded_image', 'about/icon_building.svg', 50, 50 ); ?></div>
       </li>
         </ul>
       </div>
@@ -133,62 +218,62 @@ get_header();
       <li class="num-card num-card--center" data-anim="inview">
         <div class="num-card__txt num-card__txt--w355">
           <div class="num-card__head">
-            <p class="num-card__label">パネルリーチ規模</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="1800">1,800</span><span class="num-card__unit">万人にリーチ可能</span></p>
+            <p class="num-card__label"><?php ni_about_text( 'research_panel_label' ); ?></p>
+            <?php ni_about_num( 'research_panel' ); ?>
           </div>
-          <p class="num-card__note">日本の15歳以上の約6人に1人にリーチできる規模のパネルネットワーク（自社600万人＋提携1,200万人）</p>
+          <p class="num-card__note"><?php ni_about_br( 'research_panel_desc' ); ?></p>
         </div>
       </li>
       <li class="num-card num-card--center num-card--grow" data-anim="inview">
         <div class="num-card__txt">
           <div class="num-card__head">
-            <p class="num-card__label">入社1年目に経験できる調査手法数</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="4">4</span><span class="num-card__unit">手法</span></p>
+            <p class="num-card__label"><?php ni_about_text( 'research_methods_label' ); ?></p>
+            <?php ni_about_num( 'research_methods' ); ?>
           </div>
-          <p class="num-card__note">CLT・WEB・HUT・定性（GI）など<br>バランスよく全手法を経験</p>
+          <p class="num-card__note"><?php ni_about_br( 'research_methods_desc' ); ?></p>
         </div>
       </li>
       <li class="num-card num-card--media num-card--start" data-anim="inview">
         <div class="num-card__txt num-card__txt--w235">
           <div class="num-card__head">
-            <p class="num-card__label">自社調査会場数</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="8">8</span><span class="num-card__unit">会場</span></p>
+            <p class="num-card__label"><?php ni_about_text( 'research_venues_label' ); ?></p>
+            <?php ni_about_num( 'research_venues' ); ?>
           </div>
-          <p class="num-card__note">東京7・大阪1 同日7会場でCLT同時実施可能。オフィスと同ビルで移動ゼロ</p>
+          <p class="num-card__note"><?php ni_about_br( 'research_venues_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb"><img src="<?php echo ni_img( 'about/num_venue.jpg' ); ?>" alt="" width="744" height="524" loading="lazy" style="object-position: 95% 50%"></div>
+        <div class="num-card__thumb"><?php ni_about_img( 'research_venues_image', 'about/num_venue.jpg', 744, 524, ' loading="lazy" style="object-position: 95% 50%"' ); ?></div>
       </li>
       </ul>
       <ul class="num-row">
       <li class="num-card num-card--center num-card--grow" data-anim="inview">
         <div class="num-card__txt">
           <div class="num-card__head">
-            <p class="num-card__label">専属調査員数</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="220">220</span><span class="num-card__unit">名超</span></p>
+            <p class="num-card__label"><?php ni_about_text( 'research_staff_label' ); ?></p>
+            <?php ni_about_num( 'research_staff' ); ?>
           </div>
-          <p class="num-card__note">業界最大級。機縁リクルーター150名と連携し、<br class="u-pc">困難条件の対象者も確保可能</p>
+          <p class="num-card__note"><?php ni_about_br( 'research_staff_desc' ); ?></p>
         </div>
       </li>
       <li class="num-card num-card--media num-card--lead" data-anim="inview">
         <div class="num-card__txt">
           <div class="num-card__head">
-            <p class="num-card__label">NI Shopper Lab.</p>
-            <p class="num-card__lead">業界唯一の<br>模擬店舗型実査施設</p>
+            <p class="num-card__label"><?php ni_about_text( 'research_shopper_label' ); ?></p>
+            <p class="num-card__lead"><?php ni_about_br( 'research_shopper_title' ); ?></p>
           </div>
-          <p class="num-card__note">コンビニ／ドラッグストアに切替可<br>店内カメラ完備・DIルーム2部屋併設</p>
+          <p class="num-card__note"><?php ni_about_br( 'research_shopper_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb"><img src="<?php echo ni_img( 'about/num_shopperlab.jpg' ); ?>" alt="" width="744" height="524" loading="lazy" style="object-position: 57% 50%"></div>
+        <div class="num-card__thumb"><?php ni_about_img( 'research_shopper_image', 'about/num_shopperlab.jpg', 744, 524, ' loading="lazy" style="object-position: 57% 50%"' ); ?></div>
       </li>
         <li class="num-card num-card--ai" data-anim="inview">
-          <p class="num-card__label">自社開発AIツール</p>
+          <p class="num-card__label"><?php ni_about_text( 'research_ai_label' ); ?></p>
           <div class="num-card__split">
             <div class="num-card__split-item">
-              <p class="num-card__lead">AI × 定量調査</p>
-              <p class="num-card__sub">自由回答の自動深掘り・<br>チャットインタビュー</p>
+              <p class="num-card__lead"><?php ni_about_text( 'research_ai_quant_title' ); ?></p>
+              <p class="num-card__sub"><?php ni_about_br( 'research_ai_quant_desc' ); ?></p>
             </div>
             <div class="num-card__split-item">
-              <p class="num-card__lead">AI × 定性調査</p>
-              <p class="num-card__sub">インタビュー書き起こし・<br>サマリー自動化</p>
+              <p class="num-card__lead"><?php ni_about_text( 'research_ai_quali_title' ); ?></p>
+              <p class="num-card__sub"><?php ni_about_br( 'research_ai_quali_desc' ); ?></p>
             </div>
           </div>
         </li>
@@ -209,66 +294,42 @@ get_header();
     </div>
     <div class="num-rows">
       <ul class="num-row">
+      <?php foreach ( array( 'culture_retention', 'culture_turnover', 'culture_tenure', 'culture_maternity' ) as $ni_card ) : ?>
       <li class="num-card num-card--center num-card--grow" data-anim="inview">
         <div class="num-card__txt">
           <div class="num-card__head">
-            <p class="num-card__label">新卒入社社員の3年後定着率</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="85.7">85.7</span><span class="num-card__unit">%</span></p>
+            <p class="num-card__label"><?php ni_about_text( $ni_card . '_label' ); ?></p>
+            <?php ni_about_num( $ni_card ); ?>
           </div>
-          <p class="num-card__note">入社後の定着率の高さを示す実績</p>
+          <p class="num-card__note"><?php ni_about_br( $ni_card . '_desc' ); ?></p>
         </div>
       </li>
-      <li class="num-card num-card--center num-card--grow" data-anim="inview">
-        <div class="num-card__txt">
-          <div class="num-card__head">
-            <p class="num-card__label">離職率（2024年度）</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="7">7</span><span class="num-card__unit">%</span></p>
-          </div>
-          <p class="num-card__note">日本全体平均 11.5% と比較して低水準</p>
-        </div>
-      </li>
-      <li class="num-card num-card--center num-card--grow" data-anim="inview">
-        <div class="num-card__txt">
-          <div class="num-card__head">
-            <p class="num-card__label">平均勤続年数</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="7">7</span><span class="num-card__unit">年11ヶ月</span></p>
-          </div>
-          <p class="num-card__note">専門性が積み上がり、長く働ける環境</p>
-        </div>
-      </li>
-      <li class="num-card num-card--center num-card--grow" data-anim="inview">
-        <div class="num-card__txt">
-          <div class="num-card__head">
-            <p class="num-card__label">女性産休育休復職率</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="100">100</span><span class="num-card__unit">%</span></p>
-          </div>
-          <p class="num-card__note">小学校就学まで時短OK<br>遠隔地フルリモート制度あり</p>
-        </div>
-      </li>
+      <?php endforeach; ?>
       </ul>
       <ul class="num-row">
         <li class="num-card num-card--career" data-anim="inview">
-          <p class="num-card__label">異業種からの活躍例</p>
+          <p class="num-card__label"><?php ni_about_text( 'culture_career_label' ); ?></p>
           <ul class="num-card__career">
-            <li><span>バスの運転手</span><img src="<?php echo ni_img( 'about/icon_tri.svg' ); ?>" alt="から" width="10" height="8"><span>集計部門ディレクター</span></li>
-            <li><span>アパレル販売</span><img src="<?php echo ni_img( 'about/icon_tri.svg' ); ?>" alt="から" width="10" height="8"><span>営業部部長</span></li>
+            <?php foreach ( array( 'culture_career_example1', 'culture_career_example2' ) as $ni_example ) : ?>
+            <li><span><?php ni_about_text( $ni_example . '_from' ); ?></span><img src="<?php echo ni_img( 'about/icon_tri.svg' ); ?>" alt="から" width="10" height="8"><span><?php ni_about_text( $ni_example . '_to' ); ?></span></li>
+            <?php endforeach; ?>
           </ul>
         </li>
         <li class="num-card num-card--gender num-card--start" data-anim="inview">
-          <p class="num-card__label">男女比（正社員）</p>
+          <p class="num-card__label"><?php ni_about_text( 'culture_gender_label' ); ?></p>
           <div class="num-card__ratio">
-            <p class="num-card__num"><span class="num-card__unit">男</span><span class="num-card__value" data-count="57">57</span><span class="num-card__unit">%</span></p>
-            <p class="num-card__num"><span class="num-card__unit">女</span><span class="num-card__value" data-count="43">43</span><span class="num-card__unit">%</span></p>
+            <p class="num-card__num"><span class="num-card__unit">男</span><span class="num-card__value"><?php ni_about_text( 'culture_gender_male' ); ?></span><span class="num-card__unit">%</span></p>
+            <p class="num-card__num"><span class="num-card__unit">女</span><span class="num-card__value"><?php ni_about_text( 'culture_gender_female' ); ?></span><span class="num-card__unit">%</span></p>
           </div>
-          <p class="num-card__sub">業界最大級。機縁リクルーター150名と連携し、<br>困難条件の対象者も確保可能</p>
+          <p class="num-card__sub"><?php ni_about_br( 'culture_gender_desc' ); ?></p>
         </li>
         <li class="num-card num-card--center num-card--lead num-card--grow" data-anim="inview">
           <div class="num-card__txt">
             <div class="num-card__head">
-              <p class="num-card__label">制度の柔軟性</p>
-              <p class="num-card__lead">ワーケーション／遠隔地勤務<br>時短・出社日数制限</p>
+              <p class="num-card__label"><?php ni_about_text( 'culture_flex_title' ); ?></p>
+              <p class="num-card__lead"><?php ni_about_br( 'culture_flex_lead' ); ?></p>
             </div>
-            <p class="num-card__note">ライフステージに合わせた働き方が選択可</p>
+            <p class="num-card__note"><?php ni_about_br( 'culture_flex_desc' ); ?></p>
           </div>
         </li>
       </ul>
@@ -276,32 +337,32 @@ get_header();
       <li class="num-card num-card--media num-card--grow" data-anim="inview">
         <div class="num-card__txt">
           <div class="num-card__head">
-            <p class="num-card__label">コミュニケーションランチ</p>
-            <p class="num-card__num"><span class="num-card__value" data-count="1500">1,500</span><span class="num-card__unit">円/月</span></p>
+            <p class="num-card__label"><?php ni_about_text( 'culture_lunch_title' ); ?></p>
+            <?php ni_about_num( 'culture_lunch' ); ?>
           </div>
-          <p class="num-card__note">部署ランチ代を毎月会社が負担<br>チームの関係構築をサポート</p>
+          <p class="num-card__note"><?php ni_about_br( 'culture_lunch_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb"><img src="<?php echo ni_img( 'about/num_lunch.jpg' ); ?>" alt="" width="800" height="534" loading="lazy" style="object-position: 38% 50%"></div>
+        <div class="num-card__thumb"><?php ni_about_img( 'culture_lunch_image', 'about/num_lunch.jpg', 800, 534, ' loading="lazy" style="object-position: 38% 50%"' ); ?></div>
       </li>
       <li class="num-card num-card--media num-card--lead num-card--grow" data-anim="inview">
         <div class="num-card__txt">
           <div class="num-card__head">
-            <p class="num-card__label">社内懇親会（年2回）</p>
-            <p class="num-card__lead">すし職人が<br>オフィスに来社！？</p>
+            <p class="num-card__label"><?php ni_about_text( 'culture_party_title' ); ?></p>
+            <p class="num-card__lead"><?php ni_about_br( 'culture_party_lead' ); ?></p>
           </div>
-          <p class="num-card__note">かき氷・軽食もふるまい<br>コミュニティチームが毎回企画</p>
+          <p class="num-card__note"><?php ni_about_br( 'culture_party_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb"><img src="<?php echo ni_img( 'about/num_party.jpg' ); ?>" alt="" width="416" height="556" loading="lazy" style="object-position: 50% 50%"></div>
+        <div class="num-card__thumb"><?php ni_about_img( 'culture_party_image', 'about/num_party.jpg', 416, 556, ' loading="lazy" style="object-position: 50% 50%"' ); ?></div>
       </li>
       <li class="num-card num-card--media num-card--lead num-card--grow" data-anim="inview">
         <div class="num-card__txt">
           <div class="num-card__head">
-            <p class="num-card__label">無料軽食</p>
-            <p class="num-card__lead">スナックミー<br class="u-pc">常時提供</p>
+            <p class="num-card__label"><?php ni_about_text( 'culture_snack_title' ); ?></p>
+            <p class="num-card__lead"><?php ni_about_br( 'culture_snack_lead' ); ?></p>
           </div>
-          <p class="num-card__note">人工甘味料・保存料・合成着色料不使用のヘルシー軽食</p>
+          <p class="num-card__note"><?php ni_about_br( 'culture_snack_desc' ); ?></p>
         </div>
-        <div class="num-card__thumb"><img src="<?php echo ni_img( 'about/num_snack.jpg' ); ?>" alt="" width="800" height="534" loading="lazy" style="object-position: 67% 50%"></div>
+        <div class="num-card__thumb"><?php ni_about_img( 'culture_snack_image', 'about/num_snack.jpg', 800, 534, ' loading="lazy" style="object-position: 67% 50%"' ); ?></div>
       </li>
       </ul>
     </div>

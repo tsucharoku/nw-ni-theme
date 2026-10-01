@@ -514,7 +514,8 @@
 }
 
 /* ==========================================================================
-   円グラフ（662:6986）: 扇 4 枚は Figma のベクター、ラベルは HTML。228 角。
+   円グラフ（662:6986）: 扇は手法内訳（ACF）から conic-gradient（page-about.php が style に出す）、228 角。
+   ラベルは扇の中央の角度・円の中心から 70px（page-about.php が top / left に中心の座標を出す）。
    中央の白丸は SP と同じく円の中心に置く（PC の Figma は枠が伸びたぶん 20px 下にずれている）
    登場: conic-gradient のマスクを 0 → 100% に回す（@property 非対応なら最初から全表示）
    ========================================================================== */
@@ -534,21 +535,11 @@
 .pie__sectors {
   position: absolute;
   inset: 0;
+  border-radius: 50%;
   --pie-p: 100%;
   -webkit-mask-image: conic-gradient(#000 var(--pie-p), transparent 0);
   mask-image: conic-gradient(#000 var(--pie-p), transparent 0);
 }
-
-.pie__sector {
-  position: absolute;
-  max-width: none;
-}
-
-/* 位置は Figma の inset（%）そのまま */
-.pie__sector--clt    { top: 0;      right: 0;      bottom: 9.55%;  left: 50%;    width: 50%;    height: 90.45%; }
-.pie__sector--teisei { top: 50%;    right: 20.61%; bottom: 0;      left: 15.77%; width: 63.62%; height: 50%; }
-.pie__sector--web    { top: 28.71%; right: 50%;    bottom: 13.55%; left: 0;      width: 50%;    height: 57.74%; }
-.pie__sector--hut    { top: 0;      right: 50%;    bottom: 50%;    left: 4.76%;  width: 45.24%; height: 50%; }
 
 .pie__label {
   position: absolute;
@@ -558,14 +549,8 @@
   gap: 1px;
   color: var(--c-white);
   white-space: nowrap;
-  transform: translateX(-50%);
+  transform: translate(-50%, calc(-50% - 4px));   /* 文字の見た目の中心を扇の中央に（Figma のラベル位置と ±2px） */
 }
-
-/* left はラベル枠の中心（Figma の left − 50.5 + 幅/2）、top は Figma の top − 0.3 */
-.pie__label--clt    { top: 70px;  left: 180px; }
-.pie__label--teisei { top: 159px; left: 108.5px; }
-.pie__label--web    { top: 106px; left: 45px; }
-.pie__label--hut    { top: 32px;  left: 76.5px; }
 
 .pie__name {
   font-size: 14px;
