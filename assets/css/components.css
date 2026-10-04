@@ -1829,6 +1829,14 @@ button.arrow-pill:active {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease-out;
+}
+
+/* ホバー: 写真だけ 1.05 倍に拡大（Figma にこのサムネイルのホバーは無いので、Project Story・座談会カードのホバーに合わせた） */
+@media (hover: hover) {
+  .talk-thumb:hover .talk-thumb__img img {
+    transform: scale(1.05);
+  }
 }
 
 .talk-thumb__img::after {
