@@ -1757,6 +1757,15 @@ button.arrow-pill:active {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease-out;
+}
+
+/* ホバー: 写真だけ 1.05 倍に拡大（下のサムネイルと同じ。Figma にホバーは無い）。重ねた 4 件を一緒に拡大するので、
+   拡大したままサムネイルで入れ替えても大きさが揃う。入れ替えのフェード（リンク側の opacity）とは別の要素 */
+@media (hover: hover) {
+  .talk__img:hover img {
+    transform: scale(1.05);
+  }
 }
 
 /* SP: 見出し → メイン写真 → サムネ の順（Figma SP）。col を透過させて img を間に挟む */
