@@ -924,24 +924,8 @@
   .about-sec--culture .num-row:nth-child(2) > :nth-child(2) { --w: 335.5; }
   .about-sec--culture .num-row:nth-child(2) > :nth-child(3) { --w: 492.8; }
 
-  /* カードの左右の余白と図版との間は、幅が狭いほど詰める（1440px で 24 / 32 → 12 / 16 まで）。
-     カードの幅が縮むより速く詰めるので、1440px のすぐ下では文字の折り返し位置が変わらない
-     （デザインの幅は文字がちょうど収まる幅なので、余白をそのままにすると 1439px で折り返してしまう） */
-  .num-card {
-    --pad: clamp(12px, calc(24px - (1440px - 100vw) * 0.2), 24px);
-    --pad-l: clamp(16px, calc(32px - (1440px - 100vw) * 0.2), 32px);
-    padding-inline: var(--pad);
-  }
-
   .num-card--media {
     flex-wrap: wrap;         /* 文字の幅が足りなければ図版は下に回る */
-    gap: var(--pad);
-    padding-left: var(--pad-l);
-  }
-
-  .num-card--pie,
-  .num-card--ai {
-    padding-inline: var(--pad-l);
   }
 
   .num-card__txt--w207,
@@ -954,11 +938,19 @@
     flex: 1 1 140px;
   }
 
-  /* 図版は 104 から縮む（56 まで） */
+  /* 図版は 104 から縮む（56 まで）。高さは 1440px のときの高さで止めて上下中央に置く
+     （文が折り返してカードが縦に伸びても、図版は伸ばさない。見出しのカードの図版 104 × 139 と同じ扱い）。
+     1440px のときの高さ: 上端揃えのカード（--start）は 118、それ以外は 139 */
   .num-card__thumb {
     flex: 0 1 104px;
+    align-self: center;
     width: auto;
     min-width: 56px;
+    height: 139px;
+  }
+
+  .num-card--start .num-card__thumb {
+    height: 118px;
   }
 
   /* 数字と単位・活躍例は、収まらなければ折り返す */
@@ -1018,17 +1010,53 @@
   .about-voice__group--q2 { flex-basis: 56.4%; }
 }
 
+/* ==========================================================================
+   768〜1099px: 数字カードは 2 カラムにする（上の「デザインの比率で縮める」を打ち消す）
+   会社・事業規模: 円グラフの右に業界成長率・取引社数を縦に積み、残りの 2 枚はその下に 2 カラム
+   仕事・リサーチ環境 / 働き方・カルチャー: 行をまたいで順に 2 カラム
+   ========================================================================== */
 @media (min-width: 768px) and (max-width: 1099px) {
-  /* 男女比: 横に並ばない幅では「男 57%」「女 43%」を縦に積む（罫線は出さない） */
-  .num-card__ratio {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+  .about-scale,
+  .about-sec--env .num-rows,
+  .about-sec--culture .num-rows,
+  .about-scale__side .num-row:nth-child(2) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--item-gap);
   }
 
-  .num-card__ratio .num-card__num + .num-card__num {
-    padding-left: 0;
-    border-left: 0;
+  /* 行の箱を外して、中のカード（会社・事業規模は 2 つの行）を直接グリッドに並べる */
+  .about-scale__side,
+  .about-sec--env .num-row,
+  .about-sec--culture .num-row {
+    display: contents;
+  }
+
+  .about-scale > *,
+  .num-row > *,
+  .about-scale__side .num-row:nth-child(n) {
+    width: auto;
+  }
+
+  .about-scale__side .num-row:nth-child(n) {
+    align-self: stretch;
+  }
+
+  /* 円グラフの右: 業界成長率・取引社数を縦に積み、円グラフのカードの高さを分け合う */
+  .about-scale__side .num-row:nth-child(1) {
+    flex-direction: column;
+  }
+
+  .about-scale__side .num-row:nth-child(1) > * {
+    flex: 1 1 auto;
+  }
+
+  .about-scale__side .num-row:nth-child(2) {
+    grid-column: 1 / -1;
+  }
+
+  .num-card--start {
+    align-self: stretch;     /* 2 カラムでは隣のカードと高さを揃える */
   }
 
   .about-sec__head {
