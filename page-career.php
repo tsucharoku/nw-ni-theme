@@ -155,15 +155,15 @@ get_header();
           </div>
           <div class="stat">
             <img class="stat__icon" src="<?php echo ni_img( 'common/icon_stat_clients.svg' ); ?>" alt="" width="88" height="88">
-            <div class="stat__body"><dt class="stat__label">取引社数</dt><dd class="stat__value"><span class="stat__num">800</span><span class="stat__unit">社超</span></dd></div>
+            <div class="stat__body"><dt class="stat__label">取引社数</dt><dd class="stat__value"><?php ni_about_stat( 'company_clients_number' ); ?></dd></div>
           </div>
           <div class="stat">
             <img class="stat__icon" src="<?php echo ni_img( 'common/icon_stat_growth.svg' ); ?>" alt="" width="88" height="88">
-            <div class="stat__body"><dt class="stat__label">業界成長率</dt><dd class="stat__value"><span class="stat__num">110</span><span class="stat__unit">%超</span></dd></div>
+            <div class="stat__body"><dt class="stat__label">業界成長率</dt><dd class="stat__value"><?php ni_about_stat( 'company_growth_top_number' ); ?></dd></div>
           </div>
           <div class="stat">
             <img class="stat__icon" src="<?php echo ni_img( 'common/icon_stat_satisfaction.svg' ); ?>" alt="" width="88" height="88">
-            <div class="stat__body"><dt class="stat__label">顧客満足度</dt><dd class="stat__value"><span class="stat__num">93</span><span class="stat__unit">%</span></dd></div>
+            <div class="stat__body"><dt class="stat__label">顧客満足度</dt><dd class="stat__value"><?php ni_about_stat( 'company_satisfaction_number' ); ?></dd></div>
           </div>
         </dl>
       </div>

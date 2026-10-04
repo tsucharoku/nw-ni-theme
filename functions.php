@@ -77,6 +77,32 @@ function ni_beginner_cta() {
 	return $cta;
 }
 
+/* 「2,000件」のような数値 + 単位の文字を、数字と単位の <span> に分ける（エスケープ済みの HTML を返す）。
+   最初の数字のかたまり（カンマ・小数点込み）が $num_class、その前後の文字が $unit_class。
+   例: 「7年11ヶ月」→ 7 が数字、年11ヶ月 が単位。数字が無ければ全部を単位にする。カンマは入力したとおり（付け直さない） */
+function ni_num_spans( $text, $num_class, $unit_class ) {
+	$text = trim( (string) $text );
+	if ( ! preg_match( '/^(.*?)([0-9０-９][0-9０-９,.，．]*)(.*)$/us', $text, $m ) ) {
+		$m = array( '', $text, '', '' );
+	}
+	$html = '';
+	foreach ( array( 1 => $unit_class, 2 => $num_class, 3 => $unit_class ) as $i => $class ) {
+		if ( '' !== $m[ $i ] ) {
+			$html .= sprintf( '<span class="%s">%s</span>', esc_attr( $class ), esc_html( $m[ $i ] ) );
+		}
+	}
+	return $html;
+}
+
+/* 新卒 TOP・中途 TOP の「3分でわかる、日本インフォメーション」の数字（青い数字 3 つ = 取引社数 / 業界成長率 / 顧客満足度）。
+   固定ページ about の ACF「3分でわかるNI」の欄から出す（仕様書「下層ページの内容を出力」）。$name はフィールドキーの
+   field_ni_about_ より後ろ。入力した内容だけ出す（未入力なら何も出ない）。ラベルと創業は TOP 側に固定で書いてある */
+function ni_about_stat( $name ) {
+	$page = get_page_by_path( 'about' );
+	$text = $page && function_exists( 'get_field' ) ? get_field( 'field_ni_about_' . $name, $page->ID ) : '';
+	echo ni_num_spans( $text, 'stat__num', 'stat__unit' );
+}
+
 /* ACF のフィールドグループの場所「固定ページ ==」に、ページ ID ではなくパス（beginner など）を書けるようにする。
    ID は Local とテスト・本番で変わるため（acf-json の location の value にパスを書く） */
 function ni_acf_match_page_path( $result, $rule, $screen ) {
@@ -88,12 +114,14 @@ function ni_acf_match_page_path( $result, $rule, $screen ) {
 }
 add_filter( 'acf/location/match_rule/type=page', 'ni_acf_match_page_path', 10, 3 );
 
-/* ACF の入力画面: アコーディオンの見出しを中の欄のラベルと見分けやすくする（太字・15px・薄いグレーの背景、ホバーで少し濃く） */
+/* ACF の入力画面: アコーディオンの見出しを中の欄のラベルと見分けやすくする（太字・15px・薄いグレーの背景、ホバーで少し濃く）。
+   一番上の行に横並びにした欄は、2 つ目だけ上に線が付く（ACF が上の線を消すのは先頭の欄だけ）ので、2 つ目の上の線も消す */
 function ni_acf_accordion_style() {
 	echo '<style>
 .acf-fields > .acf-field.acf-accordion > .acf-accordion-title { background: #f0f0f1; transition: background-color .15s; }
 .acf-fields > .acf-field.acf-accordion > .acf-accordion-title:hover { background: #dcdcde; }
 .acf-fields > .acf-field.acf-accordion > .acf-accordion-title label { font-size: 15px; font-weight: 700; }
+.acf-fields > .acf-field[data-width]:first-child + .acf-field[data-width] { border-top-width: 0; }
 </style>';
 }
 add_action( 'acf/input/admin_head', 'ni_acf_accordion_style' );
