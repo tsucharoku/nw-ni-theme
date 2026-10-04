@@ -59,6 +59,7 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
 - **`<body>` のクラス**は静的 HTML と同じ `page-top` / `page-beginner` / `page-career` / `page-lower page-○○`（`inc/page.php`）。WP 標準のクラスも一緒に付く。
 - **`<title>` と meta description** は、各テンプレートが `get_header()` の前に `ni_head()` で渡している（静的 HTML の値のまま）。
 - **リンクと画像**: サイト内リンクは `ni_url( '/about/' )`、画像は `ni_img( 'common/logo_black.svg' )`（`assets/img/` 以下）。
+- **新卒 TOP・中途 TOP の「社員インタビュー」は、固定ページで選んだ記事を出す**（2026-10-05。仕様書「固定ページから既存の社員インタビュー記事から 3 記事をピックアップ」）: 固定ページ `beginner` / `career` それぞれの ACF「社員インタビュー（ピックアップ）」（`acf-json/group_ni_top_voice.json`、関連 = `voice_pickup`、最大 3 件、選んだ順に左から）。カードは `template-parts/voice-card.php`（一言 = タイトル、写真 = `interview_thumbnail`、入社区分・職種・タグ = タクソノミー。見た目はデザインのまま = 氏名は出さない）、記事の ID は `functions.php` の `ni_voice_pickup()`。未選択ならスライダーと矢印を出さない。テストサーバーでも両ページで記事を選ぶ必要がある。
 - **3分でわかるNI の数字のカードは管理画面で編集**（`page-about.php`）: 固定ページ `about` の ACF「3分でわかるNI」（`acf-json/group_ni_about.json`、タブ 3 つ = 会社・事業規模 / 仕事・リサーチ環境 / 働き方・カルチャー）。設計書は「NI採用サイト_ACFフィールド設計書_3分でわかるNI.xlsx」。カードの数・並び・ページ頭・セクション見出し・社員に聞きましたは固定。
   - 入力した内容だけを出す（初期値・ダミーは出さない。2026-10-02 ユーザー指示）。未入力の画像は出さない。テストサーバー・本番では全項目の入力が要る。値はフィールドキー（`field_ni_about_○○`）で引く（名前で引くと、一度も保存していないページでは ACF がフィールドを特定できない）。
   - 入力欄の見た目は、ラベルが左・入力欄が右のテーブル形式（フィールドグループの設定 `label_placement: left`、説明は入力欄の下 = `instruction_placement: field`。2026-10-04 ユーザー指示）。この形式では欄の横並び（幅の指定）は効かない。「TOP に出す数字」は別グループなので対象外。

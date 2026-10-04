@@ -1,0 +1,64 @@
+{
+    "key": "group_ni_top_voice",
+    "title": "社員インタビュー（ピックアップ）",
+    "fields": [
+        {
+            "key": "field_ni_top_voice_pickup",
+            "label": "ピックアップする記事",
+            "name": "voice_pickup",
+            "aria-label": "",
+            "type": "relationship",
+            "instructions": "このページの「社員インタビュー」に出す記事を 3 件まで選びます（上から順に左から並びます）。選んだ記事だけ出ます。未選択ならカードは出ません。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "interview"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "filters": [
+                "search",
+                "taxonomy"
+            ],
+            "return_format": "id",
+            "min": "",
+            "max": 3,
+            "elements": "",
+            "bidirectional": 0,
+            "bidirectional_target": []
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "beginner"
+            }
+        ],
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "career"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1791127451
+}

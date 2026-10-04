@@ -293,48 +293,20 @@ get_header();
         <p class="sec-head__read">未経験から入社した先輩たちのリアルな声をお届けします。</p>
       </div>
     </div>
+    <?php
+    /* カードは固定ページの ACF「社員インタビュー（ピックアップ）」で選んだ記事（最大 3 件）。2 枚目は下にずらす（--offset）。
+       未選択ならスライダーと矢印は出さない（見出しと「全ての記事をみる」だけ） */
+    $ni_voice_ids = ni_voice_pickup();
+    if ( $ni_voice_ids ) :
+    ?>
     <div class="splide voice__slider" aria-label="Member's Voice">
     <div class="splide__track">
     <ul class="splide__list voice__list">
-      <li class="splide__slide voice-card">
-        <a class="voice-card__img" href="<?php echo ni_url( '/interview/detail/' ); ?>"><img src="<?php echo ni_img( 'common/voice_card_01.jpg' ); ?>" alt="" width="384" height="472"></a>
-        <div class="voice-card__body">
-          <div class="voice-card__row">
-            <p class="voice-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-            <a class="arrow-pill arrow-pill--l voice-card__arrow" href="<?php echo ni_url( '/interview/detail/' ); ?>" aria-label="記事を読む"><img src="<?php echo ni_img( 'common/arrow_pill_white_l.svg' ); ?>" alt="" width="20" height="24"></a>
-          </div>
-          <div class="voice-card__meta">
-            <ul class="voice-card__chips"><li>新卒入社</li><li>リサーチャー</li></ul>
-            <ul class="voice-card__tags"><li># フルリモート</li><li># 時短勤務</li></ul>
-          </div>
-        </div>
-      </li>
-      <li class="splide__slide voice-card voice-card--offset">
-        <a class="voice-card__img" href="<?php echo ni_url( '/interview/detail/' ); ?>"><img src="<?php echo ni_img( 'common/voice_card_02.jpg' ); ?>" alt="" width="384" height="472"></a>
-        <div class="voice-card__body">
-          <div class="voice-card__row">
-            <p class="voice-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-            <a class="arrow-pill arrow-pill--l voice-card__arrow" href="<?php echo ni_url( '/interview/detail/' ); ?>" aria-label="記事を読む"><img src="<?php echo ni_img( 'common/arrow_pill_white_l.svg' ); ?>" alt="" width="20" height="24"></a>
-          </div>
-          <div class="voice-card__meta">
-            <ul class="voice-card__chips"><li>新卒入社</li><li>リサーチャー</li></ul>
-            <ul class="voice-card__tags"><li># フルリモート</li><li># 時短勤務</li></ul>
-          </div>
-        </div>
-      </li>
-      <li class="splide__slide voice-card">
-        <a class="voice-card__img" href="<?php echo ni_url( '/interview/detail/' ); ?>"><img src="<?php echo ni_img( 'common/voice_card_03.jpg' ); ?>" alt="" width="384" height="472"></a>
-        <div class="voice-card__body">
-          <div class="voice-card__row">
-            <p class="voice-card__quote">リサーチの力で未来を動かす、それが私たちの仕事です。テキストテキストテキストテキスト</p>
-            <a class="arrow-pill arrow-pill--l voice-card__arrow" href="<?php echo ni_url( '/interview/detail/' ); ?>" aria-label="記事を読む"><img src="<?php echo ni_img( 'common/arrow_pill_white_l.svg' ); ?>" alt="" width="20" height="24"></a>
-          </div>
-          <div class="voice-card__meta">
-            <ul class="voice-card__chips"><li>新卒入社</li><li>リサーチャー</li></ul>
-            <ul class="voice-card__tags"><li># フルリモート</li><li># 時短勤務</li></ul>
-          </div>
-        </div>
-      </li>
+      <?php
+      foreach ( $ni_voice_ids as $ni_i => $ni_voice_id ) {
+      	get_template_part( 'template-parts/voice-card', null, array( 'post' => $ni_voice_id, 'offset' => 1 === $ni_i ) );
+      }
+      ?>
     </ul>
     </div>
     </div>
@@ -342,6 +314,7 @@ get_header();
       <button type="button" class="arrow-pill arrow-pill--prev" aria-label="前へ"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></button>
       <button type="button" class="arrow-pill" aria-label="次へ"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></button>
     </div>
+    <?php endif; ?>
     <a class="btn btn--w voice__btn" href="<?php echo ni_url( '/interview/' ); ?>">全ての記事をみる<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a>
   </section>
 
