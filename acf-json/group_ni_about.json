@@ -34,7 +34,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -160,7 +160,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -264,7 +264,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -342,7 +342,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -420,7 +420,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -560,7 +560,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -638,7 +638,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -716,7 +716,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -820,7 +820,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -898,7 +898,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -1002,7 +1002,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -1156,7 +1156,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -1234,7 +1234,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -1312,7 +1312,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -1390,7 +1390,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -1468,7 +1468,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -1586,7 +1586,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -1688,7 +1688,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -1766,7 +1766,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -1870,7 +1870,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -1974,7 +1974,7 @@
                 "class": "",
                 "id": ""
             },
-            "open": 1,
+            "open": 0,
             "multi_expand": 1,
             "endpoint": 0
         },
@@ -2101,5 +2101,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1791114867
+    "modified": 1791115310
 }

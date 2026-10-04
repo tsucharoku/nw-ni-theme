@@ -88,6 +88,16 @@ function ni_acf_match_page_path( $result, $rule, $screen ) {
 }
 add_filter( 'acf/location/match_rule/type=page', 'ni_acf_match_page_path', 10, 3 );
 
+/* ACF の入力画面: アコーディオンの見出しを中の欄のラベルと見分けやすくする（太字・15px・薄いグレーの背景、ホバーで少し濃く） */
+function ni_acf_accordion_style() {
+	echo '<style>
+.acf-fields > .acf-field.acf-accordion > .acf-accordion-title { background: #f0f0f1; transition: background-color .15s; }
+.acf-fields > .acf-field.acf-accordion > .acf-accordion-title:hover { background: #dcdcde; }
+.acf-fields > .acf-field.acf-accordion > .acf-accordion-title label { font-size: 15px; font-weight: 700; }
+</style>';
+}
+add_action( 'acf/input/admin_head', 'ni_acf_accordion_style' );
+
 /* SVG のアップロードを管理者（manage_options）だけ許可する（3分でわかるNI のアイコン・イラストなど。設計書「SVG 可」）。
    SVG は中にスクリプトを書けるので、管理者以外には許可しない */
 function ni_upload_mimes_svg( $mimes ) {
