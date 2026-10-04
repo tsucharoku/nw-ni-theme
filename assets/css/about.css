@@ -895,17 +895,18 @@
     width: calc((100% - (var(--n) - 1) * var(--item-gap)) * var(--w, 1) / var(--sum));
   }
 
-  /* 会社・事業規模: 円グラフ 424 | 右の列 800。右の列の行は左寄せのまま（1 行目 643、2 行目 733） */
-  .about-scale { --n: 2; --sum: 1224; }
-  .about-scale > .num-card--pie { --w: 424; }
-  .about-scale__side { --w: 800; }
+  /* 会社・事業規模: 円グラフ 424 | 右の列（残り幅。1440px で 800）。右の列の行は左寄せで、1 行目 643・2 行目 733。
+     デザインでは行の右に空きがある（157 / 67）ので、まずその空きを使い、行が右の列に収まらなくなってから縮める。
+     右の列が 733 を切ったら、円グラフと右の列を 424 : 733 の比で一緒に縮める */
+  .about-scale > .num-card--pie { flex: 0 1 424px; width: auto; }
+  .about-scale > .about-scale__side { flex: 1 1 734px; width: auto; }
   .about-scale__side .num-row { align-self: flex-start; --n: 2; }
-  .about-scale__side .num-row:nth-child(1) { width: calc(643 / 800 * 100%); --sum: 619; }
-  .about-scale__side .num-row:nth-child(2) { width: calc(733 / 800 * 100%); --sum: 709; }
+  .about-scale__side .num-row:nth-child(1) { width: min(643px, 100%); --sum: 619; }
+  .about-scale__side .num-row:nth-child(2) { width: min(734px, 100%); --sum: 710; }   /* 創業は文字がちょうどの幅なので 1px 余裕を持たせる */
   .about-scale__side .num-row:nth-child(1) > :nth-child(1) { --w: 391; }
   .about-scale__side .num-row:nth-child(1) > :nth-child(2) { --w: 228; }
   .about-scale__side .num-row:nth-child(2) > :nth-child(1) { --w: 281; }
-  .about-scale__side .num-row:nth-child(2) > :nth-child(2) { --w: 428; }
+  .about-scale__side .num-row:nth-child(2) > :nth-child(2) { --w: 429; }
 
   /* 仕事・リサーチ環境 */
   .about-sec--env .num-row { --n: 3; --sum: 1200; }
@@ -918,11 +919,19 @@
 
   /* 働き方・カルチャー（1 行目は 4 等分、3 行目は 3 等分） */
   .about-sec--culture .num-row:nth-child(1) { --n: 4; --sum: 4; }
-  .about-sec--culture .num-row:nth-child(2) { --n: 3; --sum: 1200; }
   .about-sec--culture .num-row:nth-child(3) { --n: 3; --sum: 3; }
-  .about-sec--culture .num-row:nth-child(2) > :nth-child(1) { --w: 371.7; }
-  .about-sec--culture .num-row:nth-child(2) > :nth-child(2) { --w: 335.5; }
-  .about-sec--culture .num-row:nth-child(2) > :nth-child(3) { --w: 492.8; }
+
+  /* 2 行目（活躍例 / 男女比 / 制度の柔軟性）は比率で縮めない。デザインと同じく活躍例と男女比は内容なりの幅、
+     制度の柔軟性が残りの幅。制度の柔軟性には文字の左右に空きがあるので、まずその空きを使い、
+     空きが無くなってから 3 枚を内容の幅の比で一緒に縮める（男女比だけ先に窮屈にならないように） */
+  .about-sec--culture .num-row:nth-child(2) > * {
+    flex: 0 1 auto;
+    width: auto;
+  }
+
+  .about-sec--culture .num-row:nth-child(2) > :nth-child(3) {
+    flex-grow: 1;
+  }
 
   .num-card--media {
     flex-wrap: wrap;         /* 文字の幅が足りなければ図版は下に回る */
