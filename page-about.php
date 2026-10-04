@@ -89,12 +89,13 @@ $ni_pie_items = array_map(
 	},
 	$ni_pie
 );
-/* 下の内訳の文: 2 つずつ「／」でつなぐ（例: CLT 40% ／ 定性 22% WEB 20% ／ HUT 18%） */
+/* 下の内訳の文: 2 つずつ「／」でつなぐ（例: CLT 40% ／ 定性 22% WEB 20% ／ HUT 18%）。
+   幅に収まらないときは組と組の間で折り返すよう、組ごとに <span> で包む（エスケープ済みの HTML） */
 $ni_pie_note = implode(
 	' ',
 	array_map(
 		function ( $pair ) {
-			return implode( ' ／ ', $pair );
+			return '<span>' . esc_html( implode( ' ／ ', $pair ) ) . '</span>';
 		},
 		array_chunk( $ni_pie_items, 2 )
 	)
@@ -149,7 +150,7 @@ get_header();
             <?php ni_about_num( 'company_survey' ); ?>
           </div>
           <?php if ( $ni_pie ) : ?>
-          <p class="num-card__note"><?php echo esc_html( $ni_pie_note ); ?></p>
+          <p class="num-card__note"><?php echo $ni_pie_note; ?></p>
           <?php endif; ?>
         </div>
         <?php if ( $ni_pie ) : ?>

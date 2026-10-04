@@ -266,8 +266,14 @@
   align-items: center;
 }
 
+/* 内訳の文は手法内訳（ACF）から作るので長さが変わる。375px のデザインでは 1 行なので、左右の余白に 16 ずつ
+   はみ出してよいことにして（32 → 16）、それでも収まらなければ組（CLT 40% ／ 定性 22%）の間で折り返す */
 .num-card--pie .num-card__note {
-  white-space: nowrap;
+  margin-inline: -16px;
+}
+
+.num-card--pie .num-card__note span {
+  display: inline-block;
 }
 
 /* --ai（546:10457）/ --career（548:10537）/ --gender（548:10504） */
@@ -471,6 +477,10 @@
     padding: 24px 32px 32px;
   }
 
+  .num-card--pie .num-card__note {
+    margin-inline: 0;
+  }
+
   .num-card--ai {
     padding: 24px 32px;
   }
@@ -651,6 +661,10 @@
   .num-card--pie {
     gap: calc(16 * var(--u));
     padding: calc(24 * var(--u)) calc(32 * var(--u)) calc(32 * var(--u));
+  }
+
+  .num-card--pie .num-card__note {
+    margin-inline: calc(-16 * var(--u));
   }
 
   .num-card--ai {
@@ -859,8 +873,11 @@
 }
 
 /* ==========================================================================
-   中間幅（768〜1439px）の流動化
-   カードは内容なりの幅なので、1248 に収まらない幅では折り返して残り幅を分け合う
+   中間幅（768〜1439px）
+   数字カードは 1440px のデザインの並びのまま（折り返さない・段を分けない）、幅だけデザインの比率で縮める。
+   各カードの --w = 1440px のデザインでの幅。行の中で --w の比で幅を分け合う（flex-grow）。
+   文字の大きさは変えないので、幅が狭いとカードの中の文は折り返して縦に伸びる。
+   円グラフと図版だけはカードに収まるように縮める
    ========================================================================== */
 @media (min-width: 768px) and (max-width: 1439px) {
   .about-sec {
@@ -871,13 +888,60 @@
     font-size: clamp(24px, 2.22vw, 32px);
   }
 
-  .num-row {
-    flex-wrap: wrap;
+  /* 幅 = （行の幅 − カードの間）× --w ÷ --sum（--sum = その行の --w の合計、--n = その行のカードの数） */
+  .about-scale > *,
+  .num-row > * {
+    flex: none;
+    width: calc((100% - (var(--n) - 1) * var(--item-gap)) * var(--w, 1) / var(--sum));
   }
 
-  .num-card,
-  .num-card--grow {
-    flex: 1 1 auto;
+  /* 会社・事業規模: 円グラフ 424 | 右の列 800。右の列の行は左寄せのまま（1 行目 643、2 行目 733） */
+  .about-scale { --n: 2; --sum: 1224; }
+  .about-scale > .num-card--pie { --w: 424; }
+  .about-scale__side { --w: 800; }
+  .about-scale__side .num-row { align-self: flex-start; --n: 2; }
+  .about-scale__side .num-row:nth-child(1) { width: calc(643 / 800 * 100%); --sum: 619; }
+  .about-scale__side .num-row:nth-child(2) { width: calc(733 / 800 * 100%); --sum: 709; }
+  .about-scale__side .num-row:nth-child(1) > :nth-child(1) { --w: 391; }
+  .about-scale__side .num-row:nth-child(1) > :nth-child(2) { --w: 228; }
+  .about-scale__side .num-row:nth-child(2) > :nth-child(1) { --w: 281; }
+  .about-scale__side .num-row:nth-child(2) > :nth-child(2) { --w: 428; }
+
+  /* 仕事・リサーチ環境 */
+  .about-sec--env .num-row { --n: 3; --sum: 1200; }
+  .about-sec--env .num-row:nth-child(1) > :nth-child(1) { --w: 403; }
+  .about-sec--env .num-row:nth-child(1) > :nth-child(2) { --w: 378; }
+  .about-sec--env .num-row:nth-child(1) > :nth-child(3) { --w: 419; }
+  .about-sec--env .num-row:nth-child(2) > :nth-child(1) { --w: 379; }
+  .about-sec--env .num-row:nth-child(2) > :nth-child(2) { --w: 408; }
+  .about-sec--env .num-row:nth-child(2) > :nth-child(3) { --w: 413; }
+
+  /* 働き方・カルチャー（1 行目は 4 等分、3 行目は 3 等分） */
+  .about-sec--culture .num-row:nth-child(1) { --n: 4; --sum: 4; }
+  .about-sec--culture .num-row:nth-child(2) { --n: 3; --sum: 1200; }
+  .about-sec--culture .num-row:nth-child(3) { --n: 3; --sum: 3; }
+  .about-sec--culture .num-row:nth-child(2) > :nth-child(1) { --w: 371.7; }
+  .about-sec--culture .num-row:nth-child(2) > :nth-child(2) { --w: 335.5; }
+  .about-sec--culture .num-row:nth-child(2) > :nth-child(3) { --w: 492.8; }
+
+  /* カードの左右の余白と図版との間は、幅が狭いほど詰める（1440px で 24 / 32 → 12 / 16 まで）。
+     カードの幅が縮むより速く詰めるので、1440px のすぐ下では文字の折り返し位置が変わらない
+     （デザインの幅は文字がちょうど収まる幅なので、余白をそのままにすると 1439px で折り返してしまう） */
+  .num-card {
+    --pad: clamp(12px, calc(24px - (1440px - 100vw) * 0.2), 24px);
+    --pad-l: clamp(16px, calc(32px - (1440px - 100vw) * 0.2), 32px);
+    padding-inline: var(--pad);
+  }
+
+  .num-card--media {
+    flex-wrap: wrap;         /* 文字の幅が足りなければ図版は下に回る */
+    gap: var(--pad);
+    padding-left: var(--pad-l);
+  }
+
+  .num-card--pie,
+  .num-card--ai {
+    padding-inline: var(--pad-l);
   }
 
   .num-card__txt--w207,
@@ -887,11 +951,67 @@
   }
 
   .num-card--media .num-card__txt {
-    flex: 1 1 200px;
+    flex: 1 1 140px;
   }
 
-  .about-scale__side .num-row {
-    align-self: stretch;
+  /* 図版は 104 から縮む（56 まで） */
+  .num-card__thumb {
+    flex: 0 1 104px;
+    width: auto;
+    min-width: 56px;
+  }
+
+  /* 数字と単位・活躍例は、収まらなければ折り返す */
+  .num-card__num {
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+
+  .num-card--center .num-card__num,
+  .num-card__ratio .num-card__num {
+    justify-content: center;
+  }
+
+  .num-card__career li {
+    flex-wrap: wrap;
+    justify-content: center;
+    white-space: normal;
+  }
+
+  .num-card--gender .num-card__label,
+  .num-card__ratio {
+    width: min(276px, 100%);
+  }
+
+  /* 男女比: 罫線の左の余白は幅が狭いほど詰める（1440px で 35） */
+  .num-card__ratio .num-card__num {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+
+  .num-card__ratio .num-card__num + .num-card__num {
+    padding-left: clamp(8px, calc(35px - (1440px - 100vw) * 0.1), 35px);
+  }
+
+  /* 円グラフ: カードの幅に収める（228 が上限）。ラベルと中央の白丸も円の大きさに合わせる */
+  .pie {
+    container-type: inline-size;
+    width: min(228px, 100%);
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .pie__name {
+    font-size: calc(14 / 228 * 100cqw);
+  }
+
+  .pie__val {
+    font-size: calc(20 / 228 * 100cqw);
+  }
+
+  .pie__hole {
+    width: calc(71 / 228 * 100%);
+    height: calc(71 / 228 * 100%);
   }
 
   .about-voice__group--q1 { flex-basis: 44.5%; }
@@ -899,12 +1019,16 @@
 }
 
 @media (min-width: 768px) and (max-width: 1099px) {
-  .about-scale {
+  /* 男女比: 横に並ばない幅では「男 57%」「女 43%」を縦に積む（罫線は出さない） */
+  .num-card__ratio {
     flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
 
-  .num-card--pie {
-    flex: none;
+  .num-card__ratio .num-card__num + .num-card__num {
+    padding-left: 0;
+    border-left: 0;
   }
 
   .about-sec__head {
