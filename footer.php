@@ -71,17 +71,29 @@
           </ul>
         </div>
       </div>
+<?php
+/* 募集中の職種一覧 = 募集要項のカテゴリ（job-category）を WP の内容で出す。リンク先はカテゴリ一覧。
+   投稿が 0 件のカテゴリも出す（募集要項一覧とは違う。ユーザー指示）。並び順は管理画面の並び替え（Intuitive Custom Post Order）。
+   カテゴリが 1 つも無ければこのグループごと出さない */
+$ni_footer_job_terms = get_terms(
+	array(
+		'taxonomy'   => 'job-category',
+		'hide_empty' => false,
+	)
+);
+if ( ! is_wp_error( $ni_footer_job_terms ) && $ni_footer_job_terms ) :
+?>
       <div class="footer__group">
         <h2 class="footer__group-title"><button type="button" class="footer__group-toggle js-footer-toggle" aria-controls="footer-panel-4" aria-expanded="false">募集中の職種一覧</button></h2>
         <div class="footer__panel" id="footer-panel-4">
           <ul class="footer__list">
-            <li><a href="<?php echo ni_job_category_url( 'new-graduate' ); ?>">新卒採用</a></li>
-            <li><a href="<?php echo ni_job_category_url( 'mid-beginner' ); ?>">中途採用(未経験)</a></li>
-            <li><a href="<?php echo ni_job_category_url( 'mid-career' ); ?>">中途採用(経験者)</a></li>
-            <li><a href="<?php echo ni_job_category_url( 'part-time' ); ?>">アルバイト</a></li>
+<?php foreach ( $ni_footer_job_terms as $ni_term ) : ?>
+            <li><a href="<?php echo esc_url( get_term_link( $ni_term ) ); ?>"><?php echo esc_html( $ni_term->name ); ?></a></li>
+<?php endforeach; ?>
           </ul>
         </div>
       </div>
+<?php endif; ?>
     </nav>
   </div>
   <div class="footer__bottom">
