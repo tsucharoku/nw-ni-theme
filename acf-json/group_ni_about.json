@@ -21,8 +21,26 @@
             "selected": 0
         },
         {
+            "key": "field_ni_about_acc_company_survey",
+            "label": "年間調査件数",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_company_survey_label",
-            "label": "年間調査件数 ラベル",
+            "label": "ラベル",
             "name": "company_survey_label",
             "aria-label": "",
             "type": "text",
@@ -42,7 +60,7 @@
         },
         {
             "key": "field_ni_about_company_survey_number",
-            "label": "年間調査件数 数値・単位",
+            "label": "数値・単位",
             "name": "company_survey_number",
             "aria-label": "",
             "type": "text",
@@ -62,7 +80,7 @@
         },
         {
             "key": "field_ni_about_company_survey_breakdown",
-            "label": "年間調査件数 手法内訳",
+            "label": "手法内訳",
             "name": "company_survey_breakdown",
             "aria-label": "",
             "type": "repeater",
@@ -129,8 +147,26 @@
             ]
         },
         {
+            "key": "field_ni_about_acc_company_growth",
+            "label": "業界成長率",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_company_growth_label",
-            "label": "業界成長率 ラベル",
+            "label": "ラベル",
             "name": "company_growth_label",
             "aria-label": "",
             "type": "text",
@@ -150,7 +186,7 @@
         },
         {
             "key": "field_ni_about_company_growth_title",
-            "label": "業界成長率 タイトル",
+            "label": "タイトル",
             "name": "company_growth_title",
             "aria-label": "",
             "type": "textarea",
@@ -170,7 +206,7 @@
         },
         {
             "key": "field_ni_about_company_growth_desc",
-            "label": "業界成長率 説明文",
+            "label": "説明文",
             "name": "company_growth_desc",
             "aria-label": "",
             "type": "textarea",
@@ -190,7 +226,7 @@
         },
         {
             "key": "field_ni_about_company_growth_graph",
-            "label": "業界成長率 アイコン",
+            "label": "アイコン",
             "name": "company_growth_graph",
             "aria-label": "",
             "type": "image",
@@ -215,8 +251,26 @@
             "preview_size": "medium"
         },
         {
+            "key": "field_ni_about_acc_company_clients",
+            "label": "取引社数",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_company_clients_label",
-            "label": "取引社数 ラベル",
+            "label": "ラベル",
             "name": "company_clients_label",
             "aria-label": "",
             "type": "text",
@@ -236,7 +290,7 @@
         },
         {
             "key": "field_ni_about_company_clients_number",
-            "label": "取引社数 数値・単位",
+            "label": "数値・単位",
             "name": "company_clients_number",
             "aria-label": "",
             "type": "text",
@@ -256,7 +310,7 @@
         },
         {
             "key": "field_ni_about_company_clients_desc",
-            "label": "取引社数 説明文",
+            "label": "説明文",
             "name": "company_clients_desc",
             "aria-label": "",
             "type": "textarea",
@@ -275,8 +329,26 @@
             "new_lines": ""
         },
         {
+            "key": "field_ni_about_acc_company_direct",
+            "label": "大手メーカー直接取引比率",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_company_direct_label",
-            "label": "大手メーカー直接取引比率 ラベル",
+            "label": "ラベル",
             "name": "company_direct_label",
             "aria-label": "",
             "type": "text",
@@ -296,7 +368,7 @@
         },
         {
             "key": "field_ni_about_company_direct_number",
-            "label": "大手メーカー直接取引比率 数値・単位",
+            "label": "数値・単位",
             "name": "company_direct_number",
             "aria-label": "",
             "type": "text",
@@ -316,7 +388,7 @@
         },
         {
             "key": "field_ni_about_company_direct_desc",
-            "label": "大手メーカー直接取引比率 説明文",
+            "label": "説明文",
             "name": "company_direct_desc",
             "aria-label": "",
             "type": "textarea",
@@ -335,8 +407,26 @@
             "new_lines": ""
         },
         {
+            "key": "field_ni_about_acc_company_founded",
+            "label": "創業",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_company_founded_label",
-            "label": "創業 ラベル",
+            "label": "ラベル",
             "name": "company_founded_label",
             "aria-label": "",
             "type": "text",
@@ -356,7 +446,7 @@
         },
         {
             "key": "field_ni_about_company_founded_number",
-            "label": "創業 数値・単位",
+            "label": "数値・単位",
             "name": "company_founded_number",
             "aria-label": "",
             "type": "text",
@@ -376,7 +466,7 @@
         },
         {
             "key": "field_ni_about_company_founded_desc",
-            "label": "創業 説明文",
+            "label": "説明文",
             "name": "company_founded_desc",
             "aria-label": "",
             "type": "textarea",
@@ -396,7 +486,7 @@
         },
         {
             "key": "field_ni_about_company_founded_image",
-            "label": "創業 イラスト",
+            "label": "イラスト",
             "name": "company_founded_image",
             "aria-label": "",
             "type": "image",
@@ -421,6 +511,24 @@
             "preview_size": "medium"
         },
         {
+            "key": "field_ni_about_acc_end_1",
+            "label": "",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 1
+        },
+        {
             "key": "field_ni_about_tab_22",
             "label": "仕事・リサーチ環境",
             "name": "",
@@ -439,8 +547,26 @@
             "selected": 0
         },
         {
+            "key": "field_ni_about_acc_research_panel",
+            "label": "パネルリーチ規模",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_research_panel_label",
-            "label": "パネルリーチ規模 ラベル",
+            "label": "ラベル",
             "name": "research_panel_label",
             "aria-label": "",
             "type": "text",
@@ -460,7 +586,7 @@
         },
         {
             "key": "field_ni_about_research_panel_number",
-            "label": "パネルリーチ規模 数値・単位",
+            "label": "数値・単位",
             "name": "research_panel_number",
             "aria-label": "",
             "type": "text",
@@ -480,7 +606,7 @@
         },
         {
             "key": "field_ni_about_research_panel_desc",
-            "label": "パネルリーチ規模 説明文",
+            "label": "説明文",
             "name": "research_panel_desc",
             "aria-label": "",
             "type": "textarea",
@@ -499,8 +625,26 @@
             "new_lines": ""
         },
         {
+            "key": "field_ni_about_acc_research_methods",
+            "label": "入社1年目の調査手法数",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_research_methods_label",
-            "label": "入社1年目の調査手法数 ラベル",
+            "label": "ラベル",
             "name": "research_methods_label",
             "aria-label": "",
             "type": "text",
@@ -520,7 +664,7 @@
         },
         {
             "key": "field_ni_about_research_methods_number",
-            "label": "入社1年目の調査手法数 数値・単位",
+            "label": "数値・単位",
             "name": "research_methods_number",
             "aria-label": "",
             "type": "text",
@@ -540,7 +684,7 @@
         },
         {
             "key": "field_ni_about_research_methods_desc",
-            "label": "入社1年目の調査手法数 説明文",
+            "label": "説明文",
             "name": "research_methods_desc",
             "aria-label": "",
             "type": "textarea",
@@ -559,8 +703,26 @@
             "new_lines": ""
         },
         {
+            "key": "field_ni_about_acc_research_venues",
+            "label": "自社調査会場数",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_research_venues_label",
-            "label": "自社調査会場数 ラベル",
+            "label": "ラベル",
             "name": "research_venues_label",
             "aria-label": "",
             "type": "text",
@@ -580,7 +742,7 @@
         },
         {
             "key": "field_ni_about_research_venues_number",
-            "label": "自社調査会場数 数値・単位",
+            "label": "数値・単位",
             "name": "research_venues_number",
             "aria-label": "",
             "type": "text",
@@ -600,7 +762,7 @@
         },
         {
             "key": "field_ni_about_research_venues_desc",
-            "label": "自社調査会場数 説明文",
+            "label": "説明文",
             "name": "research_venues_desc",
             "aria-label": "",
             "type": "textarea",
@@ -620,7 +782,7 @@
         },
         {
             "key": "field_ni_about_research_venues_image",
-            "label": "自社調査会場数 写真",
+            "label": "写真",
             "name": "research_venues_image",
             "aria-label": "",
             "type": "image",
@@ -645,8 +807,26 @@
             "preview_size": "medium"
         },
         {
+            "key": "field_ni_about_acc_research_staff",
+            "label": "専属調査員数",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_research_staff_label",
-            "label": "専属調査員数 ラベル",
+            "label": "ラベル",
             "name": "research_staff_label",
             "aria-label": "",
             "type": "text",
@@ -666,7 +846,7 @@
         },
         {
             "key": "field_ni_about_research_staff_number",
-            "label": "専属調査員数 数値・単位",
+            "label": "数値・単位",
             "name": "research_staff_number",
             "aria-label": "",
             "type": "text",
@@ -686,7 +866,7 @@
         },
         {
             "key": "field_ni_about_research_staff_desc",
-            "label": "専属調査員数 説明文",
+            "label": "説明文",
             "name": "research_staff_desc",
             "aria-label": "",
             "type": "textarea",
@@ -705,8 +885,26 @@
             "new_lines": ""
         },
         {
+            "key": "field_ni_about_acc_research_shopper",
+            "label": "NI Shopper Lab.",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_research_shopper_label",
-            "label": "NI Shopper Lab. ラベル",
+            "label": "ラベル",
             "name": "research_shopper_label",
             "aria-label": "",
             "type": "text",
@@ -726,7 +924,7 @@
         },
         {
             "key": "field_ni_about_research_shopper_title",
-            "label": "NI Shopper Lab. タイトル",
+            "label": "タイトル",
             "name": "research_shopper_title",
             "aria-label": "",
             "type": "textarea",
@@ -746,7 +944,7 @@
         },
         {
             "key": "field_ni_about_research_shopper_desc",
-            "label": "NI Shopper Lab. 説明文",
+            "label": "説明文",
             "name": "research_shopper_desc",
             "aria-label": "",
             "type": "textarea",
@@ -766,7 +964,7 @@
         },
         {
             "key": "field_ni_about_research_shopper_image",
-            "label": "NI Shopper Lab. 写真",
+            "label": "写真",
             "name": "research_shopper_image",
             "aria-label": "",
             "type": "image",
@@ -791,8 +989,26 @@
             "preview_size": "medium"
         },
         {
+            "key": "field_ni_about_acc_research_ai",
+            "label": "AI ツール",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_research_ai_label",
-            "label": "AI ツール 見出し",
+            "label": "見出し",
             "name": "research_ai_label",
             "aria-label": "",
             "type": "text",
@@ -891,6 +1107,24 @@
             "new_lines": ""
         },
         {
+            "key": "field_ni_about_acc_end_2",
+            "label": "",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 1
+        },
+        {
             "key": "field_ni_about_tab_49",
             "label": "働き方・カルチャー",
             "name": "",
@@ -909,8 +1143,26 @@
             "selected": 0
         },
         {
+            "key": "field_ni_about_acc_culture_retention",
+            "label": "新卒3年後定着率",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_culture_retention_label",
-            "label": "新卒3年後定着率 ラベル",
+            "label": "ラベル",
             "name": "culture_retention_label",
             "aria-label": "",
             "type": "text",
@@ -930,7 +1182,7 @@
         },
         {
             "key": "field_ni_about_culture_retention_number",
-            "label": "新卒3年後定着率 数値・単位",
+            "label": "数値・単位",
             "name": "culture_retention_number",
             "aria-label": "",
             "type": "text",
@@ -950,7 +1202,7 @@
         },
         {
             "key": "field_ni_about_culture_retention_desc",
-            "label": "新卒3年後定着率 説明文",
+            "label": "説明文",
             "name": "culture_retention_desc",
             "aria-label": "",
             "type": "textarea",
@@ -969,8 +1221,26 @@
             "new_lines": ""
         },
         {
+            "key": "field_ni_about_acc_culture_turnover",
+            "label": "離職率",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_culture_turnover_label",
-            "label": "離職率 ラベル",
+            "label": "ラベル",
             "name": "culture_turnover_label",
             "aria-label": "",
             "type": "text",
@@ -990,7 +1260,7 @@
         },
         {
             "key": "field_ni_about_culture_turnover_number",
-            "label": "離職率 数値・単位",
+            "label": "数値・単位",
             "name": "culture_turnover_number",
             "aria-label": "",
             "type": "text",
@@ -1010,7 +1280,7 @@
         },
         {
             "key": "field_ni_about_culture_turnover_desc",
-            "label": "離職率 説明文",
+            "label": "説明文",
             "name": "culture_turnover_desc",
             "aria-label": "",
             "type": "textarea",
@@ -1029,8 +1299,26 @@
             "new_lines": ""
         },
         {
+            "key": "field_ni_about_acc_culture_tenure",
+            "label": "平均勤続年数",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_culture_tenure_label",
-            "label": "平均勤続年数 ラベル",
+            "label": "ラベル",
             "name": "culture_tenure_label",
             "aria-label": "",
             "type": "text",
@@ -1050,7 +1338,7 @@
         },
         {
             "key": "field_ni_about_culture_tenure_number",
-            "label": "平均勤続年数 数値・単位",
+            "label": "数値・単位",
             "name": "culture_tenure_number",
             "aria-label": "",
             "type": "text",
@@ -1070,7 +1358,7 @@
         },
         {
             "key": "field_ni_about_culture_tenure_desc",
-            "label": "平均勤続年数 説明文",
+            "label": "説明文",
             "name": "culture_tenure_desc",
             "aria-label": "",
             "type": "textarea",
@@ -1089,8 +1377,26 @@
             "new_lines": ""
         },
         {
+            "key": "field_ni_about_acc_culture_maternity",
+            "label": "女性産休育休復職率",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_culture_maternity_label",
-            "label": "女性産休育休復職率 ラベル",
+            "label": "ラベル",
             "name": "culture_maternity_label",
             "aria-label": "",
             "type": "text",
@@ -1110,7 +1416,7 @@
         },
         {
             "key": "field_ni_about_culture_maternity_number",
-            "label": "女性産休育休復職率 数値・単位",
+            "label": "数値・単位",
             "name": "culture_maternity_number",
             "aria-label": "",
             "type": "text",
@@ -1130,7 +1436,7 @@
         },
         {
             "key": "field_ni_about_culture_maternity_desc",
-            "label": "女性産休育休復職率 説明文",
+            "label": "説明文",
             "name": "culture_maternity_desc",
             "aria-label": "",
             "type": "textarea",
@@ -1149,8 +1455,26 @@
             "new_lines": ""
         },
         {
+            "key": "field_ni_about_acc_culture_career",
+            "label": "異業種からの活躍例",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_culture_career_label",
-            "label": "異業種からの活躍例 ラベル",
+            "label": "ラベル",
             "name": "culture_career_label",
             "aria-label": "",
             "type": "text",
@@ -1249,8 +1573,26 @@
             "append": ""
         },
         {
+            "key": "field_ni_about_acc_culture_gender",
+            "label": "男女比",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_culture_gender_label",
-            "label": "男女比 ラベル",
+            "label": "ラベル",
             "name": "culture_gender_label",
             "aria-label": "",
             "type": "text",
@@ -1270,7 +1612,7 @@
         },
         {
             "key": "field_ni_about_culture_gender_male",
-            "label": "男女比 男性（%）",
+            "label": "男性（%）",
             "name": "culture_gender_male",
             "aria-label": "",
             "type": "number",
@@ -1292,7 +1634,7 @@
         },
         {
             "key": "field_ni_about_culture_gender_female",
-            "label": "男女比 女性（%）",
+            "label": "女性（%）",
             "name": "culture_gender_female",
             "aria-label": "",
             "type": "number",
@@ -1314,7 +1656,7 @@
         },
         {
             "key": "field_ni_about_culture_gender_desc",
-            "label": "男女比 説明文",
+            "label": "説明文",
             "name": "culture_gender_desc",
             "aria-label": "",
             "type": "textarea",
@@ -1333,8 +1675,26 @@
             "new_lines": ""
         },
         {
+            "key": "field_ni_about_acc_culture_flex",
+            "label": "制度の柔軟性",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_culture_flex_title",
-            "label": "制度の柔軟性 タイトル",
+            "label": "タイトル",
             "name": "culture_flex_title",
             "aria-label": "",
             "type": "text",
@@ -1354,7 +1714,7 @@
         },
         {
             "key": "field_ni_about_culture_flex_lead",
-            "label": "制度の柔軟性 リード",
+            "label": "リード",
             "name": "culture_flex_lead",
             "aria-label": "",
             "type": "textarea",
@@ -1374,7 +1734,7 @@
         },
         {
             "key": "field_ni_about_culture_flex_desc",
-            "label": "制度の柔軟性 説明文",
+            "label": "説明文",
             "name": "culture_flex_desc",
             "aria-label": "",
             "type": "textarea",
@@ -1393,8 +1753,26 @@
             "new_lines": ""
         },
         {
+            "key": "field_ni_about_acc_culture_lunch",
+            "label": "コミュニケーションランチ",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_culture_lunch_title",
-            "label": "コミュニケーションランチ タイトル",
+            "label": "タイトル",
             "name": "culture_lunch_title",
             "aria-label": "",
             "type": "text",
@@ -1414,7 +1792,7 @@
         },
         {
             "key": "field_ni_about_culture_lunch_number",
-            "label": "コミュニケーションランチ 数値・単位",
+            "label": "数値・単位",
             "name": "culture_lunch_number",
             "aria-label": "",
             "type": "text",
@@ -1434,7 +1812,7 @@
         },
         {
             "key": "field_ni_about_culture_lunch_desc",
-            "label": "コミュニケーションランチ 説明文",
+            "label": "説明文",
             "name": "culture_lunch_desc",
             "aria-label": "",
             "type": "textarea",
@@ -1454,7 +1832,7 @@
         },
         {
             "key": "field_ni_about_culture_lunch_image",
-            "label": "コミュニケーションランチ 写真",
+            "label": "写真",
             "name": "culture_lunch_image",
             "aria-label": "",
             "type": "image",
@@ -1479,8 +1857,26 @@
             "preview_size": "medium"
         },
         {
+            "key": "field_ni_about_acc_culture_party",
+            "label": "社内懇親会",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_culture_party_title",
-            "label": "社内懇親会 タイトル",
+            "label": "タイトル",
             "name": "culture_party_title",
             "aria-label": "",
             "type": "text",
@@ -1500,7 +1896,7 @@
         },
         {
             "key": "field_ni_about_culture_party_lead",
-            "label": "社内懇親会 リード",
+            "label": "リード",
             "name": "culture_party_lead",
             "aria-label": "",
             "type": "textarea",
@@ -1520,7 +1916,7 @@
         },
         {
             "key": "field_ni_about_culture_party_desc",
-            "label": "社内懇親会 説明文",
+            "label": "説明文",
             "name": "culture_party_desc",
             "aria-label": "",
             "type": "textarea",
@@ -1540,7 +1936,7 @@
         },
         {
             "key": "field_ni_about_culture_party_image",
-            "label": "社内懇親会 写真",
+            "label": "写真",
             "name": "culture_party_image",
             "aria-label": "",
             "type": "image",
@@ -1565,8 +1961,26 @@
             "preview_size": "medium"
         },
         {
+            "key": "field_ni_about_acc_culture_snack",
+            "label": "無料軽食",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_ni_about_culture_snack_title",
-            "label": "無料軽食 タイトル",
+            "label": "タイトル",
             "name": "culture_snack_title",
             "aria-label": "",
             "type": "text",
@@ -1586,7 +2000,7 @@
         },
         {
             "key": "field_ni_about_culture_snack_lead",
-            "label": "無料軽食 リード",
+            "label": "リード",
             "name": "culture_snack_lead",
             "aria-label": "",
             "type": "textarea",
@@ -1606,7 +2020,7 @@
         },
         {
             "key": "field_ni_about_culture_snack_desc",
-            "label": "無料軽食 説明文",
+            "label": "説明文",
             "name": "culture_snack_desc",
             "aria-label": "",
             "type": "textarea",
@@ -1626,7 +2040,7 @@
         },
         {
             "key": "field_ni_about_culture_snack_image",
-            "label": "無料軽食 写真",
+            "label": "写真",
             "name": "culture_snack_image",
             "aria-label": "",
             "type": "image",
@@ -1649,6 +2063,24 @@
             "mime_types": "",
             "allow_in_bindings": 0,
             "preview_size": "medium"
+        },
+        {
+            "key": "field_ni_about_acc_end_3",
+            "label": "",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 1
         }
     ],
     "location": [
@@ -1669,5 +2101,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1791114124
+    "modified": 1791114867
 }
