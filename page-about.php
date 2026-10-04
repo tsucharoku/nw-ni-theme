@@ -51,7 +51,7 @@ function ni_about_num( $prefix ) {
 
 /* 年間調査件数の円グラフ: 手法内訳（リピーター）。未入力なら円グラフと内訳の文は出さない。
    扇は conic-gradient（割合の合計に対する比で描く）、色は 4 色を上から順に繰り返す。
-   ラベルは扇の中央の角度、円の中心から 70px の位置（228 角の円グラフ） */
+   ラベルは扇の中央の角度、円の中心から 70px の位置（228 角の円グラフ）。SP では円グラフの大きさが変わるので % で出す */
 $ni_pie_rows = ni_about( 'company_survey_breakdown' );
 if ( ! is_array( $ni_pie_rows ) ) {
 	$ni_pie_rows = array();
@@ -69,8 +69,8 @@ foreach ( array_values( $ni_pie_rows ) as $ni_i => $ni_row ) {
 		'color' => $ni_pie_colors[ $ni_i % count( $ni_pie_colors ) ],
 		'from'  => $ni_pie_from,
 		'to'    => $ni_pie_from + $ni_share,
-		'x'     => round( 114 + 70 * sin( $ni_angle ), 1 ),
-		'y'     => round( 114 - 70 * cos( $ni_angle ), 1 ),
+		'x'     => round( 50 + 70 / 228 * 100 * sin( $ni_angle ), 2 ),
+		'y'     => round( 50 - 70 / 228 * 100 * cos( $ni_angle ), 2 ),
 	);
 	$ni_pie_from += $ni_share;
 }
@@ -157,7 +157,7 @@ get_header();
         <div class="pie" role="img" aria-label="調査手法の内訳 <?php echo esc_attr( implode( '、', $ni_pie_items ) ); ?>">
           <div class="pie__sectors" aria-hidden="true" style="background: <?php echo esc_attr( $ni_pie_bg ); ?>"></div>
           <?php foreach ( $ni_pie as $ni_slice ) : ?>
-          <p class="pie__label" aria-hidden="true" style="top: <?php echo esc_attr( $ni_slice['y'] ); ?>px; left: <?php echo esc_attr( $ni_slice['x'] ); ?>px"><span class="pie__name"><?php echo esc_html( $ni_slice['name'] ); ?></span><span class="pie__val u-en"><?php echo esc_html( $ni_slice['value'] ); ?></span></p>
+          <p class="pie__label" aria-hidden="true" style="top: <?php echo esc_attr( $ni_slice['y'] ); ?>%; left: <?php echo esc_attr( $ni_slice['x'] ); ?>%"><span class="pie__name"><?php echo esc_html( $ni_slice['name'] ); ?></span><span class="pie__val u-en"><?php echo esc_html( $ni_slice['value'] ); ?></span></p>
           <?php endforeach; ?>
           <span class="pie__hole" aria-hidden="true"></span>
         </div>

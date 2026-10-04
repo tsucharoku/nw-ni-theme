@@ -515,7 +515,8 @@
 
 /* ==========================================================================
    円グラフ（662:6986）: 扇は手法内訳（ACF）から conic-gradient（page-about.php が style に出す）、228 角。
-   ラベルは扇の中央の角度・円の中心から 70px（page-about.php が top / left に中心の座標を出す）。
+   ラベルは扇の中央の角度・円の中心から 70px（228 角のとき。page-about.php が top / left に中心の位置を % で出す。
+   SP では円グラフが画面幅に合わせて大きくなるため）。
    中央の白丸は SP と同じく円の中心に置く（PC の Figma は枠が伸びたぶん 20px 下にずれている）
    登場: conic-gradient のマスクを 0 → 100% に回す（@property 非対応なら最初から全表示）
    ========================================================================== */
@@ -574,6 +575,158 @@
   border-radius: 50%;
   background: var(--c-white);
   transform: translate(-50%, -50%);
+}
+
+/* ==========================================================================
+   SP（〜767px）: 数字カードの中身は画面幅に合わせて拡大する（375px のときを 1 倍、480px のときの 1.28 倍が上限。
+   オフィス紹介の数字ブロックと同じ）。大きさが固定だと、幅が広い端末ではカードの中の間が空きすぎる。
+   文字・余白・図版・円グラフをすべて 375px 基準の比率で大きくして、幅に対する見え方を Figma の SP と同じに保つ。
+   480px より広いときは 480px のときの大きさ・幅（440px）のまま中央に置く。カードどうしの間（16）は変えない
+   375px より狭いときは 375px のときの大きさのまま（縮めない）
+   ========================================================================== */
+@media (max-width: 767px) {
+  .about-scale,
+  .num-rows {
+    width: 100%;              /* 親が flex なので、margin auto で縮まないように */
+    max-width: 440px;         /* 480 − 左右 20 */
+    margin-inline: auto;
+  }
+
+  .num-card {
+    --u: clamp(1px, calc(100vw / 375), calc(480px / 375));   /* デザインの 1px。375px より狭いときは縮めない */
+    padding: calc(24 * var(--u));
+  }
+
+  .num-card__txt,
+  .num-card__head {
+    gap: calc(4 * var(--u));
+  }
+
+  .num-card__label {
+    font-size: calc(16 * var(--u));
+  }
+
+  .num-card__num {
+    gap: calc(2 * var(--u));
+  }
+
+  .num-card__value {
+    font-size: calc(28 * var(--u));
+  }
+
+  .num-card__unit {
+    font-size: calc(22 * var(--u));
+  }
+
+  .num-card__lead {
+    font-size: calc(18 * var(--u));
+  }
+
+  .num-card__note,
+  .num-card__sub {
+    font-size: calc(13 * var(--u));
+  }
+
+  .num-card--media {
+    grid-template-columns: minmax(0, 1fr) calc(72 * var(--u));
+    gap: calc(12 * var(--u));
+    padding: calc(16 * var(--u)) calc(16 * var(--u)) calc(16 * var(--u)) calc(24 * var(--u));
+  }
+
+  .num-card__thumb {
+    width: calc(72 * var(--u));
+    height: calc(72 * var(--u));
+  }
+
+  .num-card__thumb--icon img {
+    width: calc(32 * var(--u));
+    height: calc(32 * var(--u));
+  }
+
+  .num-card__thumb--icon-l img {
+    width: calc(50 * var(--u));
+    height: calc(50 * var(--u));
+  }
+
+  .num-card--pie {
+    gap: calc(16 * var(--u));
+    padding: calc(24 * var(--u)) calc(32 * var(--u)) calc(32 * var(--u));
+  }
+
+  .num-card--ai {
+    gap: calc(8 * var(--u));
+    padding: calc(40 * var(--u)) calc(20 * var(--u));
+  }
+
+  .num-card--ai .num-card__label {
+    font-size: calc(18 * var(--u));
+  }
+
+  .num-card--ai .num-card__sub {
+    font-size: calc(12 * var(--u));
+  }
+
+  .num-card__split-item {
+    gap: calc(6 * var(--u));
+  }
+
+  .num-card__split-item + .num-card__split-item {
+    margin-left: calc(8 * var(--u));
+    padding-left: calc(8 * var(--u));
+  }
+
+  .num-card--career {
+    gap: calc(6 * var(--u));
+  }
+
+  .num-card__career {
+    gap: calc(4 * var(--u));
+    font-size: calc(18 * var(--u));
+  }
+
+  .num-card__career li {
+    gap: calc(8 * var(--u));
+  }
+
+  .num-card__career img {
+    width: calc(10 * var(--u));
+    height: calc(8 * var(--u));
+  }
+
+  .num-card--gender {
+    gap: calc(8 * var(--u));
+  }
+
+  .num-card__ratio .num-card__unit:first-child {
+    margin-right: calc(4 * var(--u));
+  }
+
+  .num-card__ratio .num-card__num + .num-card__num {
+    margin-left: calc(24 * var(--u));
+    padding-left: calc(24 * var(--u));
+  }
+
+  .pie {
+    width: calc(228 * var(--u));
+    height: calc(228 * var(--u));
+  }
+
+  .pie__label {
+    transform: translate(-50%, calc(-50% - 4 * var(--u)));
+  }
+
+  .pie__name {
+    font-size: calc(14 * var(--u));
+  }
+
+  .pie__val {
+    font-size: calc(20 * var(--u));
+  }
+
+  .pie__hole {
+    width: calc(71 * var(--u));
+    height: calc(71 * var(--u));
+  }
 }
 
 /* ==========================================================================
