@@ -3,46 +3,6 @@
     "title": "3分でわかるNI",
     "fields": [
         {
-            "key": "field_ni_about_company_growth_top_number",
-            "label": "TOP に出す数字: 業界成長率",
-            "name": "company_growth_top_number",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "新卒 TOP・中途 TOP の「3分でわかる、日本インフォメーション」に出す青い数字です。このページ（3分でわかるNI）には出ません。数値と単位を続けて入力（例: 110%超）。",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_company_satisfaction_number",
-            "label": "TOP に出す数字: 顧客満足度",
-            "name": "company_satisfaction_number",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "新卒 TOP・中途 TOP の「3分でわかる、日本インフォメーション」に出す青い数字です。このページ（3分でわかるNI）には出ません。数値と単位を続けて入力（例: 93%）。",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
             "key": "field_ni_about_tab_0",
             "label": "会社・事業規模",
             "name": "",
@@ -2132,14 +2092,14 @@
             }
         ]
     ],
-    "menu_order": 0,
+    "menu_order": 1,
     "position": "normal",
     "style": "default",
-    "label_placement": "top",
-    "instruction_placement": "label",
+    "label_placement": "left",
+    "instruction_placement": "field",
     "hide_on_screen": "",
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1791123257
+    "modified": 1791124310
 }
