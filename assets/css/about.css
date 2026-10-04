@@ -146,7 +146,7 @@
 
 .num-card__num {
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;     /* 数字と単位は文字のベースラインで揃える（下端揃えだと数字が上に寄って見える） */
   gap: 2px;
   color: var(--c-navy);
   font-weight: 600;
@@ -359,7 +359,7 @@
 }
 
 .num-card__ratio .num-card__num {
-  align-items: flex-end;
+  align-items: baseline;
 }
 
 .num-card__ratio .num-card__unit:first-child {
@@ -435,7 +435,7 @@
   }
 
   .num-card--media .num-card__num {
-    align-items: flex-end;
+    align-items: baseline;
   }
 
   .num-card--lead .num-card__txt,
