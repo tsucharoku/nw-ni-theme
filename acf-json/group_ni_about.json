@@ -42,31 +42,11 @@
         },
         {
             "key": "field_ni_about_company_survey_number",
-            "label": "年間調査件数 数値",
+            "label": "年間調査件数 数値・単位",
             "name": "company_survey_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_company_survey_unit",
-            "label": "年間調査件数 単位",
-            "name": "company_survey_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -256,31 +236,11 @@
         },
         {
             "key": "field_ni_about_company_clients_number",
-            "label": "取引社数 数値",
+            "label": "取引社数 数値・単位",
             "name": "company_clients_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_company_clients_unit",
-            "label": "取引社数 単位",
-            "name": "company_clients_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -336,31 +296,11 @@
         },
         {
             "key": "field_ni_about_company_direct_number",
-            "label": "大手メーカー直接取引比率 数値",
+            "label": "大手メーカー直接取引比率 数値・単位",
             "name": "company_direct_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_company_direct_unit",
-            "label": "大手メーカー直接取引比率 単位",
-            "name": "company_direct_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -416,31 +356,11 @@
         },
         {
             "key": "field_ni_about_company_founded_number",
-            "label": "創業 数値",
+            "label": "創業 数値・単位",
             "name": "company_founded_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_company_founded_unit",
-            "label": "創業 単位",
-            "name": "company_founded_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -540,31 +460,11 @@
         },
         {
             "key": "field_ni_about_research_panel_number",
-            "label": "パネルリーチ規模 数値",
+            "label": "パネルリーチ規模 数値・単位",
             "name": "research_panel_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_research_panel_unit",
-            "label": "パネルリーチ規模 単位",
-            "name": "research_panel_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -620,31 +520,11 @@
         },
         {
             "key": "field_ni_about_research_methods_number",
-            "label": "入社1年目の調査手法数 数値",
+            "label": "入社1年目の調査手法数 数値・単位",
             "name": "research_methods_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_research_methods_unit",
-            "label": "入社1年目の調査手法数 単位",
-            "name": "research_methods_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -700,31 +580,11 @@
         },
         {
             "key": "field_ni_about_research_venues_number",
-            "label": "自社調査会場数 数値",
+            "label": "自社調査会場数 数値・単位",
             "name": "research_venues_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_research_venues_unit",
-            "label": "自社調査会場数 単位",
-            "name": "research_venues_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -806,31 +666,11 @@
         },
         {
             "key": "field_ni_about_research_staff_number",
-            "label": "専属調査員数 数値",
+            "label": "専属調査員数 数値・単位",
             "name": "research_staff_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_research_staff_unit",
-            "label": "専属調査員数 単位",
-            "name": "research_staff_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1090,31 +930,11 @@
         },
         {
             "key": "field_ni_about_culture_retention_number",
-            "label": "新卒3年後定着率 数値",
+            "label": "新卒3年後定着率 数値・単位",
             "name": "culture_retention_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_culture_retention_unit",
-            "label": "新卒3年後定着率 単位",
-            "name": "culture_retention_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1170,31 +990,11 @@
         },
         {
             "key": "field_ni_about_culture_turnover_number",
-            "label": "離職率 数値",
+            "label": "離職率 数値・単位",
             "name": "culture_turnover_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_culture_turnover_unit",
-            "label": "離職率 単位",
-            "name": "culture_turnover_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1250,31 +1050,11 @@
         },
         {
             "key": "field_ni_about_culture_tenure_number",
-            "label": "平均勤続年数 数値",
+            "label": "平均勤続年数 数値・単位",
             "name": "culture_tenure_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_culture_tenure_unit",
-            "label": "平均勤続年数 単位",
-            "name": "culture_tenure_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1330,31 +1110,11 @@
         },
         {
             "key": "field_ni_about_culture_maternity_number",
-            "label": "女性産休育休復職率 数値",
+            "label": "女性産休育休復職率 数値・単位",
             "name": "culture_maternity_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_culture_maternity_unit",
-            "label": "女性産休育休復職率 単位",
-            "name": "culture_maternity_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1654,31 +1414,11 @@
         },
         {
             "key": "field_ni_about_culture_lunch_number",
-            "label": "コミュニケーションランチ 数値",
+            "label": "コミュニケーションランチ 数値・単位",
             "name": "culture_lunch_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_ni_about_culture_lunch_unit",
-            "label": "コミュニケーションランチ 単位",
-            "name": "culture_lunch_unit",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
+            "instructions": "数値と単位を続けて入力（例: 2,000件）。最初の数字だけ大きく表示されます。",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1929,5 +1669,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1790900000
+    "modified": 1791114124
 }

@@ -33,9 +33,20 @@ function ni_about_img( $name, $atts = '' ) {
 	}
 }
 
-/* 数値 + 単位の見出し行（.num-card__num） */
+/* 数値・単位の見出し行（.num-card__num）。入力は 1 欄（例: 2,000件）で、最初の数字のかたまり（カンマ・小数点込み）
+   だけ大きく出す。例: 「7年11ヶ月」→ 7 が大、年11ヶ月 は単位の大きさ。カンマは入力したとおり（付け直さない） */
 function ni_about_num( $prefix ) {
-	printf( '<p class="num-card__num"><span class="num-card__value">%s</span><span class="num-card__unit">%s</span></p>', esc_html( (string) ni_about( $prefix . '_number' ) ), esc_html( (string) ni_about( $prefix . '_unit' ) ) );
+	$text = trim( (string) ni_about( $prefix . '_number' ) );
+	if ( ! preg_match( '/^(.*?)([0-9０-９][0-9０-９,.，．]*)(.*)$/us', $text, $m ) ) {
+		$m = array( '', $text, '', '' );   /* 数字が無ければ全部を単位の大きさで */
+	}
+	$html = '';
+	foreach ( array( 1 => 'unit', 2 => 'value', 3 => 'unit' ) as $i => $class ) {
+		if ( '' !== $m[ $i ] ) {
+			$html .= sprintf( '<span class="num-card__%s">%s</span>', $class, esc_html( $m[ $i ] ) );
+		}
+	}
+	echo '<p class="num-card__num">' . $html . '</p>';
 }
 
 /* 年間調査件数の円グラフ: 手法内訳（リピーター）。未入力なら円グラフと内訳の文は出さない。
