@@ -959,8 +959,7 @@
     white-space: normal;
   }
 
-  .num-card--center .num-card__num,
-  .num-card__ratio .num-card__num {
+  .num-card--center .num-card__num {
     justify-content: center;
   }
 
@@ -975,14 +974,22 @@
     width: min(276px, 100%);
   }
 
-  /* 男女比: 罫線の左の余白は幅が狭いほど詰める（1440px で 35） */
+  /* 男女比: 罫線は中央、「男 57%」は左端・「女 43%」は右端に寄せる（幅 276 のときデザインと同じ配置）。
+     幅が狭くなっても、罫線の左右の間は同じだけ縮む */
+  .num-card__ratio {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
   .num-card__ratio .num-card__num {
     flex-wrap: nowrap;
+    justify-content: flex-start;
     white-space: nowrap;
   }
 
   .num-card__ratio .num-card__num + .num-card__num {
-    padding-left: clamp(8px, calc(35px - (1440px - 100vw) * 0.1), 35px);
+    justify-content: flex-end;
+    padding-left: 4px;
   }
 
   /* 円グラフ: カードの幅に収める（228 が上限）。ラベルと中央の白丸も円の大きさに合わせる */
@@ -1057,6 +1064,11 @@
 
   .num-card--start {
     align-self: stretch;     /* 2 カラムでは隣のカードと高さを揃える */
+  }
+
+  /* 男女比: PC は内容なりの幅のカードで左寄せ。2 カラムではカードのほうが広いので中央に置く */
+  .num-card--gender {
+    align-items: center;
   }
 
   .about-sec__head {
