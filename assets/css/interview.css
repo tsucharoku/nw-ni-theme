@@ -496,15 +496,18 @@
   }
 
   /* 本文を読む間、写真は画面内に留まる（sticky。JS なし） */
+  /* 左の写真: 画面の高さいっぱい（100vh）で、本文の横に追従する（sticky。本文が終わると一緒に流れる）。
+     2026-10-05 ユーザー指示。参考: https://sasaki-seicha.net/recruit-interview/recruit-182/
+     （仕様書 Figma の参考リンク worksjapan-saiyo.info/people/01/ はページが無くなっている）。
+     Figma のデザイン（855:26765）は 568 × 768 の固定で、高さだけ変えている */
   .interview-body__side {
     position: sticky;
-    top: max(24px, calc((100vh - 768px) / 2));
+    top: 0;
     display: block;
     flex: none;
     overflow: hidden;
     width: 568px;
-    height: 768px;
-    max-height: calc(100vh - 48px);
+    height: 100vh;
   }
 
   .interview-body__side img {
@@ -817,7 +820,6 @@
 
   .interview-body__side {
     width: clamp(260px, 39.44vw, 568px);
-    height: clamp(352px, 53.33vw, 768px);
   }
 
   .day {
