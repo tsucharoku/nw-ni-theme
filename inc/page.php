@@ -40,7 +40,9 @@ function ni_page_key() {
    modules: assets/js/○○.js を <script type="module"> で読む（FV の WebGL 演出）
    ni_logo: 下層のページ頭の背景のガラスの NI ロゴを出すか。省略 = 出す / false = 出さない / 'sp' = SP だけ出す。
             出すページは ni-logo.js（中途 TOP と同じ WebGL のロゴ）を modules に自動で足す = ni_page()
-            （Figma の見出し部品 H2 の中の ni-logo-only が非表示のページに合わせる。2026-10-01 に全ページ PC / SP を確認） */
+            （Figma の見出し部品 H2 の中の ni-logo-only が非表示のページに合わせる。2026-10-01 に全ページ PC / SP を確認。
+            Figma の PC と SP で食い違っていたページは 2026-10-06 にデザイナーの回答で確定: 募集要項カテゴリ = 出さない、
+            募集要項詳細 = 出す、社員インタビュー詳細・座談会詳細 = 出さない。いずれも PC / SP 共通。'sp' は今は使っていない） */
 function ni_page_map() {
 	return array(
 		'top'                 => array(
@@ -76,12 +78,12 @@ function ni_page_map() {
 
 		/* ----- 下層: カスタム投稿（登録は inc/post-types.php） ----- */
 		'interview:archive'   => array( 'body' => 'interview', 'css' => array( 'interview' ), 'js' => array( 'interview' ) ),
-		'interview:single'    => array( 'body' => 'interview-detail', 'css' => array( 'interview' ), 'ni_logo' => 'sp' ),
+		'interview:single'    => array( 'body' => 'interview-detail', 'css' => array( 'interview' ), 'ni_logo' => false ),
 		'cross-talk:archive'  => array( 'body' => 'cross-talk', 'css' => array( 'cross-talk' ) ),
-		'cross-talk:single'   => array( 'body' => 'cross-talk-detail', 'css' => array( 'cross-talk' ), 'ni_logo' => 'sp' ),
+		'cross-talk:single'   => array( 'body' => 'cross-talk-detail', 'css' => array( 'cross-talk' ), 'ni_logo' => false ),
 		'job-opening:archive' => array( 'body' => 'job-opening' ),
 		'job-opening:term'    => array( 'body' => 'job-category', 'css' => array( 'job-opening' ), 'js' => array( 'job-opening' ), 'ni_logo' => false ),
-		'job-opening:single'  => array( 'body' => 'job-detail', 'css' => array( 'job-opening', 'editor-style', 'form' ), 'js' => array( 'job-opening', 'form' ), 'ni_logo' => false ),
+		'job-opening:single'  => array( 'body' => 'job-detail', 'css' => array( 'job-opening', 'editor-style', 'form' ), 'js' => array( 'job-opening', 'form' ) ),
 	);
 }
 
