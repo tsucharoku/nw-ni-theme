@@ -884,33 +884,7 @@
   }
 
   .career-case__voice .voice-card__img {
-    position: relative;
-    display: block;
     aspect-ratio: 384 / 472;
-  }
-
-  /* 写真左下の名前（I557:12879;557:12899）。背面は Figma のぼかした紺の楕円（525 角、left -226 / top 304）を放射グラデで */
-  .career-case__name {
-    position: absolute;
-    inset: 0;
-    display: flex !important;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 2px;
-    padding: 32px;
-    background: radial-gradient(circle 370px at 36px 566px, rgba(17, 41, 107, 0.85) 0%, rgba(17, 41, 107, 0.55) 45%, rgba(17, 41, 107, 0) 100%);
-    color: var(--c-white);
-    font-weight: 500;
-  }
-
-  .career-case__name-jp {
-    font-size: 24px;
-    line-height: 1.5;
-  }
-
-  .career-case__name-en {
-    font-size: var(--fs-tight-2xs);
-    line-height: 1.4;
   }
 }
 

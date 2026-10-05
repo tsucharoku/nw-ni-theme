@@ -312,10 +312,10 @@ get_header();
           </div>
           <?php if ( $ni_interview && 'publish' === $ni_interview->post_status ) : ?>
           <!-- 関連インタビュー（記事を選んだときだけ）。カードは TOP の社員インタビューと同じ部品（写真 = サムネイル用画像、一言 = タイトル、
-               入社区分・職種・タグ = タクソノミー）。写真の上に氏名を重ねる（PC のみ。デザインにある英字の氏名は入力項目が無いので出していない） -->
+               入社区分・職種・タグ = タクソノミー） -->
           <div class="career-case__voice">
             <p class="career-case__label u-grd-text">Interview</p>
-<?php get_template_part( 'template-parts/voice-card', null, array( 'post' => $ni_interview->ID, 'tag' => 'div', 'lazy' => true, 'name' => true ) ); ?>
+<?php get_template_part( 'template-parts/voice-card', null, array( 'post' => $ni_interview->ID, 'tag' => 'div', 'lazy' => true ) ); ?>
           </div>
           <?php endif; ?>
         </div>

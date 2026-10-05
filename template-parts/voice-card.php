@@ -4,8 +4,8 @@
  * 教育・研修のキャリアパスの関連インタビュー（.career-case__voice の中）で使う。
  *
  * get_template_part( 'template-parts/voice-card', null, array( 'post' => 記事の ID, 'offset' => 2 枚目なら true ) ) で呼ぶ。
- * キャリアパスでは array( 'post' => ID, 'tag' => 'div', 'lazy' => true, 'name' => true ) を渡す:
- * tag = 外側の要素（既定は li = スライダーの 1 枚）、lazy = 写真を遅延読み込み、name = 写真の上に氏名を重ねる（PC のみ）。
+ * キャリアパスでは array( 'post' => ID, 'tag' => 'div', 'lazy' => true ) を渡す:
+ * tag = 外側の要素（既定は li = スライダーの 1 枚）、lazy = 写真を遅延読み込み。
  * 一言 = 投稿タイトル、写真 = ACF（interview_thumbnail）、入社区分・職種・タグ = タクソノミー
  * （社員インタビュー一覧のカード template-parts/interview-card.php と同じ項目）。入力した内容だけ出す。
  */
@@ -16,7 +16,6 @@ $ni_img   = function_exists( 'get_field' ) ? get_field( 'interview_thumbnail', $
 $ni_chips = array_merge( ni_interview_terms( 'interview_entry_type', $ni_id ), ni_interview_terms( 'interview_job_type', $ni_id ) );
 $ni_tags  = ni_interview_terms( 'interview_tag', $ni_id );
 $ni_tag   = 'div' === ( $args['tag'] ?? 'li' ) ? 'div' : 'li';
-$ni_name  = ! empty( $args['name'] ) && function_exists( 'get_field' ) ? (string) get_field( 'interview_name', $ni_id ) : '';
 ?>
       <<?php echo $ni_tag; ?> class="<?php echo 'li' === $ni_tag ? 'splide__slide ' : ''; ?>voice-card<?php echo ! empty( $args['offset'] ) ? ' voice-card--offset' : ''; ?>">
         <a class="voice-card__img" href="<?php echo esc_url( $ni_url ); ?>"><?php
@@ -29,9 +28,6 @@ $ni_name  = ! empty( $args['name'] ) && function_exists( 'get_field' ) ? (string
         		(int) ( $ni_size ? $ni_img['sizes'][ $ni_size . '-height' ] : $ni_img['height'] ),
         		! empty( $args['lazy'] ) ? ' loading="lazy"' : ''
         	);
-        }
-        if ( '' !== $ni_name ) {
-        	printf( '<span class="career-case__name u-pc"><span class="career-case__name-jp">%s</span></span>', esc_html( $ni_name ) );
         }
         ?></a>
         <div class="voice-card__body">
