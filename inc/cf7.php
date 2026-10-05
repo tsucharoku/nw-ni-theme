@@ -2,7 +2,7 @@
 /**
  * Contact Form 7 の設定
  *
- * フォームの中身（行の構造と CF7 のタグ）とメール本文は cf7/ に置いてあり、管理画面の CF7 に貼って使う（手順は README）。
+ * フォームの中身（行の構造と CF7 のタグ）とメール本文は cf7/ に置いてあり（entry-* = 募集要項詳細のエントリー、casual-* = カジュアル面談）、管理画面の CF7 に貼って使う（手順は README）。
  * 見た目は form.css、select / date が空の間のグレーと送信後の完了ページへの移動は form.js。
  */
 
@@ -29,10 +29,9 @@ function ni_cf7_form_atts( $atts ) {
 }
 add_filter( 'wpcf7_form_additional_atts', 'ni_cf7_form_atts' );
 
-/* CF7 の CSS・JS は本物のフォームがあるページ（募集要項詳細）だけで読む。
-   カジュアル面談のフォームはまだ静的なマークアップ（.wpcf7 > form）なので、CF7 の JS が読まれると送信を横取りしてしまう */
+/* CF7 の CSS・JS はフォームがあるページ（募集要項詳細・カジュアル面談）だけで読む */
 function ni_cf7_load_assets() {
-	return is_singular( 'job-opening' );
+	return is_singular( 'job-opening' ) || is_page( 'casual-talk' );
 }
 add_filter( 'wpcf7_load_js', 'ni_cf7_load_assets' );
 add_filter( 'wpcf7_load_css', 'ni_cf7_load_assets' );

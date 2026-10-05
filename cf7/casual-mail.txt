@@ -1,0 +1,18 @@
+採用サイトからカジュアル面談の申し込みがありました。
+
+お名前: [your-name]
+フリガナ: [your-kana]
+生年月日: [birth]
+性別: [gender]
+メールアドレス: [your-email]
+現在の会社名: [company]
+興味のある職種: [job]
+転職活動のステータス: [status]
+申し込みいただいた理由: [reason]
+
+その他ご質問・要望:
+[your-message]
+
+--
+[_site_title] [_site_url]
+送信日時: [_date] [_time]

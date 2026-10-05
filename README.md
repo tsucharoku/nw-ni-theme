@@ -7,7 +7,7 @@ https://recruit.n-info.co.jp/ のテーマ。静的 HTML（リポジトリ `tsuc
 
 **全 18 ページを静的なままテーマ化し、募集要項（一覧・カテゴリ一覧・詳細）と社員インタビュー一覧、固定ページの一部（ACF）が WP の内容を出している段階。** ヘッダー・メニュー・フッターは共通化し、ほかのテンプレートの `<main>` は静的 HTML の内容を固定で出している（WP の投稿内容はまだ出していない）。静的 HTML と全ページ・PC / SP で、要素の寸法と位置・リンク先・画像・文言が一致することを確認済み。
 
-これから: 残りのページの投稿のループ、カスタムフィールド（ACF Pro）、カジュアル面談のフォーム（Contact Form 7）、ヘッダー・メニュー・フッターの募集要項カテゴリへのリンク。ページの種類は `制作進行資料.xlsx`「ディレクトリマップ」、入稿項目は仕様書の Figma を見て決める。
+これから: 残りのページの投稿のループ、カスタムフィールド（ACF Pro）、ヘッダー・メニュー・フッターの募集要項カテゴリへのリンク。ページの種類は `制作進行資料.xlsx`「ディレクトリマップ」、入稿項目は仕様書の Figma を見て決める。
 
 ## ページとテンプレート
 
@@ -48,7 +48,7 @@ inc/assets.php           CSS・JS の読み込み、three.js の import map、ES
 inc/editor.php           ブロックエディタ: ブロックスタイル（is-style-○○）の登録、editor-style.css とフォントをエディタに読み込む
 inc/blocks.php           ACF のカスタムブロック（募集要項の本文）の登録。定義と出力は blocks/<名前>/block.json・render.php、入力欄は acf-json/group_ni_block_<名前>.json
 inc/cf7.php              Contact Form 7: 自動 <p> を切る、メールアドレス（確認用）の一致チェック、完了ページの URL、CSS・JS を読むページ
-cf7/                     CF7 のフォームの中身（entry-form.txt）とメール本文（entry-mail.txt）。管理画面の CF7 に貼る元
+cf7/                     CF7 のフォームの中身（*-form.txt）とメール本文（*-mail.txt）。entry = 募集要項詳細のエントリー、casual = カジュアル面談。管理画面の CF7 に貼る元
 header.php               <head> 〜 ハンバーガーメニューまで
 template-parts/menu.php      ハンバーガーメニュー
 template-parts/fv-frame.php  FV の青いフレーム（新卒 TOP・中途 TOP）
@@ -132,6 +132,7 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
 - 静的なあいだのサンプル（静的 HTML の `detail/` と同じ URL にするため）: `interview` / `cross-talk` / `job-opening` にスラッグ `detail` の投稿を 1 件ずつ。Local の `job-opening` の `detail`（アルバイト「定性調査のモデレーター」）には、静的 HTML の本文と同じブロック一式とエントリーフォーム、リード文を入れてある
 - プラグイン: **Advanced Custom Fields PRO**（有効化するとテーマの `acf-json/` の項目が出る）、**Intuitive Custom Post Order**（設定 → 並び替え設定 で、投稿タイプ「募集要項」とタクソノミー「募集要項カテゴリ」、社員インタビューの「入社区分」「職種」「タグ（ハッシュタグ）」にチェック）、**Contact Form 7**（日本語の翻訳も入れる: `wp language plugin install contact-form-7 ja`）
 - CF7 のフォーム「エントリーフォーム」: 新規作成し、「フォーム」タブに `cf7/entry-form.txt`、「メール」タブの本文に `cf7/entry-mail.txt` を貼る。メールの宛先 `[_site_admin_email]`、件名 `[_site_title] エントリー：[_post_title]（[your-name] 様）`、追加ヘッダー `Reply-To: [your-email]`、ファイル添付 `[resume]`（改行して）`[cv]`。メール (2)（自動返信）は使っていない。送信できたら `/casual-talk/thanks/` へ移る（`form.js` の [C]）。各募集要項の本文の最後に h2「エントリー」+ Contact Form 7 ブロックでこのフォームを置く
+- CF7 のフォーム「カジュアル面談申し込みフォーム」（Local は ID 167）: 新規作成し、「フォーム」タブに `cf7/casual-form.txt`、「メール」タブの本文に `cf7/casual-mail.txt` を貼る。メールの宛先 `[_site_admin_email]`、件名 `[_site_title] カジュアル面談の申し込み（[your-name] 様）`、追加ヘッダー `Reply-To: [your-email]`。メール (2)（自動返信）は使っていない。**タイトルはこのとおりにする**（`page-casual-talk.php` がタイトルでフォームを引く。違うと「コンタクトフォームが見つかりません」と出る）。固定ページの本文には何も入れない
 - 募集要項のカテゴリ（`job-category`）と投稿。Local にはサンプルとして、静的 HTML と同じ内容を入れてある: カテゴリ 4 つ（新卒採用 `new-graduate` / 中途採用(未経験) `mid-beginner` / 中途採用(経験者) `mid-career` / アルバイト `part-time`）、投稿 1 / 4 / 4 / 24 件
 - 社員インタビューのターム（入社区分・職種・タグ）と投稿。Local にはサンプルとして、静的 HTML の一覧と同じ 18 件を入れてある: 入社区分 4 つ（新卒入社 / 中途入社(未経験) / 中途入社(経験者) / アルバイト）、職種 5 つ（営業 / リサーチャー / FW / IRG / NI研）、タグ 2 つ（フルリモート / 時短勤務）、写真はテーマの `assets/img/common/voice_card_01〜03.jpg` をメディアに取り込んだもの。1 件目はスラッグ `detail`（静的な詳細の URL）、ほかは `sample-02`〜`sample-18`
 - 教育・研修・キャリアパス（固定ページ `development`）のキャリアパスは Local に Figma の 3 路線（各 CASE1・4 ステップ、関連インタビューはサンプルの `detail`）を入力済み。テストサーバーでも入れる
@@ -178,7 +179,7 @@ Local（Flywheel）のサイト `http://ni.localhost/`。WP-CLI は案件フォ�
     - 選考ステップ（`acf/ni-steps`。2026-10-06 追加、ユーザー指示「ACF 繰り返しブロックに作り替えて」。それまではグループ 2 段 + ブロックスタイル `is-style-steps` / `is-style-step`）: ステップ（繰り返し）= ステップ名・説明（空でもよい）。番号（01・02 …）とステップの間の ▼ は CSS。出力は `<ol class="ni-steps">`。Local のサンプル投稿（ID 22）の旧グループ版は新ブロックに置き換え済み。旧スタイルの登録と CSS は削除したので、旧グループ版が残っている投稿があれば見た目が付かない
     - これに伴い、ブロックスタイルは 外部リンク（ボタン）と 選考ステップ（グループ）だけ残し（選考ステップも 2026-10-06 に ACF ブロックにしたので、いま残るのは 外部リンク だけ）、社員カード・プロフィール・コメント・肩書き・氏名・英字ラベル・丸タグ・# タグ・質問見出し は登録も CSS も削除。標準の「詳細」ブロック（`core/details`）の FAQ 用の見た目も削除した（FAQ は ACF ブロックで作る）
     - **未確認**: 編集画面での見え方と入力のしやすさ（フロントは PC 1440 / SP 375 で確認済み）
-- **フォーム = Contact Form 7**（募集要項詳細は本物の CF7。**未対応**: カジュアル面談はまだ静的なフォームのまま。CF7 の CSS・JS は募集要項詳細だけで読む（`inc/cf7.php`）。静的なフォームで読むと CF7 の JS が送信を横取りするため）: `.wpcf7` 以下は CF7 の出力 DOM に合わせてある（`span.wpcf7-form-control-wrap` / `.wpcf7-checkbox > .wpcf7-list-item` / `.wpcf7-acceptance` / `.wpcf7-file` / `.wpcf7-submit` / `.wpcf7-not-valid-tip` / `.wpcf7-response-output`）。行の構造（`.form__row` / `__label` / `__req` / `__field`）は CF7 のフォームテンプレートに書く部分。CF7 の自動 `<p>` / `<br>` は切る（`wpcf7_autop_or_not`）。`form.js` の [B]（必須チェック・同意で送信可・完了ページへ移動）は静的なフォームだけで動く（本物の CF7 のフォーム = 隠し項目 `_wpcf7` がある form では動かさない。カジュアル面談を CF7 にしたら [B] は消す）、[A]（select / date が空の間グレーにする）は残す、[C]（送信できたら form の `data-thanks` へ移動）は本物の CF7 のフォーム用。メールアドレス（確認用）の一致チェックは `inc/cf7.php`。**要確認**: CF7 のメールの宛先・件名・本文・自動返信の有無（いまは仮でサイト管理者宛て）。
+- **フォーム = Contact Form 7**（募集要項詳細のエントリーは本文の Contact Form 7 ブロック、カジュアル面談は `page-casual-talk.php` がタイトルで引いて出す = 2026-10-06 に CF7 化。CF7 の CSS・JS はこの 2 種類のページだけで読む（`inc/cf7.php`））: 見た目は `form.css` が CF7 の出力 DOM に当てている（`span.wpcf7-form-control-wrap` / `.wpcf7-checkbox > .wpcf7-list-item` / `.wpcf7-acceptance` / `.wpcf7-file` / `.wpcf7-submit` / `.wpcf7-not-valid-tip` / `.wpcf7-response-output`）。行の構造（`.form__row` / `__label` / `__req` / `__field`）は CF7 のフォームテンプレートに書く部分。CF7 の自動 `<p>` / `<br>` は切る（`wpcf7_autop_or_not`）。`form.js` は [A]（select / date が空の間グレーにする）と [C]（送信できたら form の `data-thanks` へ移動）だけ。必須チェック・同意で送信可は CF7 本体（静的なフォーム用の代用 [B] は消した）。メールアドレス（確認用）の一致チェックは `inc/cf7.php`。**要確認**: CF7 のメールの宛先・件名・本文・自動返信の有無（いまは 2 つのフォームとも仮でサイト管理者宛て、自動返信なし。送信完了ページの文言は「自動返信メールが届かない場合…」と自動返信がある前提）。カジュアル面談の性別・興味のある職種の選択肢は仮（仕様書 250:2632 に中身が無い）。
 - **ギミック**: 制度・環境の「社内コミュニケーション」= 中央 1 枚 → 背後のカードが左右にゆっくり開く → クリック / ドラッグ / 左右キーで入れ替え（`work-style.js`、Figma 付箋 1370:17451、参考 https://ni-communication.pages.dev ）。教育・研修の成長ステップ = 横スクロール + ヒント（PC マウス / SP 指のアイコン、バーのループ。付箋 1370:17427）。3分でわかるNI = 円グラフが回って出る（数字のカウントアップは 2026-10-02 に外した。指示の出典が無かったため）。インタビュー一覧 = 絞り込み（年次・職種は単一、タグは複数、グループ間 AND）。動きは `prefers-reduced-motion` で止まる。
 - **仕事の相関図（`page-chart.php`）**: 図は `.chart` = Figma の img（722:8368）と同じ 1248×2372px 固定の「ステージ」。カードとラベルは HTML で、`style="--x:…;--y:…"`（Figma の座標そのまま）で絶対配置。線と矢印は `assets/img/chart/lines.svg`、イラストは `illust_*.svg`。どちらも Figma で図全体を SVG 書き出し（`download_assets` で 722:8368 を svg 指定。レイヤー名が id に残る）したものから、スクリプトでレイヤー単位に切り出した（ラベルと文字は除く）。デザインが変わったら同じ手順で切り出し直し、HTML の座標を直す。
   - PC: `chart.js` がステージを枠の幅に合わせて縮小するだけ（1440px 以上で等倍）。
