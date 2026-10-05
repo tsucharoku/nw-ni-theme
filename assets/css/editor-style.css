@@ -416,6 +416,15 @@
   border-spacing: 0;
 }
 
+/* WP 標準の見出し行の下・フッター行の上の 3px の線は出さない（デザインに無い） */
+.entry-content .wp-block-table thead {
+  border-bottom: 0;
+}
+
+.entry-content .wp-block-table tfoot {
+  border-top: 0;
+}
+
 .entry-content .wp-block-table th,
 .entry-content .wp-block-table td {
   padding: 14px 20px;
