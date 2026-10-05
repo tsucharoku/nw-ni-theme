@@ -41,9 +41,12 @@ function ni_block_editor_styles( $settings, $context ) {
 		array(
 			'/\.entry-content(?=\s*[{,])/',   /* .entry-content 自体 → body（エディタが .editor-styles-wrapper に置き換える） */
 			'/\.entry-content > /',            /* 直下のブロック → エディタのブロックの親 */
+			/* 余白のリセット（:where() だけの行）→ 頭を残す。外すと詳細度が 0 になり、エディタの WP 標準のリセット
+			   （:where(.editor-styles-wrapper) p { margin: revert } など）に負けて、段落・見出しの上下にブラウザ標準の余白が出る */
+			'/\.entry-content (?=:where\()/',
 			'/\.entry-content /',              /* 子孫 → 頭を外す（エディタが .editor-styles-wrapper を付ける） */
 		),
-		array( 'body', '.is-root-container > ', '' ),
+		array( 'body', '.is-root-container > ', '.is-root-container ', '' ),
 		$css
 	);
 	/* 本文の箱の水色（job-opening.css の .job-detail__body = rgba(199, 219, 236, 0.4) をページ地色 #f6f9fc に重ねた色）。
