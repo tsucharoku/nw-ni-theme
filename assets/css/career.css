@@ -306,7 +306,11 @@
 
 /* ---- Info / Bnr（カッコ付きプレースホルダ） ---- */
 .pitch-box {
-  padding: 40px 20px;
+  padding: 80px 20px;   /* Figma SP 474:8499: カッコの外の上下 80（2026-10-06 修正。以前は 40） */
+}
+
+.pitch-box--bnr {
+  padding-block: 40px;   /* Figma SP 474:9978: バナーのほうは上下 40 */
 }
 
 .pitch-box__inner {
@@ -663,14 +667,12 @@
 
 /* ---- Do（中途版の余白） ---- */
 .do--career {
-  padding-top: 56px;   /* Figma SP 474:8503: 上のカッコ（top）が y 56 */
-  padding-bottom: 40px;
+  padding-top: 56px;   /* Figma SP 474:8503: 上のカッコ（top）が y 56。下は余白なし = カッコの下端がフレームの下端で、Project Story の上 64 に続く（2026-10-06 修正。以前は下に 40 あった） */
 }
 
 @media (min-width: 768px) {
   .do--career {
     padding-top: var(--section-margin-l);
-    padding-bottom: 0;
   }
 }
 
