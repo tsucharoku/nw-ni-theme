@@ -311,20 +311,11 @@ get_header();
             <?php endif; ?>
           </div>
           <?php if ( $ni_interview && 'publish' === $ni_interview->post_status ) : ?>
-          <!-- 関連インタビュー（記事を選んだときだけ）。TODO: 写真・名前・入社区分・職種・ハッシュタグは社員インタビューの入力項目が決まってからつなぐ。いまはタイトルとリンクだけ -->
+          <!-- 関連インタビュー（記事を選んだときだけ）。カードは TOP の社員インタビューと同じ部品（写真 = サムネイル用画像、一言 = タイトル、
+               入社区分・職種・タグ = タクソノミー）。写真の上に氏名を重ねる（PC のみ。デザインにある英字の氏名は入力項目が無いので出していない） -->
           <div class="career-case__voice">
             <p class="career-case__label u-grd-text">Interview</p>
-            <div class="voice-card">
-              <?php if ( has_post_thumbnail( $ni_interview ) ) : ?>
-              <a class="voice-card__img" href="<?php echo esc_url( get_permalink( $ni_interview ) ); ?>"><?php echo get_the_post_thumbnail( $ni_interview, 'large', array( 'loading' => 'lazy' ) ); ?></a>
-              <?php endif; ?>
-              <div class="voice-card__body">
-                <div class="voice-card__row">
-                  <p class="voice-card__quote"><?php echo esc_html( get_the_title( $ni_interview ) ); ?></p>
-                  <a class="arrow-pill arrow-pill--l voice-card__arrow" href="<?php echo esc_url( get_permalink( $ni_interview ) ); ?>" aria-label="記事を読む"><img src="<?php echo ni_img( 'common/arrow_pill_white_l.svg' ); ?>" alt="" width="20" height="24"></a>
-                </div>
-              </div>
-            </div>
+<?php get_template_part( 'template-parts/voice-card', null, array( 'post' => $ni_interview->ID, 'tag' => 'div', 'lazy' => true, 'name' => true ) ); ?>
           </div>
           <?php endif; ?>
         </div>
