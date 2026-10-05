@@ -1,0 +1,259 @@
+{
+    "key": "group_ni_cross_talk",
+    "title": "座談会",
+    "fields": [
+        {
+            "key": "field_ni_cross_talk_mv",
+            "label": "メインビジュアル",
+            "name": "ct_mv",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "詳細ページの上の大きい写真です。「その他の記事」のカードにも出ます。横長の写真（例: 2048×1366px）。",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_ni_cross_talk_members",
+            "label": "参加メンバー",
+            "name": "ct_members",
+            "aria-label": "",
+            "type": "relationship",
+            "instructions": "左の「Member」に出すメンバーを選びます（選んだ順に上から並びます）。メンバーは「座談会 › メンバー」で登録します。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "member"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "filters": [
+                "search"
+            ],
+            "return_format": "id",
+            "min": "",
+            "max": "",
+            "elements": "",
+            "bidirectional": 0,
+            "bidirectional_target": []
+        },
+        {
+            "key": "field_ni_cross_talk_body",
+            "label": "本文",
+            "name": "ct_body",
+            "aria-label": "",
+            "type": "flexible_content",
+            "instructions": "「見出し」「画像」「質問」「回答」を上から順に並べます。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layouts": {
+                "layout_ni_cross_talk_heading": {
+                    "key": "layout_ni_cross_talk_heading",
+                    "name": "heading",
+                    "label": "見出し",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_ni_cross_talk_heading",
+                            "label": "見出し",
+                            "name": "heading",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_layout": "layout_ni_cross_talk_heading"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_ni_cross_talk_image": {
+                    "key": "layout_ni_cross_talk_image",
+                    "name": "image",
+                    "label": "画像",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_ni_cross_talk_image",
+                            "label": "画像",
+                            "name": "image",
+                            "aria-label": "",
+                            "type": "image",
+                            "instructions": "横長の写真（例: 2048×1366px）。",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array",
+                            "library": "all",
+                            "min_width": "",
+                            "min_height": "",
+                            "min_size": "",
+                            "max_width": "",
+                            "max_height": "",
+                            "max_size": "",
+                            "mime_types": "",
+                            "preview_size": "medium",
+                            "parent_layout": "layout_ni_cross_talk_image"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_ni_cross_talk_question": {
+                    "key": "layout_ni_cross_talk_question",
+                    "name": "question",
+                    "label": "質問",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_ni_cross_talk_question",
+                            "label": "質問",
+                            "name": "question",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "「Question 01」などの番号は、上から順に自動で付きます。",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "rows": 2,
+                            "placeholder": "",
+                            "new_lines": "",
+                            "parent_layout": "layout_ni_cross_talk_question"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_ni_cross_talk_answer": {
+                    "key": "layout_ni_cross_talk_answer",
+                    "name": "answer",
+                    "label": "回答",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_ni_cross_talk_speaker",
+                            "label": "話者",
+                            "name": "speaker",
+                            "aria-label": "",
+                            "type": "post_object",
+                            "instructions": "メンバーから選びます（写真と氏名が出ます）。",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "post_type": [
+                                "member"
+                            ],
+                            "post_status": [
+                                "publish"
+                            ],
+                            "taxonomy": "",
+                            "return_format": "id",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "bidirectional": 0,
+                            "ui": 1,
+                            "bidirectional_target": [],
+                            "parent_layout": "layout_ni_cross_talk_answer"
+                        },
+                        {
+                            "key": "field_ni_cross_talk_answer",
+                            "label": "本文",
+                            "name": "answer",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "改行はそのまま出ます。空行を入れると段落が分かれます。",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "rows": 5,
+                            "placeholder": "",
+                            "new_lines": "",
+                            "parent_layout": "layout_ni_cross_talk_answer"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                }
+            },
+            "min": "",
+            "max": "",
+            "button_label": "ブロックを追加"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "cross-talk"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1791133030
+}
