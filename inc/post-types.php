@@ -8,7 +8,7 @@
  *
  * 座談会の一覧と社員インタビューの詳細は、まだ URL とテンプレート（archive-○○.php / single-○○.php）を出すための最小限の登録。
  * 入力項目（supports・カスタムフィールド）は仕様を見て後から足す。
- * 座談会の詳細は WP の内容を出している（メインビジュアル・参加メンバー・本文は ACF: acf-json/group_ni_cross_talk.json、
+ * 座談会の詳細は WP の内容を出している（メインビジュアルはアイキャッチ、参加メンバー・本文は ACF: acf-json/group_ni_cross_talk.json、
  * メンバーは投稿タイプ member）。
  * 社員インタビューは一覧が WP の内容を出している（タクソノミー 3 つ = 入社区分・職種・タグ、氏名・サムネイル用画像は ACF: acf-json/）。
  * 募集要項は一覧・カテゴリ一覧・詳細が WP の内容を出している（カテゴリの英語表記・詳細のリード文は ACF: acf-json/）。
@@ -29,8 +29,8 @@ function ni_register_post_types() {
 				'has_archive'   => true,
 				'show_in_rest'  => true,
 				'menu_position' => 5,
-				/* 座談会の本文は ACF（フレキシブルコンテンツ）で入力するので、エディターは出さない */
-				'supports'      => 'cross-talk' === $post_type ? array( 'title' ) : array( 'title', 'editor' ),
+				/* 座談会の本文は ACF（フレキシブルコンテンツ）で入力するので、エディターは出さない。メインビジュアルはアイキャッチ */
+				'supports'      => 'cross-talk' === $post_type ? array( 'title', 'thumbnail' ) : array( 'title', 'editor' ),
 			)
 		);
 	}

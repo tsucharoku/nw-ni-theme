@@ -3,31 +3,6 @@
     "title": "座談会",
     "fields": [
         {
-            "key": "field_ni_cross_talk_mv",
-            "label": "メインビジュアル",
-            "name": "ct_mv",
-            "aria-label": "",
-            "type": "image",
-            "instructions": "詳細ページの上の大きい写真です。「その他の記事」のカードにも出ます。横長の写真（例: 2048×1366px）。",
-            "required": 1,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "return_format": "array",
-            "library": "all",
-            "min_width": "",
-            "min_height": "",
-            "min_size": "",
-            "max_width": "",
-            "max_height": "",
-            "max_size": "",
-            "mime_types": "",
-            "preview_size": "medium"
-        },
-        {
             "key": "field_ni_cross_talk_members",
             "label": "参加メンバー",
             "name": "ct_members",
@@ -255,5 +230,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1791133030
+    "modified": 1791168257
 }

@@ -2,7 +2,7 @@
 /**
  * 座談会詳細（カスタム投稿 cross-talk の詳細 /cross-talk/{パーマリンク}/）
  *
- * タイトル = 投稿タイトル。メインビジュアル・参加メンバー・本文は ACF「座談会」（acf-json/group_ni_cross_talk.json）。
+ * タイトル = 投稿タイトル、メインビジュアル = アイキャッチ。参加メンバー・本文は ACF「座談会」（acf-json/group_ni_cross_talk.json）。
  * 参加メンバーと回答の話者は、投稿タイプ member（メンバー。氏名 = タイトル、写真・入社年・部署は ACF）から選ぶ。
  * 本文はフレキシブルコンテンツ（見出し / 画像 / 質問 / 回答）で、Question の番号は上から順に自動で付ける。
  * 先方の仕様（本文はブロックエディタ）から変えている（2026-10-05 ユーザー指示）。入力した内容だけ出す。
@@ -10,25 +10,24 @@
 
 $ni_id      = get_queried_object_id();
 $ni_title   = get_the_title( $ni_id );
-$ni_mv      = function_exists( 'get_field' ) ? get_field( 'ct_mv', $ni_id ) : null;
 $ni_members = function_exists( 'get_field' ) ? get_field( 'ct_members', $ni_id ) : array();
 $ni_body    = function_exists( 'get_field' ) ? get_field( 'ct_body', $ni_id ) : array();
 $ni_members = array_filter( array_map( 'intval', is_array( $ni_members ) ? $ni_members : array() ) );
 $ni_body    = is_array( $ni_body ) ? $ni_body : array();
 
-/* ACF の画像（配列）を <img> で出す。未入力なら何も出さない。$size は WP の画像サイズ（無ければ元画像）、$atts は追加の属性 */
-function ni_ct_img( $img, $size = '', $atts = '' ) {
-	if ( ! is_array( $img ) || empty( $img['url'] ) ) {
-		return;
+/* ACF の画像（配列）を <img> で出す。未入力なら何も出さない。$atts は追加の属性 */
+function ni_ct_img( $img, $atts = '' ) {
+	if ( is_array( $img ) && ! empty( $img['url'] ) ) {
+		printf( '<img src="%s" alt="" width="%d" height="%d"%s>', esc_url( $img['url'] ), (int) $img['width'], (int) $img['height'], $atts );
 	}
-	$sized = $size && ! empty( $img['sizes'][ $size ] );
-	printf(
-		'<img src="%s" alt="" width="%d" height="%d"%s>',
-		esc_url( $sized ? $img['sizes'][ $size ] : $img['url'] ),
-		(int) ( $sized ? $img['sizes'][ $size . '-width' ] : $img['width'] ),
-		(int) ( $sized ? $img['sizes'][ $size . '-height' ] : $img['height'] ),
-		$atts
-	);
+}
+
+/* 記事のアイキャッチ（メインビジュアル）を <img> で出す。未設定なら何も出さない。$size は WP の画像サイズ */
+function ni_ct_thumb( $post_id, $size, $atts = '' ) {
+	$src = wp_get_attachment_image_src( get_post_thumbnail_id( $post_id ), $size );
+	if ( $src ) {
+		printf( '<img src="%s" alt="" width="%d" height="%d"%s>', esc_url( $src[0] ), (int) $src[1], (int) $src[2], $atts );
+	}
 }
 
 /* メンバーの写真（ACF member_photo） */
@@ -66,7 +65,7 @@ get_header();
 
     <!-- メインビジュアル + タイトル（Figma PC 900:28234 / SP 1200:19639） -->
     <header class="ct-hero">
-      <div class="ct-hero__img"><?php ni_ct_img( $ni_mv, '', ' fetchpriority="high"' ); ?></div>
+      <div class="ct-hero__img"><?php ni_ct_thumb( $ni_id, 'full', ' fetchpriority="high"' ); ?></div>
       <div class="ct-hero__txt">
         <p class="ct-hero__label">Cross Talk</p>
         <h1 class="ct-hero__title"><?php echo esc_html( $ni_title ); ?></h1>
@@ -127,7 +126,7 @@ get_header();
         		case 'image':
         			if ( is_array( $ni_row['image'] ) && ! empty( $ni_row['image']['url'] ) ) :
         				?>
-        <figure><?php ni_ct_img( $ni_row['image'], '', ' loading="lazy"' ); ?></figure>
+        <figure><?php ni_ct_img( $ni_row['image'], ' loading="lazy"' ); ?></figure>
         				<?php
         			endif;
         			break;
@@ -163,7 +162,7 @@ get_header();
   </article>
 
   <?php if ( $ni_others ) : ?>
-  <!-- その他の記事（Figma PC 900:28297 / SP 1140:20492）。PC 3 件 / SP 4 件（4 件目は PC で非表示）。写真 = メインビジュアル -->
+  <!-- その他の記事（Figma PC 900:28297 / SP 1140:20492）。PC 3 件 / SP 4 件（4 件目は PC で非表示）。写真 = アイキャッチ -->
   <section class="lower-sec ct-others">
     <div class="sec-head sec-head--sub ct-others__head">
       <p class="sec-head__label u-grd-text">Other Articles</p>
@@ -174,7 +173,7 @@ get_header();
     <ul class="ct-others__list">
       <?php foreach ( $ni_others as $ni_other ) : ?>
       <li><a class="ct-card" href="<?php echo esc_url( get_permalink( $ni_other ) ); ?>">
-        <span class="ct-card__img"><?php ni_ct_img( function_exists( 'get_field' ) ? get_field( 'ct_mv', $ni_other->ID ) : null, 'large', ' loading="lazy"' ); ?></span>
+        <span class="ct-card__img"><?php ni_ct_thumb( $ni_other->ID, 'large', ' loading="lazy"' ); ?></span>
         <span class="ct-card__title"><?php echo esc_html( get_the_title( $ni_other ) ); ?></span>
       </a></li>
       <?php endforeach; ?>
