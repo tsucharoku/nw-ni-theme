@@ -3,13 +3,13 @@
     "title": "座談会",
     "fields": [
         {
-            "key": "field_ni_cross_talk_summary",
-            "label": "概要",
-            "name": "ct_summary",
+            "key": "field_ni_cross_talk_excerpt",
+            "label": "概要テキスト（一覧ページ用）",
+            "name": "crosstalk_excerpt",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "座談会の一覧に出る紹介文です（詳細ページには出ません）。",
-            "required": 0,
+            "instructions": "座談会の一覧で、タイトルの下に出る短い紹介文です（詳細ページには出ません）。推奨: 80〜120 文字。",
+            "required": 1,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -18,7 +18,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "rows": 3,
+            "rows": 4,
             "placeholder": "",
             "new_lines": ""
         },
@@ -252,5 +252,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1791169844
+    "modified": 1791170480
 }

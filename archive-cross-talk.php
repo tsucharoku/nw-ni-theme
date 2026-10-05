@@ -4,7 +4,7 @@
  *
  * 公開中の座談会を新しい順に全件出す（6 件目以降は hidden で出力し、「次の5件をみる」で 5 件ずつ出す = lower.js の .js-more）。
  * 番号 = 投稿順で自動（ni_cross_talk_number()）、タイトル = 投稿タイトル、写真 = アイキャッチ、
- * メンバーの行 = ACF「参加メンバー」から（ni_cross_talk_member_lines()）、サマリー = ACF「概要」（ct_summary）。
+ * メンバーの行 = ACF「参加メンバー」から（ni_cross_talk_member_lines()）、サマリー = ACF「概要テキスト（一覧ページ用）」（crosstalk_excerpt。設計書どおり）。
  * ページ頭（英字・和文・リード）は固定。入力した内容だけ出す。
  */
 
@@ -48,7 +48,7 @@ get_header();
     	$ni_url     = get_permalink( $ni_talk );
     	$ni_img     = wp_get_attachment_image_src( get_post_thumbnail_id( $ni_talk ), 'large' );
     	$ni_members = ni_cross_talk_member_lines( $ni_talk->ID );
-    	$ni_summary = function_exists( 'get_field' ) ? trim( (string) get_field( 'ct_summary', $ni_talk->ID ) ) : '';
+    	$ni_summary = function_exists( 'get_field' ) ? trim( (string) get_field( 'crosstalk_excerpt', $ni_talk->ID ) ) : '';
     	?>
     <li class="ct-row" data-anim="inview"<?php echo $ni_i >= $ni_step ? ' hidden' : ''; ?>>
       <p class="ct-row__head"><span class="ct-row__label u-grd-text">Cross Talk</span><span class="ct-row__num"><small>#</small><b><?php echo esc_html( ni_cross_talk_number( $ni_talk->ID ) ); ?></b></span></p>
