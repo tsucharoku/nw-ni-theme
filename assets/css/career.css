@@ -481,6 +481,16 @@
     gap: 72px;
   }
 
+  /* 見出しの高さを Figma PC 611:9459 に合わせる（英字 90 + 16 + 日本語 36 = 142。共通の指定だと 85 + 16 + 37 = 138 で、
+     見出しの文字と写真の縦の位置関係が 3〜5px ずれていた） */
+  .why .sec-head__en {
+    line-height: 90px;
+  }
+
+  .why .sec-head__title {
+    line-height: 36px;
+  }
+
   .why-item {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 248px;
@@ -703,8 +713,16 @@
     flex: 1 1 440px;
   }
 
+  /* 右の列は 114px 下げて始める（Figma PC 419:2684: 1 件目が y 114。左の列の 1 件目 y 214 と 100px の段違い）。
+     2 列に並ぶ幅（約 1141px 以上）だけ。1 列に折り返したときは下げない */
+  @media (min-width: 1160px) {
+    .why__col--head + .why__col {
+      padding-top: 114px;
+    }
+  }
+
   .why-item {
-    grid-template-columns: minmax(0, 1fr) clamp(160px, 32%, 248px);
+    grid-template-columns: minmax(0, 1fr) clamp(160px, 42.76%, 248px);   /* Figma PC 474:10163: 項目 580 に写真 248 = 42.76%。32% だと 1440 幅でも 186 に縮み、文字より低くなって下揃えが崩れていた */
   }
 
   .why-item__img {
