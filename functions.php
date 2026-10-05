@@ -117,6 +117,19 @@ function ni_voice_pickup() {
 	return array_slice( array_values( $ids ), 0, 3 );
 }
 
+/* 新卒 TOP・中途 TOP の「座談会（Cross Talk）」に出す記事の ID（最大 4 件）。表示中の固定ページの ACF「座談会（ピックアップ）」
+   （acf-json/group_ni_top_talk.json）で選んだ記事。公開中の記事だけ返す。未選択なら空 */
+function ni_talk_pickup() {
+	$ids = function_exists( 'get_field' ) ? get_field( 'field_ni_top_talk_pickup', get_queried_object_id() ) : array();
+	$ids = array_filter(
+		array_map( 'intval', is_array( $ids ) ? $ids : array() ),
+		function ( $id ) {
+			return 'cross-talk' === get_post_type( $id ) && 'publish' === get_post_status( $id );
+		}
+	);
+	return array_slice( array_values( $ids ), 0, 4 );
+}
+
 /* ACF のフィールドグループの場所「固定ページ ==」に、ページ ID ではなくパス（beginner など）を書けるようにする。
    ID は Local とテスト・本番で変わるため（acf-json の location の value にパスを書く） */
 function ni_acf_match_page_path( $result, $rule, $screen ) {

@@ -1,0 +1,65 @@
+{
+    "key": "group_ni_top_talk",
+    "title": "座談会（ピックアップ）",
+    "fields": [
+        {
+            "key": "field_ni_top_talk_pickup",
+            "label": "ピックアップする記事",
+            "name": "talk_pickup",
+            "aria-label": "",
+            "type": "relationship",
+            "instructions": "このページの「座談会（Cross Talk）」に出す記事を 4 件まで選びます。1 件目が最初に大きく出て、残りが下のサムネイルに並びます（矢印とサムネイルで切り替え）。選んだ記事だけ出ます。未選択なら記事の部分は出ません。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "cross-talk"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "filters": [
+                "search"
+            ],
+            "return_format": "id",
+            "min": "",
+            "max": 4,
+            "elements": [
+                "featured_image"
+            ],
+            "bidirectional": 0,
+            "bidirectional_target": []
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "beginner"
+            }
+        ],
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "career"
+            }
+        ]
+    ],
+    "menu_order": 1,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1791176324
+}

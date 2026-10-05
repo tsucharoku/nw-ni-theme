@@ -256,73 +256,7 @@ get_header();
   </section>
 
   <!-- Cross Talk -->
-  <section class="talk">
-    <div class="talk__main">
-      <div class="talk__col">
-        <div class="talk__head">
-          <div class="sec-head sec-head--top">
-            <h2 class="sec-head__en u-en">Cross<br class="u-pc"> Talk</h2>
-            <div class="sec-head__body">
-              <p class="sec-head__title sec-head__title--cap">座談会</p>
-              <p class="sec-head__read">さまざまな切り口で紐解く、リアルな日本インフォメーション</p>
-            </div>
-          </div>
-          <!-- 表示中の 1 件（4 件を重ねて is-active をフェードで切り替え。common.js） -->
-          <div class="talk__info">
-            <div class="talk__info-item is-active">
-              <div class="talk__no">
-                <p class="talk__num"><small>#</small><b>01</b></p>
-                <h3 class="talk__title">新旧新卒座談会</h3>
-              </div>
-              <p class="talk__members">2016年入社　リサーチ・コンサルティング部 サブリーダー H.Wさん<br>2022年入社　リサーチ・ディレクション部 T.Sさん<br>2022年入社　NIマーケティング研究所 K.Mさん</p>
-            </div>
-            <div class="talk__info-item">
-              <div class="talk__no">
-                <p class="talk__num"><small>#</small><b>02</b></p>
-                <h3 class="talk__title">働くママの座談会</h3>
-              </div>
-              <p class="talk__members">テキストテキストテキストテキスト<br>テキストテキストテキストテキスト<br>テキストテキストテキストテキスト</p>
-            </div>
-            <div class="talk__info-item">
-              <div class="talk__no">
-                <p class="talk__num"><small>#</small><b>03</b></p>
-                <h3 class="talk__title">育メン対談</h3>
-              </div>
-              <p class="talk__members">テキストテキストテキストテキスト<br>テキストテキストテキストテキスト<br>テキストテキストテキストテキスト</p>
-            </div>
-            <div class="talk__info-item">
-              <div class="talk__no">
-                <p class="talk__num"><small>#</small><b>04</b></p>
-                <h3 class="talk__title">働くママの座談会</h3>
-              </div>
-              <p class="talk__members">テキストテキストテキストテキスト<br>テキストテキストテキストテキスト<br>テキストテキストテキストテキスト</p>
-            </div>
-          </div>
-        </div>
-        <!-- サムネ 4 件。JS が 3 枠に組み直し、表示中以外の 3 件を出す（クリックで切り替え） -->
-        <ul class="talk__thumbs">
-          <li><button type="button" class="talk-thumb" data-talk-to="0"><span class="talk-thumb__img"><img src="<?php echo ni_img( 'common/talk_main.jpg' ); ?>" alt="" width="177" height="118"></span><span class="talk-thumb__num">#01</span><span class="talk-thumb__title">新旧新卒座談会</span></button></li>
-          <li><button type="button" class="talk-thumb" data-talk-to="1"><span class="talk-thumb__img"><img src="<?php echo ni_img( 'common/talk_thumb_02.jpg' ); ?>" alt="" width="177" height="118"></span><span class="talk-thumb__num">#02</span><span class="talk-thumb__title">働くママの座談会</span></button></li>
-          <li><button type="button" class="talk-thumb" data-talk-to="2"><span class="talk-thumb__img"><img src="<?php echo ni_img( 'common/talk_thumb_03.jpg' ); ?>" alt="" width="177" height="118"></span><span class="talk-thumb__num">#03</span><span class="talk-thumb__title">育メン対談</span></button></li>
-          <li><button type="button" class="talk-thumb" data-talk-to="3"><span class="talk-thumb__img"><img src="<?php echo ni_img( 'common/talk_thumb_04.jpg' ); ?>" alt="" width="176" height="118"></span><span class="talk-thumb__num">#04</span><span class="talk-thumb__title">働くママの座談会</span></button></li>
-        </ul>
-      </div>
-      <!-- 大きな写真 4 件（記事へのリンク）。重ねて is-active をクロスフェード -->
-      <div class="talk__img">
-        <a class="talk__img-item is-active" href="<?php echo ni_url( '/cross-talk/detail/' ); ?>"><img src="<?php echo ni_img( 'common/talk_main.jpg' ); ?>" alt="新旧新卒座談会" width="696" height="484"></a>
-        <a class="talk__img-item" href="<?php echo ni_url( '/cross-talk/detail/' ); ?>"><img src="<?php echo ni_img( 'common/talk_thumb_02.jpg' ); ?>" alt="働くママの座談会" width="696" height="484"></a>
-        <a class="talk__img-item" href="<?php echo ni_url( '/cross-talk/detail/' ); ?>"><img src="<?php echo ni_img( 'common/talk_thumb_03.jpg' ); ?>" alt="育メン対談" width="696" height="484"></a>
-        <a class="talk__img-item" href="<?php echo ni_url( '/cross-talk/detail/' ); ?>"><img src="<?php echo ni_img( 'common/talk_thumb_04.jpg' ); ?>" alt="働くママの座談会" width="696" height="484"></a>
-      </div>
-    </div>
-    <div class="talk__foot">
-      <div class="slider-nav">
-        <button type="button" class="arrow-pill arrow-pill--prev" aria-label="前へ"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></button>
-        <button type="button" class="arrow-pill" aria-label="次へ"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></button>
-      </div>
-      <a class="btn btn--w" href="<?php echo ni_url( '/cross-talk/' ); ?>">すべての記事をみる<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a>
-    </div>
-  </section>
+  <?php get_template_part( 'template-parts/talk-section' ); /* 座談会（Cross Talk）。記事は固定ページの ACF「座談会（ピックアップ）」で選ぶ */ ?>
 
   <!-- People & Culture -->
   <section class="culture">
