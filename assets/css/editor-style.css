@@ -391,11 +391,26 @@
 /* ==========================================================================
    画像＋テキスト core/media-text（565:17669 / SP 1140:16472）
    左右の分け方（グリッド）・画像の左右・メディアの幅・縦位置・モバイルで縦に並べるは WP 標準（ブロックの設定）に任せる。
-   ここは見た目だけ: 画像の角丸、文の中は 12 間隔
+   ここは見た目だけ: 画像の角丸、文の中は 12 間隔、文の余白（WP 標準は左右 8%）を画像側だけ 32 に。
+   SP（600 以下 = WP 標準が縦に並べる幅）は画像の下に 16。背景色を付けたときは文が箱の端に付かないよう標準の余白のまま
    ========================================================================== */
 .entry-content .wp-block-media-text__media {
   overflow: hidden;
   border-radius: var(--radius);
+}
+
+.entry-content .wp-block-media-text:not(.has-background) > .wp-block-media-text__content {
+  padding: 0 0 0 32px;
+}
+
+.entry-content .wp-block-media-text.has-media-on-the-right:not(.has-background) > .wp-block-media-text__content {
+  padding: 0 32px 0 0;
+}
+
+@media (max-width: 600px) {
+  .entry-content .wp-block-media-text.is-stacked-on-mobile:not(.has-background) > .wp-block-media-text__content {
+    padding: 16px 0 0;
+  }
 }
 
 .entry-content .wp-block-media-text__content > * + * {
