@@ -3,6 +3,65 @@
     "title": "ブロック: コメントA",
     "fields": [
         {
+            "aria-label": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "key": "field_ni_block_comment_a_source",
+            "label": "話者",
+            "name": "source",
+            "type": "button_group",
+            "instructions": "写真と氏名などを、ここで入力するか、登録済みのメンバー（座談会 → メンバー）から選ぶかを決めます。",
+            "choices": {
+                "manual": "直接入力",
+                "member": "メンバーから選ぶ"
+            },
+            "default_value": "manual",
+            "return_format": "value",
+            "allow_null": 0,
+            "layout": "horizontal"
+        },
+        {
+            "aria-label": "",
+            "required": 1,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_ni_block_comment_a_source",
+                        "operator": "==",
+                        "value": "member"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "key": "field_ni_block_comment_a_member",
+            "label": "メンバー",
+            "name": "member",
+            "type": "post_object",
+            "instructions": "写真 = メンバーの写真、氏名 = メンバーの名前 が出ます。",
+            "post_type": [
+                "member"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "return_format": "id",
+            "multiple": 0,
+            "allow_null": 0,
+            "bidirectional": 0,
+            "ui": 1,
+            "bidirectional_target": []
+        },
+        {
             "key": "field_ni_block_comment_a_image",
             "label": "写真",
             "name": "image",
@@ -10,7 +69,15 @@
             "type": "image",
             "instructions": "丸く切り抜いて出します。",
             "required": 1,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_ni_block_comment_a_source",
+                        "operator": "==",
+                        "value": "manual"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -35,7 +102,15 @@
             "type": "text",
             "instructions": "写真の下に出ます。",
             "required": 0,
-            "conditional_logic": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_ni_block_comment_a_source",
+                        "operator": "==",
+                        "value": "manual"
+                    }
+                ]
+            ],
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -86,5 +161,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1791200000
+    "modified": 1791210000
 }

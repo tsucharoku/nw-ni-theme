@@ -175,10 +175,11 @@ add_action( 'acf/input/admin_head', 'ni_acf_accordion_style' );
    話者の候補を取りに行くとき（ACF の select2 の ajax）に、参加メンバーの ID を ni_members として一緒に送る。
    参加メンバーを 1 人も選んでいなければ絞らない（全員から選べる）。
    あわせて、話者の候補と選択中の表示に、メンバーの写真（アイキャッチ）を氏名の左に丸く出す
-   （参加メンバーの欄は ACF の設定「アイキャッチを表示」で出していて、ここでは丸くするだけ） */
+   （参加メンバーの欄は ACF の設定「アイキャッチを表示」で出していて、ここでは丸くするだけ）。
+   写真を出すのは、募集要項の編集画面のコメントA・B ブロックの「メンバー」（blocks/comment-a・comment-b）も同じ */
 function ni_cross_talk_speaker_script() {
 	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-	if ( ! $screen || 'cross-talk' !== $screen->post_type ) {
+	if ( ! $screen || ! in_array( $screen->post_type, array( 'cross-talk', 'job-opening' ), true ) ) {
 		return;
 	}
 	$photos = array();
@@ -203,6 +204,8 @@ function ni_cross_talk_speaker_script() {
 		return;
 	}
 	var photos = <?php echo wp_json_encode( (object) $photos ); ?>;
+	/* 候補に写真を出す欄: 座談会の話者、コメントA・B ブロックのメンバー */
+	var memberFields = [ 'field_ni_cross_talk_speaker', 'field_ni_block_comment_a_member', 'field_ni_block_comment_b_member' ];
 	acf.addFilter( 'select2_ajax_data', function ( data ) {
 		if ( data.field_key === 'field_ni_cross_talk_speaker' ) {
 			var members = acf.getField( 'field_ni_cross_talk_members' );
@@ -218,7 +221,7 @@ function ni_cross_talk_speaker_script() {
 		return jQuery( '<span class="ni-member-opt"></span>' ).append( jQuery( '<img alt="">' ).attr( 'src', photos[ item.id ] ), document.createTextNode( item.text ) );
 	}
 	acf.addFilter( 'select2_args', function ( args, $select, settings, field ) {
-		if ( field && field.get( 'key' ) === 'field_ni_cross_talk_speaker' ) {
+		if ( field && memberFields.indexOf( field.get( 'key' ) ) !== -1 ) {
 			args.templateResult    = memberOption;
 			args.templateSelection = memberOption;
 		}

@@ -2,11 +2,13 @@
 /**
  * ブロック: コメントA（acf/ni-comment-a。Figma 968:10580 / SP 1140:16534）
  *
- * 丸い写真 + 氏名 | コメント。ACF: 写真（image）・氏名（name）・コメント（comment。空行で段落を分ける）
+ * 丸い写真 + 氏名 | コメント。ACF: 話者（source）= 直接入力なら 写真（image）・氏名（name）、メンバーから選ぶなら メンバー（member）の写真と名前。
+ * コメント（comment。空行で段落を分ける）
  */
 
-$ni_image   = (int) get_field( 'image' );
-$ni_name    = trim( (string) get_field( 'name' ) );
+$ni_speaker = ni_block_speaker();
+$ni_image   = $ni_speaker['image'];
+$ni_name    = $ni_speaker['member'] ? $ni_speaker['name'] : trim( (string) get_field( 'name' ) );
 $ni_comment = trim( (string) get_field( 'comment' ) );
 if ( ! $ni_image && '' === $ni_comment ) {
 	if ( $is_preview ) {
