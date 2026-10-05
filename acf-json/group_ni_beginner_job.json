@@ -1,0 +1,75 @@
+{
+    "key": "group_ni_beginner_job",
+    "title": "募集中の職種一覧（カテゴリ）",
+    "fields": [
+        {
+            "key": "field_ni_beginner_job_1",
+            "label": "タブ 1 のカテゴリ",
+            "name": "job_category_1",
+            "aria-label": "",
+            "type": "taxonomy",
+            "instructions": "このページの「募集中の職種一覧」の 1 つ目のタブ（最初に開いているタブ）に出す募集要項カテゴリです。タブの文言はカテゴリ名です。職種はカテゴリの並び順どおりに 5 件まで出ます。「全ての募集要項を見る」はこのカテゴリの募集一覧に移動します。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "job-category",
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "select",
+            "allow_null": 1,
+            "bidirectional": 0,
+            "multiple": 0,
+            "bidirectional_target": []
+        },
+        {
+            "key": "field_ni_beginner_job_2",
+            "label": "タブ 2 のカテゴリ",
+            "name": "job_category_2",
+            "aria-label": "",
+            "type": "taxonomy",
+            "instructions": "2 つ目のタブに出す募集要項カテゴリです。未選択ならタブは 1 つだけになります。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "taxonomy": "job-category",
+            "add_term": 0,
+            "save_terms": 0,
+            "load_terms": 0,
+            "return_format": "id",
+            "field_type": "select",
+            "allow_null": 1,
+            "bidirectional": 0,
+            "multiple": 0,
+            "bidirectional_target": []
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "beginner"
+            }
+        ]
+    ],
+    "menu_order": 2,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1791183526
+}

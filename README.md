@@ -48,7 +48,8 @@ cf7/                     CF7 のフォームの中身（entry-form.txt）とメ�
 header.php               <head> 〜 ハンバーガーメニューまで
 template-parts/menu.php      ハンバーガーメニュー
 template-parts/fv-frame.php  FV の青いフレーム（新卒 TOP・中途 TOP）
-template-parts/job-item.php  募集要項の 1 行（一覧・カテゴリ一覧の共通）
+template-parts/job-item.php  募集要項の 1 行（一覧・カテゴリ一覧・TOP の共通）
+template-parts/job-pickup.php  新卒 TOP・中途 TOP の「募集中の職種一覧」の 1 カテゴリぶん（職種 5 件まで + ボタン）
 footer.php               フッター 〜 </html>
 front-page.php ほか      上の表のテンプレート（<main> の中身）
 index.php                専用のテンプレートが無いページ用（ヘッダー・フッターだけ）
@@ -97,6 +98,7 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
   - カテゴリ一覧（`taxonomy-job-category.php`）: そのカテゴリの職種を全件出し、`lower.js` の `.js-more` が 10 件ずつ見せる（Ajax・ページ送りはしていない）。h1・パンくず・`<title>` は `カテゴリ名 + の募集一覧`。投稿が無いカテゴリの URL を直接開くと空の一覧になる（デザインなし）。
   - カテゴリの入稿項目: 名前 / スラッグ / 説明（WP 標準）/ 英語表記（ACF `label_en`。`acf-json/group_ni_job_category.json`）。英語表記・説明は空ならその行を出さない。
   - 並び順: 管理画面の並び替え（Intuitive Custom Post Order）の順。投稿は `menu_order` の小さい順 → 公開日の新しい順（`ni_job_orderby()`）、カテゴリはプラグインが付ける順。
+  - **新卒 TOP・中途 TOP の「募集中の職種一覧」は、固定ページで選んだカテゴリの職種を出す**（2026-10-05。仕様書 373:2942 / 373:2947 の注釈「タブは募集要項カテゴリのうち、新卒・中途(リサーチ未経験)の2カテゴリのみを出力」「カテゴリごとの募集要項アーカイブページへ遷移」）: どのカテゴリかはコードに書かず、固定ページの ACF「募集中の職種一覧（カテゴリ）」で選ぶ（ユーザー指示）。新卒 TOP = タブ 1・タブ 2（`acf-json/group_ni_beginner_job.json`、`job_category_1` / `job_category_2`）、中途 TOP = 1 つ（`acf-json/group_ni_career_job.json`、`job_category`）。カテゴリは `functions.php` の `ni_job_pickup()`、中身は `template-parts/job-pickup.php`（両 TOP 共通）。タブの文言 = カテゴリ名（ユーザー指示。デザインの「新卒」「中途(リサーチ未経験者)」にするならカテゴリ名を変える）、職種 = 並び順どおりに 5 件まで（ユーザー指示。一覧と同じ）、「全ての募集要項を見る」= そのカテゴリの募集一覧へ。未選択ならボタンだけ出して `/job-opening/` に向ける。タブ 2 が未選択ならタブは 1 つ。テストサーバーでも両ページでカテゴリを選ぶ必要がある。
   - **フッター「募集中の職種一覧」はカテゴリを自動で出す**（`footer.php`）: 全カテゴリ（投稿 0 件も含む）を並び順どおりに、名前 → カテゴリ一覧へのリンク。カテゴリが 1 つも無ければグループごと出さない。
   - **未対応**: ヘッダー「アルバイト」とメニュー「募集中の職種一覧」の 4 つのリンク。どれをどのカテゴリに向けるかが未定で、`ni_job_category_url()` が 4 つとも一覧（`/job-opening/`）に向けている。
 - **募集要項詳細も WP の内容**（`single-job-opening.php`。仕様書 732:3342「全ブロック包含」。青文字 = CMS で編集、黒文字 = 固定）

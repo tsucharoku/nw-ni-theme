@@ -130,6 +130,21 @@ function ni_talk_pickup() {
 	return array_slice( array_values( $ids ), 0, 4 );
 }
 
+/* 新卒 TOP・中途 TOP の「募集中の職種一覧」に出す募集要項カテゴリ（WP_Term の配列）。表示中の固定ページの ACF「募集中の職種一覧（カテゴリ）」
+   で選んだカテゴリ: 新卒 TOP = タブ 1・タブ 2（acf-json/group_ni_beginner_job.json）、中途 TOP = 1 つ（acf-json/group_ni_career_job.json）。
+   未選択・削除済みのカテゴリは返さない。同じカテゴリを 2 回選んでも 1 つにまとめる */
+function ni_job_pickup() {
+	$terms = array();
+	foreach ( array( 'field_ni_beginner_job_1', 'field_ni_beginner_job_2', 'field_ni_career_job' ) as $key ) {
+		$id   = function_exists( 'get_field' ) ? (int) get_field( $key, get_queried_object_id() ) : 0;
+		$term = $id ? get_term( $id, 'job-category' ) : null;
+		if ( $term instanceof WP_Term ) {
+			$terms[ $term->term_id ] = $term;
+		}
+	}
+	return array_values( $terms );
+}
+
 /* ACF のフィールドグループの場所「固定ページ ==」に、ページ ID ではなくパス（beginner など）を書けるようにする。
    ID は Local とテスト・本番で変わるため（acf-json の location の value にパスを書く） */
 function ni_acf_match_page_path( $result, $rule, $screen ) {

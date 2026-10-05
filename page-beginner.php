@@ -313,29 +313,24 @@ get_header();
         <p class="sec-head__title sec-head__title--cap">募集中の職種一覧</p>
       </div>
     </div>
+    <?php $ni_job_terms = ni_job_pickup(); /* 固定ページの ACF「募集中の職種一覧（カテゴリ）」で選んだカテゴリ（タブ 1・タブ 2） */ ?>
     <div class="job__body js-tabs">
+      <?php if ( $ni_job_terms ) : ?>
       <div class="job__tabs" role="tablist" aria-label="採用区分">
-        <button type="button" class="job__tab" role="tab" id="job-tab-1" aria-controls="job-panel-1" aria-selected="true">新卒</button>
-        <button type="button" class="job__tab" role="tab" id="job-tab-2" aria-controls="job-panel-2" aria-selected="false">中途(リサーチ未経験者)</button>
+        <?php foreach ( $ni_job_terms as $ni_i => $ni_job_term ) : ?>
+        <button type="button" class="job__tab" role="tab" id="job-tab-<?php echo $ni_i + 1; ?>" aria-controls="job-panel-<?php echo $ni_i + 1; ?>" aria-selected="<?php echo 0 === $ni_i ? 'true' : 'false'; ?>"><?php echo esc_html( $ni_job_term->name ); ?></button>
+        <?php endforeach; ?>
       </div>
-      <div class="job__panel" role="tabpanel" id="job-panel-1" aria-labelledby="job-tab-1">
-        <ul class="job__list">
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">2028年度新卒採用　募集要項テキスト</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">2028年度新卒採用　募集要項テキスト</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">2028年度新卒採用　募集要項テキスト</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">2028年度新卒採用　募集要項テキスト</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">2028年度新卒採用　募集要項テキスト</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-        </ul>
-        <p class="job__more"><a class="btn btn--w" href="<?php echo ni_url( '/job-opening/' ); ?>">全ての募集要項を見る<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a></p>
+      <?php foreach ( $ni_job_terms as $ni_i => $ni_job_term ) : ?>
+      <div class="job__panel" role="tabpanel" id="job-panel-<?php echo $ni_i + 1; ?>" aria-labelledby="job-tab-<?php echo $ni_i + 1; ?>"<?php echo 0 === $ni_i ? '' : ' hidden'; ?>>
+<?php get_template_part( 'template-parts/job-pickup', null, array( 'term' => $ni_job_term ) ); ?>
       </div>
-      <div class="job__panel" role="tabpanel" id="job-panel-2" aria-labelledby="job-tab-2" hidden>
-        <ul class="job__list">
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">中途採用（リサーチ未経験者）　募集要項テキスト</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">中途採用（リサーチ未経験者）　募集要項テキスト</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">中途採用（リサーチ未経験者）　募集要項テキスト</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-        </ul>
-        <p class="job__more"><a class="btn btn--w" href="<?php echo ni_url( '/job-opening/' ); ?>">全ての募集要項を見る<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a></p>
+      <?php endforeach; ?>
+      <?php else : ?>
+      <div class="job__panel">
+<?php get_template_part( 'template-parts/job-pickup' ); ?>
       </div>
+      <?php endif; ?>
     </div>
   </section>
 

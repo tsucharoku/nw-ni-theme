@@ -51,13 +51,7 @@ get_header();
       </div>
     </div>
     <div class="openings__body">
-      <ul class="job__list">
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">プランナー(営業企画)</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">フィールドワーク(FW)</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">インターネットリサーチ</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-          <li><a class="job-item" href="<?php echo ni_url( '/job-opening/detail/' ); ?>"><span class="job-item__text">アナリスト（NIマーケティング研究所）</span><span class="job-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-      </ul>
-      <p class="job__more"><a class="btn btn--w" href="<?php echo ni_url( '/job-opening/' ); ?>">全ての募集要項を見る<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a></p>
+<?php get_template_part( 'template-parts/job-pickup', null, array( 'term' => ni_job_pickup()[0] ?? null ) ); /* 固定ページの ACF「募集中の職種一覧（カテゴリ）」で選んだカテゴリ */ ?>
     </div>
   </section>
 
