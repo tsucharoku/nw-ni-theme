@@ -3,6 +3,26 @@
     "title": "座談会",
     "fields": [
         {
+            "key": "field_ni_cross_talk_summary",
+            "label": "概要",
+            "name": "ct_summary",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "座談会の一覧に出る紹介文です（詳細ページには出ません）。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "rows": 3,
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
             "key": "field_ni_cross_talk_members",
             "label": "参加メンバー",
             "name": "ct_members",
@@ -232,5 +252,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1791168869
+    "modified": 1791169844
 }

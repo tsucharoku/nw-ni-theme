@@ -6,9 +6,9 @@
  *   座談会           cross-talk   /cross-talk/   /cross-talk/{パーマリンク}/
  *   募集要項         job-opening  /job-opening/  /job-opening/{パーマリンク}/  /job-opening/{カテゴリのスラッグ}/
  *
- * 座談会の一覧と社員インタビューの詳細は、まだ URL とテンプレート（archive-○○.php / single-○○.php）を出すための最小限の登録。
+ * 社員インタビューの詳細は、まだ URL とテンプレート（single-interview.php）を出すための最小限の登録。
  * 入力項目（supports・カスタムフィールド）は仕様を見て後から足す。
- * 座談会の詳細は WP の内容を出している（メインビジュアルはアイキャッチ、参加メンバー・本文は ACF: acf-json/group_ni_cross_talk.json、
+ * 座談会は一覧・詳細が WP の内容を出している（メインビジュアルはアイキャッチ、参加メンバー・本文は ACF: acf-json/group_ni_cross_talk.json、
  * メンバーは投稿タイプ member）。
  * 社員インタビューは一覧が WP の内容を出している（タクソノミー 3 つ = 入社区分・職種・タグ、氏名・サムネイル用画像は ACF: acf-json/）。
  * 募集要項は一覧・カテゴリ一覧・詳細が WP の内容を出している（カテゴリの英語表記・詳細のリード文は ACF: acf-json/）。
@@ -86,6 +86,38 @@ function ni_register_post_types() {
 	}
 }
 add_action( 'init', 'ni_register_post_types' );
+
+/* 座談会の番号（#01 など）。公開中の記事を古い順に並べたときの順番で、2 桁（仕様書「投稿順を 2 桁で自動付与」）。
+   記事ごとには入力しない。公開日を変えたり古い記事を消したりすると、それより新しい記事の番号は繰り上がる */
+function ni_cross_talk_number( $post_id ) {
+	static $order = null;
+	if ( null === $order ) {
+		$order = array_flip(
+			get_posts(
+				array(
+					'post_type'      => 'cross-talk',
+					'posts_per_page' => -1,
+					'orderby'        => array( 'date' => 'ASC', 'ID' => 'ASC' ),
+					'fields'         => 'ids',
+				)
+			)
+		);
+	}
+	return isset( $order[ $post_id ] ) ? sprintf( '%02d', $order[ $post_id ] + 1 ) : '';
+}
+
+/* 座談会の参加メンバーを 1 人 1 行の文にする（一覧の写真の下。例: 2016年入社　リサーチ・コンサルティング部 サブリーダー H.Wさん）。
+   記事の ACF「参加メンバー」で選んだ順。エスケープ済みの HTML（行は <br> 区切り）を返す */
+function ni_cross_talk_member_lines( $post_id ) {
+	$ids   = function_exists( 'get_field' ) ? get_field( 'ct_members', $post_id ) : array();
+	$lines = array();
+	foreach ( array_filter( array_map( 'intval', is_array( $ids ) ? $ids : array() ) ) as $member_id ) {
+		$year    = trim( (string) get_field( 'member_year', $member_id ) );
+		$who     = trim( trim( (string) get_field( 'member_dept', $member_id ) ) . ' ' . get_the_title( $member_id ) );
+		$lines[] = esc_html( '' !== $year ? $year . '　' . $who : $who );
+	}
+	return implode( '<br>', $lines );
+}
 
 /* /job-opening/○○/ の ○○ がカテゴリのスラッグなら、詳細ではなくカテゴリ一覧にする */
 function ni_job_category_request( $query_vars ) {
