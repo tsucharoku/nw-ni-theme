@@ -1988,13 +1988,12 @@ button.arrow-pill:active {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 64px 20px;
+  padding: var(--section-margin-l) 20px 64px;   /* SP: 上 80 / 下 64（Figma 474:6962） */
 }
 
 .culture__list {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   gap: 24px;
 }
 
@@ -2121,7 +2120,7 @@ button.arrow-pill:active {
 @media (min-width: 768px) {
   .culture {
     flex-direction: row;
-    min-height: 1166px;
+    min-height: 1073px;   /* Figma 474:6696 の高さ */
   }
 
   .culture__bg {

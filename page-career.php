@@ -357,7 +357,6 @@ get_header();
         <li><a class="culture-item" href="<?php echo ni_url( '/work-style/' ); ?>"><span class="culture-item__body"><span class="culture-item__title">制度・環境</span><span class="culture-item__text">在宅勤務・フレックス・産休育休復職制度など、長く安心して働ける環境をご紹介します。</span></span><span class="culture-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
         <li><a class="culture-item" href="<?php echo ni_url( '/development/' ); ?>"><span class="culture-item__body"><span class="culture-item__title">教育・研修・キャリアパス</span><span class="culture-item__text">OJT・メンター・AIツール研修・資格支援まで、入社直後から専門性を積み上げる仕組みが整っています。</span></span><span class="culture-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
         <li><a class="culture-item" href="<?php echo ni_url( '/office/' ); ?>"><span class="culture-item__body"><span class="culture-item__title">オフィス紹介</span><span class="culture-item__text">銀座に構える開放的なオフィス。リサーチの話題が日常的に飛び交う、日本インフォメーションの職場環境をご紹介します。</span></span><span class="culture-item__divider"></span><span class="arrow-pill"><img src="<?php echo ni_img( 'common/arrow_pill_white_m.svg' ); ?>" alt="" width="16" height="24"></span></a></li>
-        <li><a class="btn btn--w" href="#">全ての記事をみる<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a></li>
       </ul>
     </div>
   </section>
