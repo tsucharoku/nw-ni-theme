@@ -48,9 +48,9 @@ function ni_enqueue_assets() {
 	$is_lower = 'lower' === $type;
 	$has_fv   = 'beginner' === $type || 'career' === $type;   /* 新卒 TOP・中途 TOP: スライダー（Splide）と FV の WebGL 演出 */
 
-	/* フォント: 和文 Gen Interface JP、欧文 Poppins。中途 TOP の Future の見出しだけ Shippori Antique */
+	/* フォント: 和文 Gen Interface JP、欧文 Poppins。中途 TOP の Future の見出しと、業界の未来・メッセージだけ Shippori Antique */
 	wp_enqueue_style( 'ni-font-gen-interface', 'https://cdn.jsdelivr.net/npm/gen-interface-jp@0.8.0/cdn/all.css', array(), null );
-	wp_enqueue_style( 'ni-font-google', 'https://fonts.googleapis.com/css2?family=Poppins:wght@500;600' . ( 'career' === $type ? '&family=Shippori+Antique' : '' ) . '&display=swap', array(), null );
+	wp_enqueue_style( 'ni-font-google', 'https://fonts.googleapis.com/css2?family=Poppins:wght@500;600' . ( 'career' === $type || in_array( $page['body'], array( 'future', 'message' ), true ) ? '&family=Shippori+Antique' : '' ) . '&display=swap', array(), null );
 
 	if ( $has_fv ) {
 		wp_enqueue_style( 'splide-core', get_theme_file_uri( 'assets/vendor/splide/splide-core.min.css' ), array(), '4.1.4' );

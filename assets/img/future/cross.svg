@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="77.7814" height="77.0746" viewBox="0 0 77.7814 77.0746" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 2015">
+<line id="Line 96" x1="0.353553" y1="76.7211" x2="76.7211" y2="0.353553" stroke="url(#paint0_linear_0_30)" stroke-opacity="0.7"/>
+<line id="Line 97" y1="-0.5" x2="108" y2="-0.5" transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 77.0743 77.0746)" stroke="url(#paint1_linear_0_30)" stroke-opacity="0.7"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_30" x1="1.06066" y1="77.4282" x2="77.4282" y2="1.06066" gradientUnits="userSpaceOnUse">
+<stop stop-color="#4851C9"/>
+<stop offset="1" stop-color="#007ACC"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_30" x1="0" y1="0.5" x2="108" y2="0.5" gradientUnits="userSpaceOnUse">
+<stop stop-color="#4851C9"/>
+<stop offset="1" stop-color="#007ACC"/>
+</linearGradient>
+</defs>
+</svg>

@@ -1,0 +1,733 @@
+/* ==========================================================================
+   message.css — メッセージ（/message/）
+   Figma: PC 507:8512（Container 507:8515）/ SP 1137:10917（Container 1140:13193）
+   msg-photo（写真の切り出し）/ msg-intro（写真 + リード）/ msg-head + msg-label（見出しの行）/
+   msg-culture（飾りの四角 + カッコの枠）/ msg-item（写真か吹き出し + 見出し + 文）/ msg-band（写真の帯 + 流れる英字）/
+   msg-president（代表メッセージ）/ msg-ideal + msg-words（求める人物像の吹き出し）
+   共通から使うもの: .page-head / .lower-sec / .sec-head / .bracket / .future__marquee（流れる英字。common.js が複製して流す）
+   ========================================================================== */
+
+/* 禁則: Figma は小さいかな（ッ・ャ など）や長音（ー）の前では改行しない。Chrome の既定（line-break: auto）は改行するので、
+   strict にして Figma の折り返しに合わせる（業界の未来と同じ） */
+.page-message .page-main {
+  line-break: strict;
+}
+
+/* 折り返し: ブラウザの字送りは Figma より 1 行あたり 1〜3px 広く、枠ぴったりの行が 1 文字早く折れる（リードが 8 行 → 9 行になるなど）。
+   文の箱をその分だけ外へ広げて Figma の折り返しに合わせる（左揃えは右へ、中央揃えは左右へ。見た目の位置は変わらない。
+   値は Figma で収まっている行・収まっていない行の幅をブラウザで測って決めた） */
+.msg-intro__text {
+  margin-right: -2px;
+}
+
+.msg-item__title {
+  margin-inline: -1.2px;
+}
+
+.msg-item__body {
+  margin-right: -1px;
+}
+
+.msg-president__text {
+  margin-right: -1px;
+}
+
+@media (min-width: 768px) {
+  .msg-president__text {
+    margin-right: -4px;
+  }
+}
+
+/* ==========================================================================
+   写真の切り出し
+   Figma は枠（角丸 4）の中に元の写真を拡大して置いている。枠 = .msg-photo（縦横比を固定）、写真 = 中の img。
+   --w: 枠の幅に対する写真の幅 / --x --y: 枠の中央に来る写真上の点。値は Figma の枠と写真の位置から計算
+   （assets/img/message/ の JPG は、元の写真から PC・SP で見える範囲 + 2% を切り出したもの）
+   ========================================================================== */
+.msg-photo {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: #797979;
+}
+
+.msg-photo img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--w);
+  max-width: none;
+  height: auto;
+  transform: translate(calc(var(--x) * -1), calc(var(--y) * -1));
+}
+
+.msg-photo--intro-main { aspect-ratio: 355 / 297; --w: 111.23%; --x: 52.03%; --y: 52.64%; }
+.msg-photo--intro-sub { aspect-ratio: 260 / 173; --w: 102.31%; --x: 48.87%; --y: 48.78%; }
+.msg-photo--culture-1 { aspect-ratio: 239 / 110; --w: 104.25%; --x: 50.14%; --y: 50%; }
+.msg-photo--culture-2 { aspect-ratio: 239 / 110; --w: 110.53%; --x: 50.01%; --y: 50.01%; }
+.msg-photo--culture-3 { aspect-ratio: 239 / 110; --w: 104.28%; --x: 49.84%; --y: 49.96%; }
+.msg-photo--culture-4 { aspect-ratio: 239 / 110; --w: 100.33%; --x: 52.47%; --y: 50%; }
+.msg-photo--president { aspect-ratio: 562 / 374; --w: 105.1%; --x: 49.56%; --y: 45.86%; }
+
+@media (min-width: 768px) {
+  .msg-photo--intro-main { aspect-ratio: 680 / 568; --w: 108.48%; --x: 49.08%; --y: 51.07%; }
+  .msg-photo--culture-1 { --w: 119.37%; --x: 47.8%; --y: 44.69%; }
+  .msg-photo--culture-2 { --w: 128.81%; --x: 43.59%; --y: 43.85%; }
+  .msg-photo--culture-3 { --w: 121.53%; --x: 50%; --y: 43.31%; }
+  .msg-photo--culture-4 { --w: 116.92%; --x: 45.4%; --y: 50.07%; }
+  .msg-photo--president { aspect-ratio: 400 / 533; --w: 191.95%; --x: 71.11%; --y: 50.05%; }
+}
+
+/* ==========================================================================
+   Intro（512:9301 / SP 1140:13195）
+   SP: 写真（左端から 355、下 40）→ 見出し → 文 → 小さい写真（中央）。PC: 写真 680 | 文 568（右 96）
+   ========================================================================== */
+.msg-intro__photo {
+  padding: 0 20px 40px 0;
+}
+
+.msg-intro__txt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--item-gap);    /* SP 16（PC は 48） */
+  padding-inline: var(--side-margin);
+}
+
+.msg-intro__title {
+  width: 100%;
+  font-size: clamp(30px, calc(30 / 375 * 100vw), 42px);   /* SP: 375px のとき 30。画面幅に合わせて拡大し、PC の 42 で止める */
+  font-weight: 600;
+  line-height: 1.44;
+  letter-spacing: 0.04em;
+}
+
+.msg-intro__text {
+  font-size: 18px;         /* SP 1140:13203: 13 行で 468 → 18px（PC は 20） */
+  font-weight: 500;
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+
+.msg-photo--intro-sub {
+  flex: none;
+  width: 260px;
+  margin-top: 8px;
+}
+
+@media (min-width: 768px) {
+  .msg-intro {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-right: var(--side-margin);
+  }
+
+  .msg-intro__photo {
+    flex: none;
+    width: 680px;
+    padding: 0;
+  }
+
+  .msg-intro__txt {
+    flex: none;
+    align-items: flex-start;
+    gap: 48px;
+    width: 568px;
+    padding-inline: 0;
+  }
+
+  .msg-intro__title {
+    font-size: 42px;
+  }
+
+  .msg-intro__text {
+    font-size: 20px;
+  }
+
+  .msg-photo--intro-sub {
+    margin-top: 32px;
+  }
+}
+
+/* ==========================================================================
+   見出しの行（Frame 1985 515:6077 / Frame 1986 515:6528）
+   SP: 英字ラベル + 和文 → 見出し。PC: 見出し（左）| 英字ラベル + 和文（右、上下中央）
+   ========================================================================== */
+.msg-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 英字ラベル + 「● 和文」（Frame 1980 + read 315:805） */
+.msg-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 12px;           /* SP の代表メッセージ（1140:13266）は 2 行に折り返す。行の間 2 */
+}
+
+.msg-label__en {
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.03em;  /* body の 0.03em は 16px 換算のまま継承されるので、16px 以外の文字は付け直す（以下同じ） */
+}
+
+.msg-label__jp {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.msg-label__jp::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 10px;
+  background: url("../img/common/icon_dot.svg") center / contain no-repeat;
+}
+
+/* section-heading（PC-sub 603:9035 / SP-sub 611:9697）: 共通 .sec-head との差分だけ */
+.page-message .sec-head__title {
+  line-height: 1.5;
+}
+
+.page-message .sec-head__title--cap {
+  gap: 6px;
+}
+
+.page-message .sec-head__read {
+  gap: 8px;
+  padding-left: 10px;
+}
+
+@media (min-width: 768px) {
+  .page-message .sec-head__title--cap {
+    align-items: center;
+    gap: 8px;
+  }
+
+  .page-message .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 0;
+  }
+
+  .page-message .sec-head__read {
+    gap: 12px;
+    padding-left: 20px;
+    font-weight: 400;      /* PC は Body-Regular/XS */
+  }
+}
+
+/* 見出しとラベルを横に並べるのは、両方が 1 行で収まる幅から */
+@media (min-width: 1200px) {
+  .msg-head {
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .msg-head .msg-label {
+    flex: none;
+  }
+}
+
+/* ==========================================================================
+   Our Culture（507:8581 / SP 1140:13207）
+   ========================================================================== */
+.msg-culture {
+  position: relative;
+  isolation: isolate;      /* 飾りの四角を中身の背後に */
+  overflow-x: clip;        /* 左にはみ出す四角を切る */
+  display: flex;
+  flex-direction: column;
+  gap: 56px;               /* SP: 見出しの下 24 + 32。PC: heading-gap/s 56 */
+  padding-block: var(--section-margin-l);
+}
+
+/* 飾りの四角（img 507:8582 / SP 1140:13208）: 左の組は左端から、右の組は右端からの位置 */
+.msg-culture__squares {
+  position: absolute;
+  top: 269px;              /* SP: y 268.55 / 高さ 318 */
+  right: 0;
+  left: 0;
+  z-index: -1;
+  height: 318px;
+  pointer-events: none;
+}
+
+.msg-culture__sq {
+  position: absolute;
+  border-radius: 4px;
+  background: #00aad5;
+  opacity: 0.14;
+}
+
+.msg-culture__sq--1 { top: 0; right: 78px; width: 20px; height: 24px; background: var(--c-navy); }
+.msg-culture__sq--2 { top: 98px; right: -2px; width: 32px; height: 40px; }
+.msg-culture__sq--3 { top: 185px; right: 22px; width: 20px; height: 20px; border-radius: 3px; }
+.msg-culture__sq--4 { display: none; }   /* SP は画面の外（x 376） */
+.msg-culture__sq--5 { top: 38px; right: 103px; width: 10px; height: 10px; border-radius: 3px; }
+.msg-culture__sq--6 { top: 160px; left: 11px; width: 24px; height: 28px; background: rgba(0, 170, 213, 0.67); }
+.msg-culture__sq--7 { top: 70px; left: -23px; width: 37px; height: 46px; background: var(--c-navy); }
+.msg-culture__sq--8 { top: 32px; left: 79px; width: 21px; height: 20px; border-radius: 3px; background: var(--c-navy); opacity: 0.1; }
+.msg-culture__sq--9 { top: 257px; left: 7px; width: 10px; height: 11px; border-radius: 3px; }
+
+/* カッコの枠（txt 507:8598 / SP 1140:13223）: カッコ行 24 + 間（SP 16 / PC 24） */
+.msg-culture__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px 16px;
+}
+
+.msg-culture__title {
+  font-family: "Shippori Antique", var(--ff-jp);
+  font-size: clamp(26px, calc(26 / 375 * 100vw), 40px);   /* SP: 375px のとき 26（3 行）。画面幅に合わせて拡大（PC は 45・2 行） */
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.msg-culture__text {
+  width: 100%;
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.msg-culture__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .msg-culture__squares {
+    top: 135px;            /* 507:8582: y 135 / 高さ 555 */
+    height: 555px;
+  }
+
+  .msg-culture__sq--1 { top: 312px; right: 209px; width: 39px; height: 48px; }
+  .msg-culture__sq--2 { top: 229px; right: 53px; width: 62px; height: 77px; }
+  .msg-culture__sq--3 { top: 398px; right: 99px; width: 40px; height: 40px; }
+  .msg-culture__sq--4 { display: block; top: 318px; right: 35px; width: 20px; height: 20px; border-radius: 3px; background: var(--c-navy); opacity: 0.1; }
+  .msg-culture__sq--5 { top: 210px; right: 288px; width: 19px; height: 19px; }
+  .msg-culture__sq--6 { top: 318px; left: 67px; width: 45px; height: 55px; }
+  .msg-culture__sq--7 { top: 221px; left: -47px; width: 72px; height: 90px; }
+  .msg-culture__sq--8 { top: 255px; left: 261px; width: 40px; height: 40px; }
+  .msg-culture__sq--9 { top: 399px; left: 229px; width: 20px; height: 20px; }
+
+  .msg-culture__box {
+    gap: 32px;
+    padding: 48px 56px;
+  }
+
+  .msg-culture__title {
+    font-size: 45px;
+    line-height: 1.4;
+  }
+
+  .msg-culture__text {
+    text-align: center;
+  }
+
+  .msg-culture__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px;
+  }
+}
+
+/* ==========================================================================
+   項目（item/Frame 1962 515:5695）: 写真か吹き出し → 見出し（中央）→ 文
+   ========================================================================== */
+.msg-item {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.msg-item__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.msg-item__title {
+  font-size: 18px;         /* SP: 2 行で 50 → 18px（PC は 20） */
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.msg-item__body {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .msg-item__title {
+    font-size: var(--fs-tight-s);
+  }
+}
+
+/* ==========================================================================
+   写真の帯（515:5924 / SP 1140:13254）
+   黒地 + 写真 + 紺 12% のベール。流れる英字は下端に重ねる（SP は下端ぴったり、PC は下端の 5 上）
+   ========================================================================== */
+.msg-band {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 375 / 230;
+  background: var(--c-black);
+}
+
+/* 写真は .msg-photo と同じ置き方（--w / --x / --y）。SP は写真のほぼ全体、PC は中央の帯を拡大 */
+.msg-band__img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 108.69%;
+  max-width: none;
+  height: auto;
+  transform: translate(-48.12%, -48.71%);
+}
+
+.msg-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--c-navy);
+  opacity: 0.12;
+}
+
+.msg-band .future__marquee {
+  top: auto;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  font-size: clamp(62px, calc(62 / 375 * 100vw), 80px);   /* オフィス紹介の流れる英字と同じ伸び方 */
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Figma は同じ文を半角スペース 2 つでつないでいる（1 回ぶん = 文字の大きさの 15.41 倍 = PC 2249.5 / SP 955.5） */
+.msg-band .future__marquee span {
+  margin-right: 0.26em;
+}
+
+/* TOP の Future 用の登場（右下からせり上がる）はこのページでは使わない。流すだけ */
+.msg-band .future__marquee.is-fx,
+.msg-band .future__marquee.is-fx .future__marquee-slide {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+@media (min-width: 768px) {
+  .msg-band {
+    aspect-ratio: 1440 / 520;
+  }
+
+  .msg-band__img {
+    width: 109.06%;
+    transform: translate(-52.01%, -64.08%);
+  }
+
+  .msg-band .future__marquee {
+    bottom: 5px;           /* 923:14042: y 368.63 + 146 = 514.63 / 520 */
+    font-size: clamp(80px, 10.14vw, 146px);
+  }
+}
+
+/* 1440px より広い画面では高さを 520 で止める（写真は同じ点を中央に置いたまま横に広がる） */
+@media (min-width: 1440px) {
+  .msg-band {
+    aspect-ratio: auto;
+    height: 520px;
+  }
+}
+
+/* ==========================================================================
+   President's Message（515:5581 / SP 1140:13259）
+   カッコの枠: カッコ行 24 + 間 16 = 40。左右 SP 24 / PC 40
+   ========================================================================== */
+.msg-president {
+  padding-block: var(--section-margin-l);
+}
+
+.msg-president__box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 40px 24px;
+}
+
+.msg-president__head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.msg-president__title {
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+}
+
+.msg-president__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;               /* SP: 文 969 → 写真 985 */
+}
+
+.msg-president__text {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.msg-president__text p + p {
+  margin-top: 1.65em;      /* 1 行あき */
+}
+
+@media (min-width: 768px) {
+  .msg-president__box {
+    gap: 32px;
+    padding: 40px;
+  }
+
+  .msg-president__body {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 80px;
+  }
+
+  .msg-president__text {
+    flex: 1 1 0;           /* 1440px のとき 688 */
+    min-width: 0;
+  }
+
+  .msg-photo--president {
+    flex: none;
+    width: 400px;
+  }
+}
+
+/* ==========================================================================
+   Ideal Person（507:8531 / SP 1140:13276）
+   ========================================================================== */
+.msg-ideal {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  padding-bottom: var(--section-margin-l);
+}
+
+.msg-ideal__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+}
+
+/* 吹き出し（card1〜3 515:5693）: 高さ 80 の枠 + 下の尻尾で 96。
+   枠は Figma の Subtract（グラデーションの線 1px・角丸 4・下辺の中央に切れ目）を border-image で引き伸ばす
+   （SP の 335 幅は Figma でも同じ形を横に伸ばしたもの。切れ目も幅に比例する）。尻尾（Line 94）は切れ目の右端から左下への斜めの線 */
+.msg-words {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 80px;
+  margin-bottom: 16px;
+  padding-inline: 7px;     /* 枠 5 + 7 = Figma の左右 12 */
+  border: 5px solid transparent;
+  border-image: url("../img/message/bubble.svg") 5 stretch;
+  font-family: "Shippori Antique", var(--ff-jp);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.msg-words::after {
+  content: "";
+  position: absolute;
+  top: calc(100% + 4.43px);   /* 枠の上端から 79.43 */
+  left: 48.82%;
+  width: 2.89%;
+  height: 16.53px;
+  background: linear-gradient(to top left, transparent calc(50% - 0.5px), rgba(36, 102, 203, 0.4) calc(50% - 0.5px), rgba(36, 102, 203, 0.4) calc(50% + 0.5px), transparent calc(50% + 0.5px));
+}
+
+.msg-words li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.msg-words li span {
+  background: var(--grd-blue70);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 語の間の丸（Ellipse 7: 6px） */
+.msg-words li + li::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  background: url("../img/common/icon_dot.svg") center / contain no-repeat;
+}
+
+/* 2 行の語（card2 515:5769 / 515:5773: 18px・行間 1.08）と、その間の 1 行の語（515:5771: 行間 1） */
+.msg-words__s {
+  font-size: 18px;
+  line-height: 1.08;
+  text-align: center;
+}
+
+.msg-words__m {
+  line-height: 1;
+}
+
+/* 375px より狭い画面: 語が枠からはみ出さないように詰める */
+@media (max-width: 374px) {
+  .msg-words,
+  .msg-words li {
+    gap: 8px;
+  }
+
+  .msg-words {
+    font-size: 20px;
+  }
+
+  .msg-words__s {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  .msg-ideal__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .msg-intro {
+    gap: clamp(32px, 6.67vw, 96px);
+    padding-right: var(--side-margin-fluid);
+  }
+
+  .msg-intro__photo {
+    flex: 0 1 680px;
+    width: auto;
+    min-width: 0;
+  }
+
+  .msg-intro__txt {
+    flex: 0 1 568px;
+    width: auto;
+    min-width: 0;
+    gap: clamp(24px, 3.33vw, 48px);
+  }
+
+  .msg-intro__title {
+    font-size: clamp(24px, 2.917vw, 42px);
+  }
+
+  .msg-intro__text {
+    font-size: clamp(16px, 1.39vw, 20px);
+  }
+
+  .msg-culture__box {
+    padding-inline: clamp(24px, 3.89vw, 56px);
+  }
+
+  .msg-culture__title {
+    font-size: clamp(28px, 3.125vw, 45px);
+  }
+
+  .msg-culture__list {
+    gap: clamp(20px, 2.22vw, 32px);
+  }
+
+  .msg-president__box {
+    padding-inline: clamp(24px, 2.78vw, 40px);
+  }
+
+  .msg-president__body {
+    gap: clamp(32px, 5.56vw, 80px);
+  }
+
+  .msg-photo--president {
+    width: clamp(240px, 27.78vw, 400px);
+  }
+
+  .msg-ideal__list {
+    gap: clamp(20px, 2.78vw, 40px);
+  }
+
+  .msg-words {
+    gap: clamp(8px, 1.11vw, 16px);
+    font-size: clamp(16px, 1.53vw, 22px);
+  }
+
+  .msg-words li {
+    gap: clamp(8px, 1.11vw, 16px);
+  }
+
+  .msg-words__s {
+    font-size: clamp(13px, 1.25vw, 18px);
+  }
+}
+
+/* 狭い PC 幅（768〜1023px）: 4 列・3 列が収まらないので段を分ける */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .msg-culture__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 32px;
+  }
+
+  .msg-ideal__list {
+    grid-template-columns: minmax(0, 560px);
+    justify-content: center;
+    gap: 40px;
+  }
+
+  .msg-words {
+    gap: 16px;
+    font-size: 22px;
+  }
+
+  .msg-words li {
+    gap: 16px;
+  }
+
+  .msg-words__s {
+    font-size: 18px;
+  }
+}

@@ -1,0 +1,1003 @@
+/* ==========================================================================
+   future.css — 業界の未来（/future/）
+   Figma: PC 515:6722（Container 515:6725）/ SP 1137:10918（Container 1140:13577）
+   future-hero（見出し + リード + 点と線の立体 + 流れる英字）/ future-sec（Chapter の枠）/ future-chapter（Chapter 見出し）/
+   future-side（光・影のカード）/ future-era（OLD ERA → NEW ERA の帯）/ future-quote（カッコの引用）/ future-insight（手書きの Insight）/
+   future-domain + future-tags（Real / AI のカード）/ future-message + future-note（Message to You）/ future-squares（飾りの四角）
+   流れる英字は新卒・中途 TOP の .future__marquee（components.css + common.js）、四隅のカッコは .bracket（common.css）、
+   見出しは .sec-head（components.css）をそのまま使い、ここには位置と差分だけを書く
+   ========================================================================== */
+
+/* 禁則: Figma は小さいかな（ッ・ャ など）や長音（ー）の前では改行しない。Chrome の既定（line-break: auto）は改行するので、
+   strict にして Figma の折り返しに合わせる（SP の見出しのリードの行数などが変わる） */
+.page-future .page-main {
+  line-break: strict;
+}
+
+/* 字間: Figma はどの文字も 3%。body の 0.03em は 16px 換算の 0.48px のまま子に継承されるので、
+   16px 以外の文字はここで付け直す（共通部品の .sec-head / パンくずは共通側のまま） */
+.future-hero__title,
+.future-chapter__label,
+.future-chapter__name,
+.future-side__kanji,
+.future-side__en,
+.future-side__title,
+.future-side__text,
+.future-era__label,
+.future-era__txt,
+.future-domain__en,
+.future-domain__title,
+.future-domain__text,
+.future-tags__item,
+.future-position__summary,
+.future-message__label,
+.future-message__title,
+.future-message__closing,
+.future-note__label {
+  letter-spacing: 0.03em;
+}
+
+/* ==========================================================================
+   Hero（515:6727 / SP 1140:13579）
+   ページ頭（.page-head）はパンくずだけ。その下に見出し・リード、右上に立体、下端に流れる英字
+   ========================================================================== */
+.future-hero {
+  position: relative;
+  overflow-x: clip;        /* 流れる英字の横はみ出しだけ切る */
+}
+
+.future-hero__inner {
+  position: relative;
+}
+
+/* 点と線の立体（Frame 2126: PC 617:6900 / SP 1140:13580）。Figma は画面収録の 1 コマ（758×790、地色つき）を枠で切り抜いたもの。
+   SP: 枠 375×307（上 70）の中に 300×313 を 左 210 / 上 -34。右にはみ出すぶんは画面の端で切れる。
+   地色の四角い縁が見えないよう、上・左・下の端だけマスクでぼかしている（Figma には無い処理） */
+.future-hero__obj {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  height: 307px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.future-hero__obj img {
+  position: absolute;
+  top: -34px;
+  right: -135px;
+  width: 300px;
+  max-width: none;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 16%), linear-gradient(to bottom, transparent 11%, #000 24%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 16%), linear-gradient(to bottom, transparent 11%, #000 24%, #000 86%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.future-hero__body {
+  position: relative;
+  z-index: 1;              /* 流れる英字より手前 */
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 0 var(--side-margin) 23px;   /* SP: 本文の下端 586 → 枠の下端 609 */
+}
+
+.future-hero__title {
+  font-size: clamp(26px, calc(26 / 375 * 100vw), 36px);   /* SP: 375px のとき 26。広い端末では画面幅に合わせて拡大し、PC と同じ 36 で止める */
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.future-hero__text {
+  font-size: 18px;         /* SP Accent/lead-body。PC は 20 */
+  font-weight: 500;
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+
+/* 流れる英字（Autocarouse 522:8262 / SP 1140:13584）: 見た目と動きは .future__marquee。ここは位置だけ。
+   SP 上 535.7（高さ 62）= 枠の下端から 11 上。PC 上 391.7（高さ 146）= 枠の下端から 21 はみ出す */
+.future-hero__marquee {
+  top: auto;
+  bottom: 11px;
+  left: 0;
+}
+
+@media (min-width: 768px) {
+  .future-hero__inner {
+    max-width: 1440px;     /* 本文（.lower-sec）と同じ枠 */
+    margin-inline: auto;
+  }
+
+  /* PC: 枠 719×695（右端、上 8）の中に 719×750 を上 -55.3 */
+  .future-hero__obj {
+    top: 8px;
+    right: 0;
+    left: auto;
+    width: 719px;
+    height: 695px;
+  }
+
+  .future-hero__obj img {
+    top: -55.3px;
+    right: auto;
+    left: 0;
+    width: 100%;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%), linear-gradient(to bottom, transparent 7.4%, #000 18%, #000 88%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 12%), linear-gradient(to bottom, transparent 7.4%, #000 18%, #000 88%, transparent 100%);
+  }
+
+  .future-hero__body {
+    padding: 0 var(--side-margin) 93px 120px;   /* 本文の下端 424 → 枠の下端 517 */
+  }
+
+  .future-hero__title {
+    width: fit-content;
+    font-size: var(--fs-h1);
+  }
+
+  .future-hero__text {
+    max-width: 718px;
+    font-size: 20px;
+  }
+
+  .future-hero__marquee {
+    bottom: -21px;
+  }
+}
+
+/* ==========================================================================
+   Chapter の枠。上下の余白は Figma のフレームどおり:
+   01 = 上 80/160・下 64/120、02 = 下 80/160、03 = なし（次の Message の上の余白が受ける）
+   ========================================================================== */
+.future-sec {
+  position: relative;
+  overflow-x: clip;        /* 飾りの四角・手書きの Insight の横はみ出しだけ切る */
+}
+
+.future-sec__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;               /* SP heading-gap/s（PC 56） */
+}
+
+.future-sec--now .future-sec__inner {
+  padding-block: var(--section-margin-l) var(--section-margin-m);
+}
+
+.future-sec--turn .future-sec__inner {
+  padding-bottom: var(--section-margin-l);
+}
+
+/* section-heading（PC-sub 603:9035 / SP-sub 611:9697）: 共通 .sec-head との差分だけ */
+.future-sec .sec-head__title {
+  line-height: 1.5;
+}
+
+.future-sec .sec-head__title--cap {
+  gap: 6px;
+}
+
+.future-sec .sec-head__read {
+  gap: 8px;
+  padding-left: 10px;
+}
+
+@media (min-width: 768px) {
+  .future-sec__inner {
+    gap: 56px;
+  }
+
+  .future-sec .sec-head__title--cap {
+    gap: 8px;
+  }
+
+  .future-sec .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 0;         /* Figma: 見出しの枠の上端に揃える */
+  }
+
+  .future-sec .sec-head__read {
+    gap: 12px;
+    padding-left: 20px;
+    font-weight: 400;      /* PC は Body-Regular/XS */
+  }
+}
+
+/* ==========================================================================
+   Chapter 見出し（Frame 2007: 522:8295 / SP 1140:13589）
+   「Chapter 01」— 罫線 — 章の名前。SP は間隔 24・数字 28・名前 18、PC は 32・38・20
+   ========================================================================== */
+.future-chapter {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.future-chapter__no {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.future-chapter__label {
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.future-chapter__num {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+.future-chapter__line {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 1px;
+  background: #c0d9ec;
+}
+
+.future-chapter__name {
+  flex: none;
+  color: var(--c-navy);
+  font-size: 18px;         /* SP Tight/S は 18（base.css の --fs-tight-s は SP 20 なので直指定） */
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .future-chapter {
+    gap: 32px;
+  }
+
+  .future-chapter__num {
+    font-size: 38px;
+  }
+
+  .future-chapter__name {
+    font-size: var(--fs-tight-s);
+  }
+}
+
+/* ==========================================================================
+   Chapter 01: 光と影（Sec 515:6736 / SP 1140:13595）
+   SP 縦積み（見出し → 24 → カード、カードの間 40）。PC は 見出し 300 | 光 410（112 下げ）| 影 458、間 40
+   ========================================================================== */
+.future-now {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.future-now__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* 光・影のカード（515:6780 / 522:7782）。背景は同じ写真（Abstract Colorful Waves、1024×683）を Figma の配置どおりに切り出す。
+   位置と幅はカードの幅・高さに対する割合（SP 光: 335×345 の中に 1134 幅を 左 -227 / 上 -67。影: 335×378 の中に 814.5 幅を 左 -182 / 上 -9）。
+   影は灰色（gray）の地に写真を乗算で重ねる */
+.future-side {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 56px 16px;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.future-side__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.future-side__bg img {
+  position: absolute;
+  max-width: none;
+  height: auto;
+}
+
+.future-side--light .future-side__bg img {
+  top: -18.3%;
+  left: -67.76%;
+  width: 338.51%;
+}
+
+.future-side--shadow {
+  background: var(--c-gray);
+  color: var(--c-white);
+}
+
+.future-side--shadow .future-side__bg {
+  mix-blend-mode: multiply;
+}
+
+.future-side--shadow .future-side__bg img {
+  top: -2.38%;
+  left: -54.33%;
+  width: 243.13%;
+}
+
+.future-side__mark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.future-side__kanji {
+  font-size: var(--fs-h2);
+  line-height: 1.5;
+}
+
+.future-side__en {
+  color: var(--c-navy);
+  font-size: var(--fs-tight-2xs);
+  line-height: 1.4;
+}
+
+.future-side__title {
+  align-self: stretch;
+  font-size: var(--fs-body-s);
+  font-weight: 400;
+  line-height: 1.65;
+  text-align: center;
+}
+
+.future-side__text {
+  align-self: stretch;
+  color: #555;
+  font-size: var(--fs-body-2xs);
+  line-height: 1.65;
+}
+
+.future-side--shadow .future-side__en,
+.future-side--shadow .future-side__text {
+  color: inherit;
+}
+
+@media (min-width: 768px) {
+  .future-now {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  .future-now__head {
+    flex: none;
+    width: 300px;
+  }
+
+  .future-now__cards {
+    flex: 1 1 0;
+    flex-direction: row;
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  .future-side {
+    min-height: 471px;
+    padding: 24px 40px;
+  }
+
+  /* PC 光: 410×471 の中に 1550 幅を 左 -323 / 上 -147。影: 458×471 の中に 1550 幅を 左 -773 / 上 -35 */
+  .future-side--light {
+    flex: 0 1 410px;
+    margin-top: 112px;
+  }
+
+  .future-side--light .future-side__bg img {
+    top: -31.21%;
+    left: -78.78%;
+    width: 378.05%;
+  }
+
+  .future-side--shadow {
+    flex: 0 1 458px;
+  }
+
+  .future-side--shadow .future-side__bg img {
+    top: -7.43%;
+    left: -168.78%;
+    width: 338.43%;
+  }
+}
+
+/* ==========================================================================
+   Chapter 02: 時代の変曲点（522:8078 / SP 1140:13615）
+   ========================================================================== */
+/* 見出し + 文（Frame 1995 522:7982）。SP 縦 24、PC 見出し 300 | 112 | 文 836 */
+.future-turn__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.future-turn__text {
+  color: #444;
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* OLD ERA → NEW ERA の帯（Frame 1990: 522:8327 / SP 1140:13637）。
+   地のグラデーションと矢印は Figma の書き出し（PC 1248×124 = 横並び / SP 335×210 = 縦並び）を枠いっぱいに敷く */
+.future-era {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: url("../img/future/era_sp.svg") center / 100% 100% no-repeat;
+}
+
+.future-era__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px 32px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.future-era__item--old {
+  color: var(--c-white);
+}
+
+.future-era__label {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-size: var(--fs-tight-2xs);
+}
+
+.future-era__item--new .future-era__label {
+  right: 16px;
+  left: auto;
+  background: var(--grd-blue100);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.future-era__txt {
+  font-size: 18px;         /* SP Tight/S は 18 */
+}
+
+/* カッコの引用（txt 522:8168 / SP 1140:13649）。四隅は共通の .bracket。
+   SP: 上 40 / 下 160（下の余白に手書きの Insight が重なる）、中は カッコ 24 + 16 = 40、左右 16。左揃え。
+   PC: 幅 1080、上下 48、中は 40 / 40。中央揃え */
+.future-quote {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-block: 40px 160px;
+  padding: 40px 16px;
+}
+
+.future-quote__lead {
+  font-family: "Shippori Antique", var(--ff-jp);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+}
+
+.future-quote__text {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.future-turn__closing {
+  color: #444;
+  font-size: var(--fs-body-xs);
+  line-height: 1.65;
+}
+
+/* 手書きの Insight（Frame 2001: 522:8341 / SP 1140:13659）。文字の後ろに敷く。
+   SP: 400×181 を 上 1162（= セクションの下端から 89 上）、右に 25 はみ出す。
+   PC: 787×344 を 左 590 / 上 754.3（= 下端から 30 はみ出して Chapter 03 の見出しに掛かる） */
+.future-insight {
+  position: absolute;
+  right: -25px;
+  bottom: 89px;
+  width: 400.22px;
+  pointer-events: none;
+}
+
+.future-insight img {
+  width: 100%;
+  max-width: none;
+}
+
+@media (min-width: 768px) {
+  .future-turn__intro {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 112px;
+  }
+
+  .future-turn__head {
+    flex: none;
+    width: 300px;
+  }
+
+  .future-turn__text {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .future-era {
+    flex-direction: row;
+    background-image: url("../img/future/era.svg");
+  }
+
+  .future-era__item {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 124px;
+    padding: 40px 64px;        /* 文字は 124 の中央（上 48） */
+  }
+
+  .future-era__txt {
+    font-size: var(--fs-tight-s);
+  }
+
+  .future-quote {
+    align-items: center;
+    align-self: center;
+    gap: 32px;
+    width: 100%;
+    max-width: 1080px;
+    margin-block: 48px;
+    padding: 40px;
+    text-align: center;
+  }
+
+  .future-quote__lead {
+    font-size: 25px;
+    line-height: 1.5;
+  }
+
+  .future-turn__closing {
+    text-align: center;
+  }
+
+  .future-insight {
+    right: auto;
+    bottom: -30px;
+    left: calc(50% - 130px);   /* 1440 の枠の左から 590 */
+    width: 787px;
+  }
+}
+
+/* ==========================================================================
+   Chapter 03: 当社のポジション（522:8224 / SP 1140:13663）
+   ========================================================================== */
+/* この見出しだけ、見出しとリードの間が 0（Figma 576:7880 / SP 1140:13670） */
+.future-position__head {
+  gap: 0;
+}
+
+.future-position {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.future-domains {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  gap: 16px;
+}
+
+/* Real Domain / AI Domain のカード（522:8238 / 522:8246）。SP 余白 32 / 24、PC 64 */
+.future-domain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px 24px;
+  border-radius: var(--radius);
+  background: rgba(0, 77, 184, 0.1);
+}
+
+.future-domain--ai {
+  background: rgba(0, 114, 167, 0.1);
+}
+
+.future-domain__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.future-domain__en {
+  font-size: var(--fs-tight-2xs);
+}
+
+.future-domain__title {
+  font-size: 18px;         /* SP Tight/S は 18 */
+}
+
+.future-domain__text {
+  align-self: stretch;
+  font-size: var(--fs-body-2xs);
+  line-height: 1.65;
+}
+
+/* 白いチップ（htag 522:8482） */
+.future-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-self: stretch;
+  justify-content: center;
+  gap: 8px;
+}
+
+.future-tags__item {
+  padding: 8px 16px;
+  border-radius: 100px;
+  background: var(--c-white);
+  font-size: var(--fs-tight-2xs);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* ×（Frame 2015: 522:8536 / SP 1140:13693）。SP 50 角、PC 76.37 角（書き出しは線の太さぶん 0.7 外にはみ出す） */
+.future-position__cross {
+  position: relative;
+  flex: none;
+  width: 50px;
+  height: 50px;
+}
+
+.future-position__cross img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: none;
+}
+
+.future-position__summary {
+  font-size: var(--fs-body-s);
+  line-height: 1.65;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .future-domains {
+    flex-direction: row;
+  }
+
+  .future-domain {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 64px;
+  }
+
+  .future-domain__title {
+    font-size: var(--fs-tight-s);
+  }
+
+  .future-tags {
+    margin-inline: -25px;  /* Figma の tag-row は 538 幅（本文 488 より左右 25 ずつ広い） */
+  }
+
+  .future-position__cross {
+    width: 76.37px;
+    height: 76.37px;
+  }
+
+  .future-position__cross img {
+    top: -0.71px;
+    left: -0.71px;
+    width: 77.78px;
+  }
+}
+
+/* ==========================================================================
+   Message to You（message-wrap 522:8269 / SP 1140:13697）
+   上 136 / 200 の余白に流れる英字（SP 上 40、PC 上 32）、カッコの枠の中に 見出し → 青いカード 2 枚 → 結びの文
+   ========================================================================== */
+.future-message {
+  position: relative;
+  overflow-x: clip;
+  padding-block: 136px var(--section-margin-l);
+}
+
+.future-message__marquee {
+  top: 40px;
+  left: 0;
+}
+
+.future-message__inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* SP: カッコ 24 + 16 = 上下 40、左右 24、間 24。PC: カッコ 24 + 24 = 上下 48、左右 56、間 32 */
+.future-message__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px 24px;
+}
+
+.future-message__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.future-message__label {
+  font-size: var(--fs-tight-ss);
+  line-height: 1.4;
+}
+
+.future-message__title {
+  color: #1a1a1a;
+  font-size: 22px;         /* SP Heading/h2-S */
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.future-message__cards {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  gap: var(--item-gap);    /* SP 16 / PC 24 */
+}
+
+/* 青いカード（Frame 2004 522:8289）。ラベルの点は共通の icon_dot.svg（8 角、行の上から 9） */
+.future-note {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 32px 24px;
+  border-radius: var(--radius);
+  background: var(--c-blue);
+  color: var(--c-white);
+}
+
+.future-note__label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--c-accent);
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.future-note__label::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 9px;
+  background: url("../img/common/icon_dot.svg") center / contain no-repeat;
+}
+
+.future-note__text {
+  font-size: var(--fs-body-xs);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.future-message__closing {
+  font-size: 18px;         /* Body-Light/SS（SP / PC とも 18） */
+  font-weight: 300;
+  line-height: 1.65;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .future-message {
+    padding-top: 200px;
+  }
+
+  .future-message__marquee {
+    top: 32px;
+  }
+
+  .future-message__box {
+    gap: 32px;
+    padding: 48px 56px;
+  }
+
+  .future-message__title {
+    font-size: 24px;
+  }
+
+  .future-message__cards {
+    flex-direction: row;
+  }
+
+  .future-note {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 40px 48px;
+  }
+}
+
+/* ==========================================================================
+   飾りの四角（img: PC 522:8399 / SP 1145:25010。Chapter 02 は同じものを PC だけ左右反転 = 536:9763）
+   色は navy / #00aad5、濃さ 14%（一部 10%）、角丸 4 / 3
+   SP: 376×318 の枠。右の組（Group 1278）は画面の右端、左の組（Group 1277）は左端からの位置
+   PC: 1440×555 の枠を中央に置く（1440px より狭い画面では両端の四角が画面の外に出る）
+   ========================================================================== */
+.future-squares {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 318px;
+  pointer-events: none;
+}
+
+.future-sec--turn .future-squares {
+  bottom: -19px;           /* SP 上 1133（セクションの高さ 1432） */
+}
+
+.future-message .future-squares {
+  top: 88px;
+}
+
+.future-squares span {
+  position: absolute;
+  border-radius: 3px;
+  background: #00aad5;
+  opacity: 0.14;
+}
+
+@media (max-width: 767px) {
+  .future-squares span:nth-child(1) { top: 0; right: 78px; width: 20px; height: 24px; border-radius: 4px; background: var(--c-navy); }
+  .future-squares span:nth-child(2) { top: 98px; right: -2px; width: 32px; height: 40px; border-radius: 4px; }
+  .future-squares span:nth-child(3) { top: 185px; right: 22px; width: 20px; height: 20px; }
+  .future-squares span:nth-child(4) { top: 144px; right: -11px; width: 10px; height: 10px; background: var(--c-navy); opacity: 0.1; }
+  .future-squares span:nth-child(5) { top: 38px; right: 103px; width: 10px; height: 10px; }
+  .future-squares span:nth-child(6) { top: 160px; left: 11px; width: 24px; height: 28px; border-radius: 4px; background: rgba(0, 170, 213, 0.67); }
+  .future-squares span:nth-child(7) { top: 70px; left: -23px; width: 37px; height: 46px; border-radius: 4px; background: var(--c-navy); }
+  .future-squares span:nth-child(8) { top: 32px; left: 79px; width: 21px; height: 20px; background: var(--c-navy); opacity: 0.1; }
+  .future-squares span:nth-child(9) { top: 257px; left: 7px; width: 10px; height: 11px; }
+}
+
+@media (min-width: 768px) {
+  .future-squares {
+    left: 50%;
+    width: 1440px;
+    height: 555px;
+    transform: translateX(-50%);
+  }
+
+  .future-sec--turn .future-squares {
+    bottom: 105px;         /* PC 上 408（セクションの高さ 1068） */
+  }
+
+  .future-message .future-squares {
+    top: 111px;
+  }
+
+  .future-squares--flip {
+    transform: translateX(-50%) scaleX(-1);
+  }
+
+  .future-squares span:nth-child(1) { top: 312px; left: 1192px; width: 39px; height: 48px; border-radius: 4px; background: var(--c-navy); }
+  .future-squares span:nth-child(2) { top: 318px; left: 67px; width: 45px; height: 55px; border-radius: 4px; background: rgba(0, 170, 213, 0.67); }
+  .future-squares span:nth-child(3) { top: 229px; left: 1325px; width: 62px; height: 77px; border-radius: 4px; }
+  .future-squares span:nth-child(4) { top: 221px; left: -47px; width: 72px; height: 90px; border-radius: 4px; background: var(--c-navy); }
+  .future-squares span:nth-child(5) { top: 398px; left: 1301px; width: 40px; height: 40px; }
+  .future-squares span:nth-child(6) { top: 318px; left: 1385px; width: 20px; height: 20px; background: var(--c-navy); opacity: 0.1; }
+  .future-squares span:nth-child(7) { top: 210px; left: 133px; width: 19px; height: 19px; }
+  .future-squares span:nth-child(8) { top: 255px; left: 261px; width: 40px; height: 40px; background: var(--c-navy); opacity: 0.1; }
+  .future-squares span:nth-child(9) { top: 399px; left: 229px; width: 20px; height: 20px; }
+  .future-squares--flip span:nth-child(7) { left: 1133px; }   /* Chapter 02 だけ位置が違う（536:9770） */
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .future-hero__obj {
+    width: 49.93vw;
+    height: 48.26vw;
+  }
+
+  .future-hero__obj img {
+    top: -3.84vw;
+  }
+
+  .future-hero__body {
+    padding-right: var(--side-margin-fluid);
+    padding-left: calc(var(--side-margin-fluid) * 120 / 96);
+  }
+
+  .future-sec--now .future-sec__inner {
+    padding-block: clamp(96px, 11.1vw, 160px) clamp(80px, 8.33vw, 120px);
+  }
+
+  .future-sec--turn .future-sec__inner,
+  .future-message {
+    padding-bottom: clamp(96px, 11.1vw, 160px);
+  }
+
+  .future-turn__intro {
+    gap: clamp(32px, 7.78vw, 112px);
+  }
+
+  .future-era__item {
+    padding-inline: clamp(16px, 4.44vw, 64px);
+  }
+
+  .future-domain {
+    padding: clamp(24px, 4.44vw, 64px);
+  }
+
+  .future-tags {
+    margin-inline: calc(-1 * clamp(8px, 1.74vw, 25px));
+  }
+
+  .future-message__box {
+    padding-inline: clamp(24px, 3.9vw, 56px);
+  }
+
+  .future-note {
+    padding: clamp(24px, 2.78vw, 40px) clamp(24px, 3.33vw, 48px);
+  }
+}
+
+/* 1199px 以下: 光と影は見出しを上に出してカードを 2 枚並べる。3 行に分けた結びの文は改行を外して流し込む */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .future-now {
+    flex-direction: column;
+  }
+
+  .future-now__head {
+    width: auto;
+  }
+
+  .future-now__head br,
+  .future-position__summary br {
+    display: none;
+  }
+}
+
+/* 899px 以下: 見出しの改行を外す（1 行目が入り切らず 3 行以上になるため） */
+@media (min-width: 768px) and (max-width: 899px) {
+  .future-hero__title br,
+  .future-message__closing br {
+    display: none;
+  }
+}

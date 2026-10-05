@@ -1,0 +1,1873 @@
+/* ==========================================================================
+   story.css — プロジェクトストーリー（/beginner/story-1/ ・ /beginner/story-2/ ・ /career/story-1/ 共通）
+   Figma: 新卒・中途未経験 #01 1433:18565 / #02 1433:18875 / 中途経験者 #01 1433:19185（元のテンプレート 780:16343）
+   SP: テンプレート 1137:10927（中身 1140:17780。文言はダミー）。図は PC と同じ横長のまま横スクロールさせる。
+   漏斗図（#02）と AI 導入の流れ（中途 #01）は SP のデザインが無いので、タイムラインと同じ方式（横スクロール + 同じ案内の行）
+   クラスは ps-（Project Story）始まり。.story / .story-card は新卒・中途 TOP の Project Story 節（components.css）が使っているので使わない。
+   読み込み順: base → common → components → lower → story
+   ========================================================================== */
+
+/* ==========================================================================
+   共通の小さい部品
+   ========================================================================== */
+/* 紺の英字見出し（Accent/display 38px: Story Overview / Member） */
+.ps-heading {
+  color: var(--c-navy);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+/* チェック付きの箇条書き（Before / After、発売後の箱）。白い丸チェック 16px + 白い文字 */
+.ps-checks {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--c-white);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.ps-checks li {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.ps-checks li::before {
+  content: "";
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 5px;
+  background: url("../img/story/icon_check.svg") center / contain no-repeat;
+}
+
+/* セクション見出し（section-heading PC-sub 603:9035）: 羽根のアイコンは 30.85 × 38、見出しの 1 行目にそろえる */
+@media (min-width: 768px) {
+  .page-story .sec-head__title--cap {
+    gap: 8px;
+  }
+
+  .page-story .sec-head__title--cap::before {
+    width: 30.85px;
+    height: 38px;
+    margin-top: 5px;
+  }
+}
+
+@media (min-width: 768px) {
+  .ps-heading {
+    font-size: 38px;
+  }
+}
+
+/* ==========================================================================
+   タイトル（Frame 2082 1433:18570）: 四隅カッコ（common.css の .bracket）の枠 1000px に
+   番号（左上）+ タイトル + リード。その下に流れる英字
+   ========================================================================== */
+.ps-intro__box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 80px 20px 40px;   /* SP 1140:17791: カッコ 24 + 16 + 上 40。タイトルは枠の上から 80 */
+  text-align: center;
+}
+
+/* # は 20px・数字は 34px（SP は 18px・28px）、上揃え。Figma は text-box-trim（cap〜alphabetic）なので、
+   座談会一覧の番号（cross-talk.css の .ct-row__num）と同じく line-height 0.73 で文字の天地に合わせる */
+.ps-intro__num {
+  position: absolute;
+  top: 28.3px;
+  left: 19px;
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+  margin-block: -4px;
+  padding-block: 4px;
+  font-weight: 500;
+  background: var(--grd-blue70);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ps-intro__num small {
+  font-size: 18px;
+  line-height: 0.73;
+  letter-spacing: 0.04em;
+}
+
+.ps-intro__num b {
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 0.73;
+}
+
+.ps-intro__title {
+  font-size: var(--fs-h2);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.ps-intro__lead {
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* 流れる英字（Autocarouse 1433:18571）。オフィス紹介の帯（office.css の .office-hero__marquee）と同じ作り:
+   同じ文言を 4 つ並べ、1 つぶん（25%）動かしてくり返す */
+.ps-marquee {
+  overflow: hidden;
+  margin-block: 34.3px 63.7px;
+  color: rgba(199, 219, 236, 0.4);
+  font-size: clamp(62px, calc(62 / 375 * 100vw), 80px);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.ps-marquee__track {
+  display: inline-flex;
+  animation: ps-marquee 40s linear infinite;
+}
+
+.ps-marquee__track span {
+  padding-right: calc(40em / 146);
+}
+
+@keyframes ps-marquee {
+  to { transform: translateX(-25%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-marquee__track {
+    animation: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .ps-intro__box {
+    gap: 24px;
+    max-width: 1000px;
+    margin-inline: auto;
+    padding: 48px 96px;
+  }
+
+  .ps-intro__num {
+    top: 24.3px;
+    left: 23px;
+    gap: 4px;
+  }
+
+  .ps-intro__num small {
+    font-size: 20px;
+  }
+
+  .ps-intro__num b {
+    font-size: 34px;
+  }
+
+  .ps-intro__lead {
+    margin-inline: -48px;   /* Figma: リードは枠の余白にはみ出して 1 行に収める（幅 891） */
+  }
+
+  .ps-marquee {
+    margin-block: 54.3px 79.7px;
+    font-size: 146px;
+  }
+
+  .ps-marquee__track {
+    animation-duration: 60s;
+  }
+
+  .ps-marquee__track span {
+    padding-right: 40px;
+  }
+}
+
+/* ==========================================================================
+   Story Overview / Member / Before After（Frame 1604 1433:18585）: 縦に 56 間隔、下 160
+   ========================================================================== */
+.ps-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-bottom: var(--section-margin-l);
+}
+
+.ps-overview__row {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* SP: 英字見出しは中央（1140:17799） */
+@media (max-width: 767px) {
+  .ps-overview .ps-heading {
+    text-align: center;
+  }
+}
+
+.ps-overview__txt,
+.ps-message__txt {
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* Figma は段落の間に空行 1 行 */
+.ps-overview__txt p + p,
+.ps-message__txt p + p,
+.ps-speech__text p + p,
+.ps-result__txt p + p {
+  margin-top: 1.65em;
+}
+
+/* ----- Member（block: コメント 855:25787 / SP 1161:16925）: 丸アバター 88 + 部署 / 名前 / 紹介文。
+   SP はアバター 80 の右に部署と名前、紹介文はその下に全幅（.ps-member__body を display: contents にして 2 列のグリッドに並べる） ----- */
+.ps-members {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ps-members__list {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ps-member {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  column-gap: 20px;
+  align-items: start;
+  padding: 32px 24px;
+  border-radius: var(--radius);
+  background: rgba(199, 219, 236, 0.4);
+}
+
+.ps-member__img {
+  grid-row: 1 / span 2;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--c-white);
+}
+
+.ps-member__body {
+  display: contents;
+}
+
+.ps-member__dept {
+  padding-top: 8px;
+}
+
+.ps-member__dept,
+.ps-speech__dept {
+  color: var(--c-blue);
+  font-size: var(--fs-tight-2xs);
+  line-height: 1.4;
+}
+
+.ps-member__name,
+.ps-speech__name {
+  color: var(--c-navy);
+  font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ps-member__name {
+  margin-top: 1px;
+}
+
+.ps-member__bio {
+  grid-column: 1 / -1;
+  margin-top: 20px;
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* ----- Before / After（before after 1433:27552）: 青いグラデーション 80% + 斜めの楕円の飾り ----- */
+.ps-ba {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 40px 20px;
+  border-radius: var(--radius);
+  background: url("../img/story/band_ba.svg") center / cover no-repeat, var(--grd-blue80);
+}
+
+/* SP（1140:17855）: ラベル + Before を 1 行、その下に箇条書き。かたまりごと中央に置く */
+.ps-ba__col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-self: center;
+  max-width: 100%;
+}
+
+.ps-ba__head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 吹き出し形のラベル（Frame 1676）: Before = 白地に紺の文字、After = 紺地に白い文字。左下に尻尾 */
+.ps-ba__label {
+  position: relative;
+  margin-bottom: 8.5px;
+  padding: 12px 24px;
+  border-radius: 32px;
+  background: var(--c-white);
+  color: var(--c-navy);
+  font-size: var(--fs-tight-xs);
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.ps-ba__label::after {
+  content: "";
+  position: absolute;
+  top: calc(100% - 0.5px);
+  left: 56px;
+  width: 15px;
+  height: 9px;
+  background: inherit;
+  clip-path: polygon(0 0, 80% 0, 100% 100%);
+}
+
+.ps-ba__col--after .ps-ba__label {
+  background: var(--c-navy);
+  color: var(--c-white);
+}
+
+.ps-ba__en {
+  color: var(--c-white);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+/* まん中の区切り: 線 + 矢印 + 線。SP は横線と下向きの矢印 */
+.ps-ba__arrow {
+  position: relative;
+  flex: none;
+  height: 25px;
+  background:
+    linear-gradient(#72aad4, #72aad4) left center / calc(50% - 11.5px) 1px no-repeat,
+    linear-gradient(#72aad4, #72aad4) right center / calc(50% - 11.5px) 1px no-repeat;
+}
+
+.ps-ba__arrow::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 11px;
+  margin: -5.5px 0 0 -8px;
+  background: var(--c-white);
+  clip-path: polygon(100% 50%, 0 100%, 18.75% 50%, 0 0);
+  transform: rotate(90deg);
+}
+
+@media (min-width: 768px) {
+  .ps-overview {
+    gap: 56px;
+  }
+
+  .ps-overview__row {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 104px;
+  }
+
+  .ps-overview__row .ps-heading {
+    flex: none;
+  }
+
+  .ps-overview__txt {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .ps-members {
+    gap: 16px;
+  }
+
+  .ps-members__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .ps-member {
+    display: flex;
+    gap: 32px;
+    padding: 32px;
+  }
+
+  .ps-member__img {
+    flex: none;
+    width: 88px;
+    height: 88px;
+  }
+
+  .ps-member__body {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    min-width: 0;
+    padding-top: 8px;
+  }
+
+  .ps-member__dept {
+    padding-top: 0;
+  }
+
+  .ps-member__name {
+    margin-top: 4px;
+  }
+
+  .ps-member__bio {
+    margin-top: 8px;
+  }
+
+  .ps-ba {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 32px;
+    padding: 72px 40px;
+  }
+
+  .ps-ba__col {
+    flex: 1 1 0;
+    flex-direction: row;
+    align-items: flex-start;
+    align-self: auto;
+    gap: 24px;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .ps-ba__head {
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ps-ba__label {
+    align-self: flex-start;
+  }
+
+  .ps-ba__en {
+    font-size: 38px;
+  }
+
+  .ps-ba__col .ps-checks {
+    flex: 1 1 0;
+    align-self: stretch;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .ps-ba__arrow {
+    width: 25px;
+    height: auto;
+    background:
+      linear-gradient(#72aad4, #72aad4) center top / 1px calc(50% - 11.5px) no-repeat,
+      linear-gradient(#72aad4, #72aad4) center bottom / 1px calc(50% - 11.5px) no-repeat;
+  }
+
+  .ps-ba__arrow::before {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   調査の流れ / AI導入プロセス（Frame 2200 1433:18618）: 左に見出し、右に図（968px）。下 56
+   ========================================================================== */
+.ps-process {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;   /* SP 1140:17877: 見出し → 32 → 案内の行 → 32 → 図 */
+}
+
+/* 図の入れ物。PC では中の図を、幅 968px のデザインのまま入れ物の幅に合わせて縮める:
+   --u = デザインの 1px（968px 以上で 1px、狭いときは 幅 ÷ 968）。図の寸法・文字はすべて calc(n * var(--u)) で書く。
+   SP（〜767px）は縮めず（--u = 1px）、横長の図のまま入れ物を横スクロールさせる（Frame 2285 1161:18193。右は画面の端まで）。
+   入れ物の下の余白は、スクロールの枠で図の影が切れないようにするためのもの（同じだけ margin で詰めて位置は変えない） */
+.ps-chart {
+  container-type: inline-size;
+  width: 100%;
+  max-width: 968px;
+}
+
+.ps-chart > * {
+  --u: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 767px) {
+  .ps-chart {
+    width: auto;
+    max-width: none;
+    margin: 0 calc(-1 * var(--side-margin)) -64px 0;
+    padding: 0 var(--side-margin) 64px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .ps-chart::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ps-chart > .ps-funnel,
+  .ps-chart > .ps-aiflow {
+    width: 968px;
+  }
+}
+
+/* 「横にスクロールして全ステップを見る」+ 線 + 手のアイコン（Frame 2045 1250:20146。SP だけ）。
+   教育・研修の成長ステップの案内（development.css の .growth__hint）と同じ部品・同じ動き: 線が左から伸びて左から消える 2 秒ループ */
+.ps-hint {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: var(--fs-tight-xs);
+  line-height: 1.4;
+}
+
+.ps-hint__icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.ps-hint__line {
+  width: 40px;
+  height: 1px;
+  background: #b5ccea;
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ps-hint__line {
+    animation: ps-hint-line 2s linear infinite;
+  }
+}
+
+@keyframes ps-hint-line {
+  0%    { transform: scaleX(0); transform-origin: left center; }
+  40%   { transform: scaleX(1); transform-origin: left center; animation-timing-function: ease-in-out; }
+  40.1% { transform: scaleX(1); transform-origin: right center; animation-timing-function: ease-in-out; }
+  80%   { transform: scaleX(0); transform-origin: right center; }
+  100%  { transform: scaleX(0); transform-origin: right center; }
+}
+
+@media (min-width: 768px) {
+  .ps-process {
+    gap: 40px;
+    padding-bottom: 56px;
+  }
+
+  .ps-chart > * {
+    --u: min(1px, calc(100cqw / 968));
+  }
+}
+
+/* 1200px 以上: 見出しと図を横に並べる（1440px で 見出し 222 + 56 + 図 970） */
+@media (min-width: 1200px) {
+  .ps-process {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 56px;
+  }
+
+  /* 見出しは残りの幅（1440px で 222）。「AI導入プロセス」のように長い見出しは Figma と同じく図との間にはみ出す */
+  .ps-process__head {
+    flex: 1 1 0;
+    min-width: 222px;
+    white-space: nowrap;
+  }
+
+  .ps-process .ps-chart {
+    flex: 0 1 968px;
+    min-width: 0;
+  }
+}
+
+/* ==========================================================================
+   図 1: timeline-chart（#01 1433:18620。カード card-01 855:22859 / 発売 Frame 2196 855:24395）
+   横線の上下に工程のカード 4 枚（上・下・上・下、122px ずつずらす）、右端に「発売」の丸と「発売後」の箱。
+   .is-off = グレー（Variant2）。章の中の図（--focus）は、いまの工程以外に is-off を付け、矢印もグレーにする
+   ========================================================================== */
+.ps-timeline {
+  --dot: calc(4.5 * var(--u));   /* 横線の上の点の半径 */
+  position: relative;
+}
+
+.ps-timeline :where(ul) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 横線（Rectangle 357）と矢印（Polygon 9） */
+.ps-timeline::before,
+.ps-timeline::after {
+  content: "";
+  position: absolute;
+}
+
+.ps-timeline::before {
+  background: var(--c-accent);
+}
+
+.ps-timeline::after {
+  background: linear-gradient(180deg, #4851c9, #007acc);
+  clip-path: polygon(100% 50%, 0 100%, 18.75% 50%, 0 0);
+}
+
+.ps-timeline--focus::after {
+  background: var(--c-gray);
+}
+
+/* カード: 塗りなし（Figma はガラスの効果だけ）。影は中身（紺のタグと文字）から落ちる */
+.ps-timeline__card {
+  display: flex;
+  flex-direction: column;
+  gap: calc(20 * var(--u));
+  padding: calc(32 * var(--u)) calc(12 * var(--u)) calc(12 * var(--u));
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+  filter: drop-shadow(0 calc(30 * var(--u)) calc(15 * var(--u)) rgba(0, 36, 119, 0.12));
+}
+
+.ps-timeline__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(44 * var(--u));
+  color: var(--c-navy);
+  font-size: calc(16 * var(--u));
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ps-timeline__tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(72 * var(--u));
+  padding-inline: calc(12 * var(--u));
+  border-radius: 3px;
+  background: var(--c-navy);
+  color: var(--c-white);
+  font-size: calc(14 * var(--u));
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* カードと横線をつなぐ線（::before）と、横線の上の丸（::after: 輪 34px + 中の点 9px） */
+.ps-timeline__step::before,
+.ps-timeline__step::after {
+  content: "";
+  position: absolute;
+}
+
+.ps-timeline__step::before {
+  background: var(--c-accent);
+}
+
+.ps-timeline__step::after {
+  box-sizing: border-box;
+  border: 1px solid var(--c-accent);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle closest-side, #2466cb calc(var(--dot) - 0.5px), transparent var(--dot)) center / calc(var(--dot) * 2 + 1px) calc(var(--dot) * 2 + 1px) no-repeat,
+    rgba(255, 255, 255, 0.4);
+}
+
+.ps-timeline__step.is-off .ps-timeline__card {
+  background: rgba(203, 203, 203, 0.4);
+  box-shadow: none;
+  filter: none;
+}
+
+.ps-timeline__step.is-off .ps-timeline__title {
+  color: var(--c-gray);
+}
+
+.ps-timeline__step.is-off .ps-timeline__tag {
+  background: #a4a6ac;
+}
+
+.ps-timeline__step.is-off::before {
+  background: #c3c3c3;
+}
+
+.ps-timeline__step.is-off::after {
+  border-color: transparent;
+  background: radial-gradient(circle closest-side, #a4a6ac calc(var(--dot) - 0.5px), transparent var(--dot)) center / calc(var(--dot) * 2 + 1px) calc(var(--dot) * 2 + 1px) no-repeat;
+}
+
+/* 発売の丸 + 発売後の箱 */
+.ps-timeline__goal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ps-timeline__mark {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: calc(88 * var(--u));
+  height: calc(88 * var(--u));
+  border-radius: 50%;
+  background: var(--grd-blue100);
+  color: var(--c-white);
+  font-size: calc(18 * var(--u));
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ps-timeline__after {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(8 * var(--u));
+  margin-top: calc(18 * var(--u));
+  padding: calc(32 * var(--u));
+  border-radius: var(--radius);
+  background: var(--grd-blue100);
+  color: var(--c-white);
+}
+
+.ps-timeline__after::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 1px;
+  height: calc(18 * var(--u));
+  background: var(--c-accent);
+}
+
+.ps-timeline__after-title {
+  font-size: calc(18 * var(--u));
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.ps-timeline__after .ps-checks {
+  font-size: calc(16 * var(--u));
+}
+
+.ps-timeline__after .ps-checks li {
+  gap: calc(4 * var(--u));
+  white-space: nowrap;
+}
+
+.ps-timeline__after .ps-checks li::before {
+  width: calc(16 * var(--u));
+  height: calc(16 * var(--u));
+  margin-top: calc(5 * var(--u));
+}
+
+.ps-timeline__goal.is-off .ps-timeline__mark,
+.ps-timeline__goal.is-off .ps-timeline__after {
+  background: #9e9e9e;
+}
+
+/* PC: Figma の座標のまま絶対配置（968 × 500） */
+@media (min-width: 768px) {
+  .ps-timeline {
+    height: calc(500 * var(--u));
+  }
+
+  .ps-timeline::before {
+    top: calc(238.3 * var(--u));
+    left: 0;
+    width: 100%;
+    height: 1px;
+  }
+
+  .ps-timeline::after {
+    top: calc(228.3 * var(--u));
+    right: 0;
+    width: calc(45 * var(--u));
+    height: calc(21 * var(--u));
+  }
+
+  .ps-timeline__step {
+    position: absolute;
+    top: 0;
+    left: calc(var(--i) * 122 * var(--u));
+    width: calc(212 * var(--u));
+  }
+
+  .ps-timeline__step--bottom {
+    top: calc(297 * var(--u));
+  }
+
+  .ps-timeline__step::before {
+    top: 100%;
+    left: 50%;
+    width: 1px;
+    height: calc(58.5 * var(--u));
+  }
+
+  .ps-timeline__step::after {
+    top: calc(100% + 41.5 * var(--u));
+    left: calc(50% - 16.5 * var(--u));
+    width: calc(34 * var(--u));
+    height: calc(34 * var(--u));
+  }
+
+  .ps-timeline__step--bottom::before {
+    top: auto;
+    bottom: 100%;
+  }
+
+  .ps-timeline__step--bottom::after {
+    top: auto;
+    bottom: calc(100% + 41.5 * var(--u));
+  }
+
+  .ps-timeline__goal {
+    position: absolute;
+    top: calc(193 * var(--u));
+    left: calc(676 * var(--u));
+    width: calc(254 * var(--u));
+  }
+}
+
+/* SP（timeline-chart 1140:17879）: PC より小さい寸法の同じ図（793 × 441。カード 196・106px ずつずらす・発売の丸 56）を横スクロールで見せる */
+@media (max-width: 767px) {
+  .ps-timeline {
+    --dot: 3.3px;
+    width: 793px;
+    height: 441px;
+  }
+
+  .ps-timeline::before {
+    top: 190.7px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+  }
+
+  .ps-timeline::after {
+    top: 181px;
+    right: 0;
+    width: 45px;
+    height: 21px;
+  }
+
+  .ps-timeline__step {
+    position: absolute;
+    top: 0;
+    left: calc(var(--i) * 106px);
+    width: 196px;
+  }
+
+  .ps-timeline__step--bottom {
+    top: 235.7px;
+  }
+
+  .ps-timeline__card {
+    gap: 12px;
+    padding: 20px 12px 12px;
+  }
+
+  .ps-timeline__tag {
+    height: 60px;
+  }
+
+  .ps-timeline__step::before {
+    top: 100%;
+    left: 50%;
+    width: 1px;
+    height: 43.2px;
+  }
+
+  .ps-timeline__step::after {
+    top: calc(100% + 30.7px);
+    left: calc(50% - 12.5px);
+    width: 25px;
+    height: 25px;
+  }
+
+  .ps-timeline__step--bottom::before {
+    top: auto;
+    bottom: 100%;
+    height: 44.5px;
+  }
+
+  .ps-timeline__step--bottom::after {
+    top: auto;
+    bottom: calc(100% + 32px);
+  }
+
+  .ps-timeline__goal {
+    position: absolute;
+    top: 164px;
+    left: 555px;
+    width: 238px;
+  }
+
+  .ps-timeline__mark {
+    width: 56px;
+    height: 56px;
+    font-size: 16px;
+  }
+
+  .ps-timeline__after {
+    padding: 32px 24px;
+  }
+}
+
+/* ==========================================================================
+   図 2: funnel-chart（#02 1443:29322）
+   左に「複数案」の丸 3 つ → だんだん細く・濃くなる台形の STEP01〜04 → 右に「最終案」。
+   .is-on = 章の中の図で、いまの STEP を赤（#e75353）で強調（章 02〜05 の図 1446:29457 ほか）。
+   強調の台形は影つきなので Figma から書き出した SVG（funnel_step○_on.svg）、STEP04 は右端が曲線なので通常時も SVG。
+   調査の流れの図は STEP04 の右端が丸く、章の中の図（--focus）は尖っている（Figma のとおり）
+   ========================================================================== */
+.ps-funnel {
+  --red: #e75353;
+  position: relative;
+}
+
+.ps-funnel :where(ul, ol) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ps-funnel__src-label {
+  color: var(--c-navy);
+  font-size: calc(16 * var(--u));
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ps-funnel__src-list {
+  display: flex;
+}
+
+.ps-funnel__src-list li {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: calc(48 * var(--u));
+  height: calc(48 * var(--u));
+  border-radius: 50%;
+  background: rgba(199, 219, 236, 0.4);
+  color: var(--c-navy);
+  font-size: calc(14 * var(--u));
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ps-funnel__src.is-on .ps-funnel__src-label {
+  color: var(--red);
+}
+
+.ps-funnel__src.is-on li {
+  background: var(--red);
+  box-shadow: 0 calc(14 * var(--u)) calc(14 * var(--u)) rgba(0, 36, 119, 0.07);
+  color: var(--c-white);
+}
+
+.ps-funnel__step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(12 * var(--u));
+}
+
+.ps-funnel__step::before {   /* 台形の地 */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.ps-funnel__step--1::before { background-color: rgba(27, 58, 152, 0.05); }
+.ps-funnel__step--2::before { background-color: rgba(27, 58, 152, 0.2); }
+.ps-funnel__step--3::before { background-color: rgba(27, 58, 152, 0.6); }
+
+.ps-funnel__num {
+  padding: calc(6 * var(--u)) calc(16 * var(--u));
+  border-radius: 100px;
+  background: var(--c-white);
+  color: var(--c-navy);
+  font-size: calc(14 * var(--u));
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.ps-funnel__title {
+  color: var(--c-navy);
+  font-size: calc(18 * var(--u));
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ps-funnel__step--3 .ps-funnel__title,
+.ps-funnel__step--4 .ps-funnel__title {
+  color: var(--c-white);
+}
+
+/* STEP の間の矢印（前の STEP との境目に重ねる）。強調している STEP の前後は赤 */
+.ps-funnel__step + .ps-funnel__step .ps-funnel__num::before {
+  content: "";
+  position: absolute;
+  width: calc(16 * var(--u));
+  height: calc(11 * var(--u));
+  background: var(--c-black);
+  clip-path: polygon(100% 50%, 0 100%, 18.75% 50%, 0 0);
+}
+
+.ps-funnel__step.is-on .ps-funnel__num::before,
+.ps-funnel__step.is-on + .ps-funnel__step .ps-funnel__num::before {
+  background: var(--red);
+}
+
+.ps-funnel__step.is-on .ps-funnel__num {
+  background: var(--red);
+  color: var(--c-white);
+}
+
+.ps-funnel__step--1.is-on .ps-funnel__title,
+.ps-funnel__step--2.is-on .ps-funnel__title {
+  color: var(--red);
+}
+
+.ps-funnel__goal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(8 * var(--u));
+  color: var(--c-navy);
+  font-size: calc(16 * var(--u));
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.ps-funnel__goal::before {
+  content: "";
+  width: calc(41.06 * var(--u));
+  height: calc(58.22 * var(--u));
+  background: url("../img/story/funnel_doc.svg") center / contain no-repeat;
+}
+
+.ps-funnel__goal.is-on {
+  color: var(--red);
+}
+
+.ps-funnel__goal.is-on::before {
+  background-image: url("../img/story/funnel_doc_on.svg");
+}
+
+/* Figma の座標のまま絶対配置（968 × 380）。--x / --y / --w / --h = 台形の位置と大きさ。SP も同じ図を横スクロールで見せる */
+.ps-funnel {
+  height: calc(380 * var(--u));
+}
+
+.ps-funnel__src {
+  position: absolute;
+  top: calc(67 * var(--u));
+  left: 0;
+}
+
+.ps-funnel__src-list {
+  flex-direction: column;
+  gap: calc(16.1 * var(--u));
+  margin-top: calc(8.4 * var(--u));
+}
+
+/* 丸 3 つを STEP01 につなぐ線（link 1446:29399） */
+.ps-funnel__src::before,
+.ps-funnel__src::after {
+  content: "";
+  position: absolute;
+  left: calc(51 * var(--u));
+  box-sizing: border-box;
+}
+
+.ps-funnel__src::before {
+  top: calc(55.3 * var(--u));
+  width: calc(20.5 * var(--u));
+  height: calc(129 * var(--u));
+  border: 1px solid var(--c-accent);
+  border-left: 0;
+}
+
+.ps-funnel__src::after {
+  top: calc(119.3 * var(--u));
+  width: calc(45 * var(--u));
+  height: 1px;
+  background: var(--c-accent);
+}
+
+.ps-funnel__src.is-on::before {
+  border-color: #efbfbf;
+}
+
+.ps-funnel__src.is-on::after {
+  background: #efbfbf;
+}
+
+.ps-funnel__step {
+  position: absolute;
+  top: calc(var(--y) * var(--u));
+  left: calc(var(--x) * var(--u));
+  box-sizing: border-box;
+  width: calc(var(--w) * var(--u));
+  height: calc(var(--h) * var(--u));
+  padding-top: calc((143 - var(--y)) * var(--u));
+}
+
+.ps-funnel__step--1 { --x: 96; --y: 54; --w: 177; --h: 280; }
+.ps-funnel__step--2 { --x: 273; --y: 68; --w: 177; --h: 252; }
+.ps-funnel__step--3 { --x: 450; --y: 83; --w: 177; --h: 224; padding-left: calc(6 * var(--u)); }
+.ps-funnel__step--4 { --x: 627; --y: 96; --w: 271; --h: 197; padding-right: calc(70 * var(--u)); }
+
+/* 台形: 右へ 177px 進むごとに上下 13.8px ずつ細くなる */
+.ps-funnel__step--1::before,
+.ps-funnel__step--2::before,
+.ps-funnel__step--3::before {
+  clip-path: polygon(0 0, 100% calc(13.8 * var(--u)), 100% calc(100% - 13.8 * var(--u)), 0 100%);
+}
+
+.ps-funnel__step--4::before {
+  background: url("../img/story/funnel_step4.svg") left top / calc(244.872 * var(--u)) 100% no-repeat;
+}
+
+.ps-funnel--focus .ps-funnel__step--4::before {
+  background: url("../img/story/funnel_step4_focus.svg") left top / 100% 100% no-repeat;
+}
+
+/* 強調: 影つきの SVG（書き出しの範囲 = 台形の左 30px 外から、幅 + 60・高さ + 60） */
+.ps-funnel__step.is-on::before {
+  inset: 0 calc(-30 * var(--u)) calc(-60 * var(--u));
+  background-color: transparent;
+  background-position: 0 0;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  clip-path: none;
+}
+
+.ps-funnel__step--1.is-on::before { background-image: url("../img/story/funnel_step1_on.svg"); }
+.ps-funnel__step--2.is-on::before { background-image: url("../img/story/funnel_step2_on.svg"); }
+.ps-funnel__step--3.is-on::before { background-image: url("../img/story/funnel_step3_on.svg"); }
+.ps-funnel--focus .ps-funnel__step--4.is-on::before { background-image: url("../img/story/funnel_step4_on.svg"); }
+
+.ps-funnel__step + .ps-funnel__step .ps-funnel__num::before {
+  top: calc((184.75 - var(--y)) * var(--u));
+  left: calc(-6 * var(--u));
+}
+
+.ps-funnel__goal {
+  position: absolute;
+  top: calc(155 * var(--u));
+  right: 0;
+  width: calc(80 * var(--u));
+}
+
+
+/* ==========================================================================
+   図 3: ai-flow-chart（中途 #01 1433:28763。カード ai-flow-card 1433:28132 / 1433:28144）
+   カード 4 枚（課題 1 → 課題 2 → AI → AI）を矢印でつなぐ。後ろ 2 枚の上に「ここからAIプロダクトの提案」のカッコ、下に凡例。
+   .is-off = 章の中の図で、いまの工程以外のカード（影なし。課題のカードは文字もグレー）
+   ========================================================================== */
+.ps-aiflow {
+  position: relative;
+}
+
+.ps-aiflow :where(ol, ul) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ps-aiflow__head {
+  color: var(--c-navy);
+  font-size: calc(16 * var(--u));
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.ps-aiflow__cards {
+  display: flex;
+}
+
+.ps-aiflow__card {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(16 * var(--u));
+  box-sizing: border-box;
+  padding: calc(32 * var(--u)) calc(16 * var(--u));
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(186, 186, 186, 0.12), rgba(255, 255, 255, 0));
+  box-shadow: 0 calc(30 * var(--u)) calc(30 * var(--u)) rgba(0, 36, 119, 0.16);
+  text-align: center;
+}
+
+.ps-aiflow__card--ai {
+  background-image: linear-gradient(180deg, rgba(0, 144, 255, 0.12), rgba(255, 255, 255, 0));
+}
+
+.ps-aiflow__pill {
+  padding: calc(4 * var(--u)) calc(14 * var(--u));
+  border-radius: 100px;
+  background: var(--c-blue);
+  color: var(--c-white);
+  font-size: calc(14 * var(--u));
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.ps-aiflow__card--ai .ps-aiflow__pill {
+  background: var(--grd-blue100);
+}
+
+.ps-aiflow__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(4 * var(--u));
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.ps-aiflow__sub {
+  color: #1c88e6;
+  font-size: calc(14 * var(--u));
+}
+
+.ps-aiflow__main {
+  color: var(--c-blue);
+  font-size: calc(20 * var(--u));
+  font-weight: 500;
+}
+
+.ps-aiflow__card--ai .ps-aiflow__main {
+  background: var(--grd-blue100);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ps-aiflow__note {
+  color: var(--c-gray);
+  font-size: calc(14 * var(--u));
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.ps-aiflow__card.is-off {
+  box-shadow: none;
+}
+
+.ps-aiflow__card--issue.is-off .ps-aiflow__pill {
+  background: var(--c-gray);
+}
+
+.ps-aiflow__card--issue.is-off .ps-aiflow__main {
+  color: var(--c-gray);
+}
+
+.ps-aiflow__card--ai.is-off {
+  background-image: linear-gradient(180deg, rgba(28, 177, 246, 0.11), rgba(255, 255, 255, 0));
+}
+
+/* カードの間の矢印（左から 青 → 青〜水色のグラデーション → 水色） */
+.ps-aiflow__card + .ps-aiflow__card::before {
+  content: "";
+  position: absolute;
+  width: calc(16 * var(--u));
+  height: calc(11 * var(--u));
+  background: var(--c-blue);
+  clip-path: polygon(100% 50%, 0 100%, 18.75% 50%, 0 0);
+}
+
+.ps-aiflow__card:nth-child(3)::before {
+  background: linear-gradient(270deg, #59adf6 43%, #6479ae);
+}
+
+.ps-aiflow__card:nth-child(4)::before {
+  background: #59acf6;
+}
+
+.ps-aiflow__legend {
+  display: flex;
+}
+
+.ps-aiflow__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--c-gray);
+  line-height: 1.4;
+}
+
+.ps-aiflow__legend-item::before {
+  content: "";
+  flex: none;
+  border-radius: 50%;
+  background: var(--c-blue);
+}
+
+.ps-aiflow__legend-item--ai::before {
+  background: var(--grd-blue100);
+}
+
+/* 968 × 306。カード 196 × 224 を 4 枚、右に 20 の余白、間（54.67）のまん中に矢印。SP も同じ図を横スクロールで見せる */
+.ps-aiflow {
+  padding-top: calc(38 * var(--u));
+}
+
+.ps-aiflow__head {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: calc(474 * var(--u));
+  padding-left: calc(4 * var(--u));
+}
+
+/* 見出しの左右から下りるカッコ（divider 1433:28766 / 28767） */
+.ps-aiflow__head::before,
+.ps-aiflow__head::after {
+  content: "";
+  position: absolute;
+  top: calc(12 * var(--u));
+  box-sizing: border-box;
+  width: calc(136 * var(--u));
+  height: calc(47 * var(--u));
+  border-top: 1px solid var(--c-accent);
+}
+
+.ps-aiflow__head::before {
+  left: 0;
+  border-left: 1px solid var(--c-accent);
+}
+
+.ps-aiflow__head::after {
+  right: 0;
+  border-right: 1px solid var(--c-accent);
+}
+
+.ps-aiflow__cards {
+  justify-content: space-between;
+  padding-right: calc(20 * var(--u));
+}
+
+.ps-aiflow__card {
+  width: calc(196 * var(--u));
+  height: calc(224 * var(--u));
+}
+
+.ps-aiflow__card + .ps-aiflow__card::before {
+  top: calc(50% - 5.5 * var(--u));
+  left: calc(-38.33 * var(--u));
+}
+
+.ps-aiflow__legend {
+  gap: calc(32 * var(--u));
+  margin-top: calc(24 * var(--u));
+}
+
+.ps-aiflow__legend-item {
+  gap: calc(8 * var(--u));
+  font-size: calc(14 * var(--u));
+}
+
+.ps-aiflow__legend-item::before {
+  width: calc(12 * var(--u));
+  height: calc(12 * var(--u));
+}
+
+
+/* ==========================================================================
+   Chapter（Frame 2201 1433:18634 ほか）: 上 160（最初の章だけ 0）。見出し（番号 | 線 | タイトル + 図）→ 56 → 対話の箱
+   ========================================================================== */
+.ps-chapter {
+  padding-top: var(--section-margin-l);
+}
+
+.ps-process + .ps-chapter {
+  padding-top: 56px;   /* SP: 図（発売後の箱の下端）から 56。PC は 0 */
+}
+
+/* 見出し（Frame 2008）: 番号（Chapter + 01）| 線 113px | タイトル。図はタイトルの下。
+   SP（1140:17895）: 番号は中央、線は無し。24 間隔で タイトル → 横スクロールの案内 → 図 */
+.ps-chapter__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.ps-chapter__num {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  justify-self: center;
+  color: var(--c-navy);
+  white-space: nowrap;
+}
+
+.ps-chapter__num small {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ps-chapter__num b {
+  font-size: 46px;
+  font-weight: 600;
+  line-height: 50px;
+}
+
+.ps-chapter__line {
+  display: none;
+}
+
+.ps-chapter__title {
+  margin-top: 24px;
+  color: #1a1a1a;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ps-chapter__head .ps-hint,
+.ps-chapter__chart {
+  margin-top: 24px;
+}
+
+@media (min-width: 768px) {
+  .ps-chapter__head {
+    grid-template-columns: auto 113px minmax(0, 1fr);
+    column-gap: 32px;
+  }
+
+  .ps-process + .ps-chapter {
+    padding-top: 0;
+  }
+
+  .ps-chapter__num {
+    justify-self: auto;
+  }
+
+  .ps-chapter__num small {
+    font-size: var(--fs-tight-s);
+  }
+
+  .ps-chapter__num b {
+    font-size: 80px;
+    line-height: 1.0625;   /* 85 / 80 */
+  }
+
+  .ps-chapter__line {
+    display: block;
+    height: 58px;
+    border-bottom: 1px solid #c0d9ec;
+  }
+
+  .ps-chapter__title {
+    grid-column: 3;
+    margin-top: 0;
+    padding-top: 24px;
+    font-size: 24px;
+    line-height: 1.5;
+  }
+
+  .ps-chapter__title--single {
+    padding-top: 44px;   /* 1 行のタイトルは下げる（Figma: Chapter 06 など） */
+  }
+
+  .ps-chapter__chart {
+    grid-column: 1 / -1;
+    margin-top: 56px;
+  }
+}
+
+/* 1200px 以上: 図もタイトルと同じ列（番号と線の右）に入れる。番号と線は 2 行ぶんの高さを使い、図はタイトルのすぐ下 56px に来る */
+@media (min-width: 1200px) {
+  .ps-chapter__num,
+  .ps-chapter__line {
+    grid-row: 1 / span 2;
+  }
+
+  .ps-chapter__chart {
+    grid-column: 3;
+  }
+}
+
+/* ----- 対話の箱（Frame 2204 1433:18657）: 薄い青の箱に 質問 → 吹き出し を 56 間隔。
+   Figma は箱ごと不透明度 80%（中の吹き出し・文字・写真も 80% になる）。そのまま再現している ----- */
+.ps-talk {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 40px;
+  padding: 40px 20px;
+  border-radius: 8px;
+  background: rgba(199, 219, 236, 0.4);
+  opacity: 0.8;
+}
+
+.ps-talk__list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 質問（Frame 1449 855:27172）: 左に accent の縦罫、「Question 01」+ 質問文。座談会詳細の .ct-question と同じ見た目 */
+.ps-question {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding-left: 32px;
+  border-left: 1px solid var(--c-accent);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ps-question__label {
+  font-size: 18px;
+  background: var(--grd-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ps-question__title {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* 吹き出し（speech-wrap-左 855:23254 / speech-wrap-右）: 丸アイコン 48 + 白い吹き出し 752px。
+   --left = アイコンが左（吹き出しは左上の角だけ四角）、--right = 右（右上の角だけ四角）。
+   SP（1140:17921）: アイコン 40 + 16 + 吹き出し（残りの幅、内側 32 / 24）。部署と名前は縦に並べる。
+   <div class="ps-speech ps-speech--left">
+     <img class="ps-speech__avatar">
+     <div class="ps-speech__bubble"><p class="ps-speech__who">部署 + 名前</p><div class="ps-speech__text"><p>…</p></div><figure class="ps-speech__img">写真（任意）</figure></div>
+   </div> */
+.ps-speech {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.ps-speech--right {
+  flex-direction: row-reverse;
+}
+
+.ps-speech__avatar {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--c-white);
+}
+
+.ps-speech__bubble {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding: 32px 24px;
+  border-radius: 0 16px 16px;
+  background: var(--c-white);
+}
+
+.ps-speech--right .ps-speech__bubble {
+  align-items: flex-start;
+  border-radius: 16px 0 16px 16px;
+}
+
+.ps-speech__who {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-self: stretch;
+}
+
+.ps-speech__text {
+  align-self: stretch;
+  margin-top: 8px;
+  color: #333;
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* 写真（スロット「画像」）。--w / --h = Figma の枠の大きさ。左の吹き出しでは中央、右では左寄せ */
+.ps-speech__img {
+  overflow: hidden;
+  width: calc(var(--w) * 1px);
+  max-width: 100%;
+  margin-top: 32px;
+  border-radius: var(--radius);
+  aspect-ratio: var(--w) / var(--h);
+}
+
+.ps-speech__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .ps-talk {
+    gap: 56px;
+    margin-top: 56px;
+    padding: 104px var(--side-margin);
+  }
+
+  .ps-talk__list {
+    gap: 32px;
+  }
+
+  .ps-question__title {
+    font-size: 20px;
+  }
+
+  .ps-speech {
+    gap: 24px;
+  }
+
+  .ps-speech__avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .ps-speech__bubble {
+    flex: 0 1 752px;
+    padding: 48px;
+  }
+
+  .ps-speech__who {
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 2px 16px;
+  }
+}
+
+/* ----- Project Result（Result 1433:18808）: 最後の章の箱から縦線 96px でつながる青い帯 ----- */
+.ps-result {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 64px;
+  padding: 40px 32px;
+  border-radius: var(--radius);
+  background: url("../img/story/band_result.svg") center / cover no-repeat, var(--grd-blue80);
+  color: var(--c-white);
+}
+
+.ps-result::before {   /* Line 100 */
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 1px;
+  height: 64px;
+  background: var(--c-blue);
+}
+
+.ps-result__title {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+.ps-result__txt {
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .ps-result {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    margin-top: 96px;
+    padding: 72px;
+    background-position: center calc(50% + 4.3px);
+    background-size: max(100%, 1248px) auto;
+  }
+
+  .ps-result::before {
+    height: 96px;
+  }
+
+  .ps-result__title {
+    flex: none;
+    font-size: 38px;
+    white-space: nowrap;
+  }
+
+  .ps-result__txt {
+    flex: 0 1 805px;   /* 区切り線 1 + 64 + 本文 740 */
+    min-width: 0;
+    padding: 0 0 0 64px;
+    border-top: 0;
+    border-left: 1px solid #72aad4;
+  }
+}
+
+/* ==========================================================================
+   ディレクターからのメッセージ（Frame 2208 1433:18815）: 上下 160、見出し | 80 | 本文 812px。SP は見出し → 32 → 本文
+   ========================================================================== */
+.ps-message {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-block: 64px;   /* SP 1140:18082: Project Result の下 64、本文の下 64 */
+}
+
+@media (min-width: 768px) {
+  .ps-message {
+    gap: 40px;
+    padding-block: var(--section-margin-l);
+  }
+}
+
+@media (min-width: 1024px) {
+  .ps-message {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 80px;
+  }
+
+  .ps-message__head {
+    flex: none;
+  }
+
+  .ps-message__txt {
+    flex: 0 1 812px;
+    min-width: 0;
+  }
+}
+
+/* ==========================================================================
+   中間幅（768〜1439px）の流動化
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .ps-intro__box {
+    padding-inline: clamp(32px, 6.67vw, 96px);
+  }
+
+  .ps-intro__lead {
+    margin-inline: 0;
+  }
+
+  .ps-marquee {
+    font-size: clamp(80px, 10.14vw, 146px);
+  }
+
+  .ps-overview__row {
+    gap: clamp(40px, 7.2vw, 104px);
+  }
+
+  .ps-ba {
+    padding: clamp(48px, 5vw, 72px) clamp(24px, 2.8vw, 40px);
+  }
+
+  .ps-talk {
+    padding: clamp(56px, 7.2vw, 104px) var(--side-margin-fluid);
+  }
+
+  .ps-result {
+    padding: clamp(40px, 5vw, 72px);
+  }
+
+  .ps-result__txt {
+    padding-left: clamp(32px, 4.4vw, 64px);
+  }
+}
+
+/* 768〜1099px: Before / After と Member は横に並べると狭いので縦に積む。Project Result も縦 */
+@media (min-width: 768px) and (max-width: 1099px) {
+  .ps-members__list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ps-ba {
+    flex-direction: column;
+  }
+
+  .ps-ba__arrow {
+    width: auto;
+    height: 25px;
+    background:
+      linear-gradient(#72aad4, #72aad4) left center / calc(50% - 11.5px) 1px no-repeat,
+      linear-gradient(#72aad4, #72aad4) right center / calc(50% - 11.5px) 1px no-repeat;
+  }
+
+  .ps-ba__arrow::before {
+    transform: rotate(90deg);
+  }
+
+  .ps-result {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+  }
+
+  .ps-result__txt {
+    flex: none;
+    padding: 24px 0 0;
+    border-top: 1px solid #72aad4;
+    border-left: 0;
+  }
+}

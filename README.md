@@ -21,6 +21,9 @@ https://recruit.n-info.co.jp/ のテーマ。静的 HTML（リポジトリ `tsuc
 | `/development/` 教育・研修・キャリアパス | `page-development.php` | 固定ページ | 553:10756 / 1137:10920 | `development.css` / `development.js` |
 | `/work-style/` 制度・環境 | `page-work-style.php` | 固定ページ | 557:13142 / 1137:10921 | `work-style.css` / `work-style.js` |
 | `/office/` オフィス紹介 | `page-office.php` | 固定ページ | 562:14690 / 1137:10922 | `office.css` |
+| `/message/` メッセージ | `page-message.php` | 固定ページ | 507:8512 / 1137:10917 | `message.css` |
+| `/future/` 業界の未来 | `page-future.php` | 固定ページ | 515:6722 / 1137:10918 | `future.css` |
+| `/beginner/story-1/` `/beginner/story-2/` `/career/story-1/` プロジェクトストーリー | `page-story-1.php` `page-story-2.php` → `template-parts/story/` | 固定ページ（beginner / career の子） | 1433:18565 / 1433:18875 / 1433:19185 / SP は共通のテンプレート 1137:10927 | `story.css` |
 | `/casual-talk/` カジュアル面談フォーム | `page-casual-talk.php` | 固定ページ | 900:29128 / 1137:10932 | `form.css` / `form.js` |
 | `/casual-talk/thanks/` 送信完了 | `page-thanks.php` | 固定ページ（casual-talk の子） | 900:29656 / 1137:10933 | `form.css` |
 | `/interview/` 社員インタビュー一覧 | `archive-interview.php` | カスタム投稿 `interview` | 855:23614 / 1137:10928 | `interview.css` / `interview.js` |
@@ -32,7 +35,7 @@ https://recruit.n-info.co.jp/ のテーマ。静的 HTML（リポジトリ `tsuc
 | `/job-opening/{パーマリンク}/` 詳細 | `single-job-opening.php` | カスタム投稿 `job-opening` | 565:17162 / 1137:10925 | `job-opening.css` `editor-style.css` `form.css` / `job-opening.js` `form.js` |
 | 404 | `404.php` | 404 | 900:30217 / 1137:10934 | `form.css` |
 
-デザイン未 FIX で未着手: プロジェクトストーリー（`/beginner/story-1/` ほか）/ メッセージ（`/message/`）/ 業界の未来（`/future/`）。メニュー・フッターのリンクは `#` のまま。ほかに `#` のままのリンク: 公式採用インスタグラム / マイナビ新卒2028 / 個人情報保護方針 / コーポレートサイト。
+デザイン未 FIX で未着手: プロジェクトストーリー 中途経験者 #2（`/career/story-2/`、原稿待ち）。`#` のままのリンク: フッターの「プロジェクトストーリー」2 つ（一覧ページが無く、行き先が未定）/ 中途 TOP の Project Story の 2 枚目 / 公式採用インスタグラム / マイナビ新卒2028 / 個人情報保護方針 / コーポレートサイト。
 
 ## テーマの構成
 
@@ -60,6 +63,11 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
 - **`<body>` のクラス**は静的 HTML と同じ `page-top` / `page-beginner` / `page-career` / `page-lower page-○○`（`inc/page.php`）。WP 標準のクラスも一緒に付く。
 - **`<title>` と meta description** は、各テンプレートが `get_header()` の前に `ni_head()` で渡している（静的 HTML の値のまま）。
 - **リンクと画像**: サイト内リンクは `ni_url( '/about/' )`、画像は `ni_img( 'common/logo_black.svg' )`（`assets/img/` 以下）。
+- **メッセージ / 業界の未来 / プロジェクトストーリーは静的**（2026-10-05。文言・画像はテンプレートに固定で、WP の投稿内容は出していない）。
+  - プロジェクトストーリーは `/beginner/story-1/` と `/career/story-1/` が同じスラッグなので、`page-story-1.php` / `page-story-2.php` が親ページのスラッグで `template-parts/story/beginner-1.php` / `beginner-2.php` / `career-1.php` に振り分ける。3 ページは同じ部品（クラスは `ps-`。`.story` は TOP の節が使っている）で、工程の図だけ種類が違う（#01 = タイムライン / #02 = 漏斗 / 中途 #01 = AI 導入の流れ）。図は HTML + CSS で、章ごとの強調は `is-on` / `is-off`。
+  - プロジェクトストーリーの SP は、3 ページ共通の SP テンプレート（Figma 1137:10927。文言はダミー）に合わせている。工程の図は PC と同じ横長のまま横スクロール（CSS だけ）で、上に「横にスクロールして全ステップを見る」の行を出す。テンプレートの図はタイムラインだけなので、漏斗図（#02）と AI 導入の流れ（中途 #01）は PC の図をそのまま同じ方式で置いている。このフレームは `get_metadata` が子を返さない（中身は Container 1140:17780）。
+  - 業界の未来はページ頭のガラスの NI ロゴを出さない（`inc/page.php` の `ni_logo`）。ヒーローの立体は Figma の静止画（付箋の参考は three.js のデモ https://ni-future.pages.dev/ = `デモ/NI_CRYSTAL.html`。WebGL 化は未着手）。
+  - 書体 Shippori Antique は 中途 TOP・業界の未来・メッセージだけ読む（`inc/assets.php`）。
 - **新卒 TOP・中途 TOP の「社員インタビュー」は、固定ページで選んだ記事を出す**（2026-10-05。仕様書「固定ページから既存の社員インタビュー記事から 3 記事をピックアップ」）: 固定ページ `beginner` / `career` それぞれの ACF「社員インタビュー（ピックアップ）」（`acf-json/group_ni_top_voice.json`、関連 = `voice_pickup`、最大 3 件、選んだ順に左から）。カードは `template-parts/voice-card.php`（一言 = タイトル、写真 = `interview_thumbnail`、入社区分・職種・タグ = タクソノミー。見た目はデザインのまま = 氏名は出さない）、記事の ID は `functions.php` の `ni_voice_pickup()`。未選択ならスライダーと矢印を出さない。テストサーバーでも両ページで記事を選ぶ必要がある。
 - **社員インタビューの詳細は WP の内容を出す**（`single-interview.php`。2026-10-05。設計書「NI採用サイト_ACFフィールド設計書_社員インタビュー.xlsx」）: タイトル = 投稿タイトル、メインビジュアル = アイキャッチ（横長）、入社区分・職種・タグ = タクソノミー、ACF「社員インタビュー」（`acf-json/group_ni_interview.json`）= 氏名・サムネイル用画像（一覧やカード用）・サイド追従画像（本文の左、PC だけ）・本文・スケジュール（リピーター = 時間 / 本文。0 件ならセクションごと出さない）。
   - **本文だけ設計書（ブロックエディタ）から変えて、ACF のフレキシブルコンテンツ**（`interview_body`。レイアウトは 質問・回答 / 画像。ユーザー指示、座談会と同じ考え方）。Question の番号は上から順に自動。エディターは出さない。
@@ -85,7 +93,7 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
 - **教育・研修・キャリアパスの「キャリアパス」は管理画面で編集**（`page-development.php`）: 固定ページ `development` の ACF「キャリアパス」（`acf-json/group_ni_development.json`、設計書は「NI採用サイト_ACFフィールド設計書_キャリアパス.xlsx」）。それ以外の節（研修・成長ステップなど）は固定。
   - 路線リスト（リピーター `route_list`）= タブ 1 つずつ（路線タイトル `route_label`）→ CASE リスト（`route_case_list`: 出発職種・到達職種・説明文・タイムラインステップ（年次バッジ・タイトル・本文）・関連インタビュー記事）。CASE が複数あれば縦に並べ（間 80px。デザインに無い）、CASE 番号は路線ごとに 1 から自動。入力した内容だけ出す（路線が無ければ見出しと説明だけ）。
   - 設計書と Figma の注釈（「3 路線は固定で表示・非表示をチェックボックス」）が食い違っていたが、2026-10-02 にユーザーと設計書どおり（リピーター）に決定。
-  - **未対応**: 関連インタビューのカードは、社員インタビューの入力項目（写真・名前・一言・入社区分・職種・ハッシュタグ）が未定のため、いまは記事のタイトルとリンクだけ（記事にアイキャッチがあれば写真も出すが、interview はまだアイキャッチ非対応）。未選択ならカードを出さない。
+  - 関連インタビューのカードは、TOP の社員インタビューと同じ部品 `template-parts/voice-card.php`（2026-10-05）: 写真 = サムネイル用画像、一言 = タイトル、入社区分・職種・タグ = タクソノミー。写真の上に氏名（`interview_name`）を重ねる（PC のみ）。デザインにある英字の氏名（Taro Tanaka）は入力項目が無いので出していない。
 - **制度・環境は管理画面で編集**（`page-work-style.php`）: 固定ページ `work-style` の ACF「制度・環境」（`acf-json/group_ni_work_style.json`、タブ 5 つ。設計書は「NI採用サイト_ACFフィールド設計書_制度・環境.xlsx」）。固定はページ頭・カルチャー・各セクションの見出しと説明・働き方の大カード 2 枚の見出し・本文・アイコン。
   - ACF: 働き方の社員の声（写真・役職年次・引用）× 2 / ミニカード・福利厚生カード（支援内容 = 大きい金額の行、PC のみ）・社内コミュニケーションのミニカード・制度カード（リピーター、アイコン SVG 可）/ 社内コミュニケーションの大カード 3 枚（タイトル・写真・サブタイトル・本文。並びは表彰 → サンクス → ランチで固定）/ 写真の帯（ギャラリー）。必須は設計書どおり。入力した内容だけ出す（未入力のリピーター・写真の帯は丸ごと出さない）。
   - 設計書から足したもの（2026-10-02 にユーザーと決定）: 写真の帯のギャラリー（Figma の注釈「画像は全て差し替え可能にする」）、制度カードのアイコン（デザインにある）。
@@ -119,7 +127,7 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
 
 テンプレートは URL（スラッグ）で決まるので、次のものが WP に無いとページが出ない。Local では WP-CLI で作成済み。テストサーバーでも同じものを作る。
 
-- 固定ページ: `beginner` / `career` / `about` / `chart` / `development` / `work-style` / `office` / `casual-talk` / `casual-talk` の子の `thanks`
+- 固定ページ: `beginner` / `career` / `about` / `chart` / `development` / `work-style` / `office` / `casual-talk` / `casual-talk` の子の `thanks` / `message` / `future` / `beginner` の子の `story-1`・`story-2` / `career` の子の `story-1`
 - 静的なあいだのサンプル（静的 HTML の `detail/` と同じ URL にするため）: `interview` / `cross-talk` / `job-opening` にスラッグ `detail` の投稿を 1 件ずつ。Local の `job-opening` の `detail`（アルバイト「定性調査のモデレーター」）には、静的 HTML の本文と同じブロック一式とエントリーフォーム、リード文を入れてある
 - プラグイン: **Advanced Custom Fields PRO**（有効化するとテーマの `acf-json/` の項目が出る）、**Intuitive Custom Post Order**（設定 → 並び替え設定 で、投稿タイプ「募集要項」とタクソノミー「募集要項カテゴリ」、社員インタビューの「入社区分」「職種」「タグ（ハッシュタグ）」にチェック）、**Contact Form 7**（日本語の翻訳も入れる: `wp language plugin install contact-form-7 ja`）
 - CF7 のフォーム「エントリーフォーム」: 新規作成し、「フォーム」タブに `cf7/entry-form.txt`、「メール」タブの本文に `cf7/entry-mail.txt` を貼る。メールの宛先 `[_site_admin_email]`、件名 `[_site_title] エントリー：[_post_title]（[your-name] 様）`、追加ヘッダー `Reply-To: [your-email]`、ファイル添付 `[resume]`（改行して）`[cv]`。メール (2)（自動返信）は使っていない。送信できたら `/casual-talk/thanks/` へ移る（`form.js` の [C]）。各募集要項の本文の最後に h2「エントリー」+ Contact Form 7 ブロックでこのフォームを置く
@@ -146,7 +154,7 @@ Local（Flywheel）のサイト `http://ni.localhost/`。WP-CLI は案件フォ�
 
 ## Figma
 
-- デザイン: https://www.figma.com/design/opYGDQklgdjfC6rKNvw9jC/ni （view 権限のみで Figma MCP からは読めない）。MCP で読むときはユーザー所有の複製 `hu3TKQFAQ4B328fle7gPeP`（https://www.figma.com/design/hu3TKQFAQ4B328fle7gPeP/ni--Copy- 。2026-09-30 に複製し直したもの。ノード ID は同じ）
+- デザイン: https://www.figma.com/design/opYGDQklgdjfC6rKNvw9jC/ni （view 権限のみで Figma MCP からは読めない）。MCP で読むときはユーザー所有の複製 `og2ggHanBk64WS08DjxKwY`（https://www.figma.com/design/og2ggHanBk64WS08DjxKwY/ni--Copy- 。2026-10-05 に複製し直したもの。ノード ID は同じ）
 - 仕様書（画面設計）: fileKey `AGijGTgPtyohq1gAk8wVNz`（日本インフォメーション様_採用サイト_画面設計 の複製）
 - デザイナーのデモ: 案件フォルダの `デモ/NI_TOP.html`（three.js。元データは `NI-FV/`）
 

@@ -200,7 +200,7 @@ get_header();
       <ul class="splide__list story__list">
         <li class="splide__slide story-card">
           <div class="story-card__visual">
-            <a class="story-card__img" href="#"><img src="<?php echo ni_img( 'common/story_photo_01.jpg' ); ?>" alt="" width="680" height="383"></a>
+            <a class="story-card__img" href="<?php echo ni_url( '/career/story-1/' ); ?>"><img src="<?php echo ni_img( 'common/story_photo_01.jpg' ); ?>" alt="" width="680" height="383"></a>
             <span class="story-card__cap" aria-hidden="true"></span>
             <p class="story-card__label u-en">PROJECT<br>STORY</p>
             <div class="story-card__tags">
@@ -268,7 +268,7 @@ get_header();
       <div class="future__content">
         <h2 class="future__title-text">リサーチ業界の今と<br>日本インフォメーションが<br class="u-sp">描く未来</h2>
         <p class="future__text">AI・データ活用が進む中でもリサーチャーの価値は高まっています。<br class="u-pc">日本インフォメーションの戦略と展望をご覧ください。</p>
-        <a class="btn btn--w" href="#">業界の未来を読む<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a>
+        <a class="btn btn--w" href="<?php echo ni_url( '/future/' ); ?>">業界の未来を読む<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a>
       </div>
     </div>
   </section>

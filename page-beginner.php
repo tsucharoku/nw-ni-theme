@@ -47,7 +47,7 @@ get_header();
         <h2 class="message__title">楽しんで働ける場を創る。</h2>
       </div>
       <p class="message__text">各人の仕事に対する考え方や姿勢は様々。<br class="u-pc">当社は多様な価値観、バックボーンを持つ人材が集まり、<br class="u-pc">それぞれが楽しみ尊重しあいながら仕事をしている<br class="u-pc">職場づくりを目指したい。<br>そんな想いで「Have fun！」を掲げ、<br class="u-pc">様々な働き方に関する取り組みを実施しています。</p>
-      <a class="btn btn--w" href="#">メッセージ<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a>
+      <a class="btn btn--w" href="<?php echo ni_url( '/message/' ); ?>">メッセージ<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a>
     </div>
   </section>
 
@@ -137,7 +137,7 @@ get_header();
       <ul class="splide__list story__list">
         <li class="splide__slide story-card">
           <div class="story-card__visual">
-            <a class="story-card__img" href="#"><img src="<?php echo ni_img( 'common/story_photo_01.jpg' ); ?>" alt="" width="680" height="383"></a>
+            <a class="story-card__img" href="<?php echo ni_url( '/beginner/story-1/' ); ?>"><img src="<?php echo ni_img( 'common/story_photo_01.jpg' ); ?>" alt="" width="680" height="383"></a>
             <span class="story-card__cap" aria-hidden="true"></span>
             <p class="story-card__label u-en">PROJECT<br>STORY</p>
             <div class="story-card__tags">
@@ -155,7 +155,7 @@ get_header();
         </li>
         <li class="splide__slide story-card">
           <div class="story-card__visual">
-            <a class="story-card__img" href="#"><img src="<?php echo ni_img( 'common/story_photo_01.jpg' ); ?>" alt="" width="680" height="383"></a>
+            <a class="story-card__img" href="<?php echo ni_url( '/beginner/story-2/' ); ?>"><img src="<?php echo ni_img( 'common/story_photo_01.jpg' ); ?>" alt="" width="680" height="383"></a>
             <span class="story-card__cap" aria-hidden="true"></span>
             <p class="story-card__label u-en">PROJECT<br>STORY</p>
             <div class="story-card__tags">
@@ -211,7 +211,7 @@ get_header();
         </h2>
         <p class="future__sub">そんな疑問にお答えします</p>
         <p class="future__text">AI・データ分析が加速する時代だからこそ、「人の声を聞き、意味を読み解く」リサーチの価値は高まっています。<br>日本インフォメーションが描く、業界の未来をご覧ください。</p>
-        <a class="btn btn--w" href="#">業界の未来を読む<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a>
+        <a class="btn btn--w" href="<?php echo ni_url( '/future/' ); ?>">業界の未来を読む<span class="btn__arrow"><img src="<?php echo ni_img( 'common/arrow_btn.svg' ); ?>" alt="" width="12" height="20"></span></a>
       </div>
     </div>
   </section>

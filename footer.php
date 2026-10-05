@@ -51,8 +51,8 @@
         <div class="footer__panel" id="footer-panel-3">
           <ul class="footer__list">
             <li><a href="<?php echo ni_url( '/about/' ); ?>">3分でわかる日本インフォメーション</a></li>
-            <li><a href="#">業界の未来</a></li>
-            <li><a href="#">メッセージ</a></li>
+            <li><a href="<?php echo ni_url( '/future/' ); ?>">業界の未来</a></li>
+            <li><a href="<?php echo ni_url( '/message/' ); ?>">メッセージ</a></li>
             <li class="footer__subgroup">
               <p class="footer__subhead">仕事とキャリア</p>
               <ul class="footer__sub footer__list">

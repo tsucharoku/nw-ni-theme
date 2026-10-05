@@ -1,0 +1,20 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="335" height="210" viewBox="0 0 335 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 1990" clip-path="url(#clip0_0_49)">
+<rect id="Rectangle 338" width="335" height="210" fill="url(#paint0_linear_0_49)"/>
+<path id="Polygon 4" d="M167.5 132L-40 69L375 69L167.5 132Z" fill="url(#paint1_linear_0_49)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_49" x1="335" y1="0" x2="335" y2="210" gradientUnits="userSpaceOnUse">
+<stop stop-color="#3C434A"/>
+<stop offset="0.67015" stop-color="#C8D7F8"/>
+<stop offset="0.956731" stop-color="#D7EAFF"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_49" x1="166.228" y1="132.372" x2="166.228" y2="69.1859" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="#A5A5A5" stop-opacity="0"/>
+</linearGradient>
+<clipPath id="clip0_0_49">
+<rect width="335" height="210" fill="white"/>
+</clipPath>
+</defs>
+</svg>

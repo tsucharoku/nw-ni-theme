@@ -37,8 +37,8 @@
       <div class="menu__groups">
         <ul class="menu__group">
           <li><a href="<?php echo ni_url( '/about/' ); ?>">3分でわかる日本インフォメーション</a></li>
-          <li><a href="#">業界の未来</a></li>
-          <li><a href="#">メッセージ</a></li>
+          <li><a href="<?php echo ni_url( '/future/' ); ?>">業界の未来</a></li>
+          <li><a href="<?php echo ni_url( '/message/' ); ?>">メッセージ</a></li>
         </ul>
         <div class="menu__group">
           <p class="menu__group-title">仕事とキャリア</p>
