@@ -38,7 +38,8 @@ function ni_page_key() {
    css:     assets/css/○○.css（共通ぶんの後に、この順で読む）
    js:      assets/js/○○.js（共通ぶんの後に、この順で読む）
    modules: assets/js/○○.js を <script type="module"> で読む（FV の WebGL 演出）
-   ni_logo: 下層のページ頭の背景のガラスの NI ロゴを出すか。省略 = 出す / false = 出さない / 'sp' = SP だけ出す
+   ni_logo: 下層のページ頭の背景のガラスの NI ロゴを出すか。省略 = 出す / false = 出さない / 'sp' = SP だけ出す。
+            出すページは ni-logo.js（中途 TOP と同じ WebGL のロゴ）を modules に自動で足す = ni_page()
             （Figma の見出し部品 H2 の中の ni-logo-only が非表示のページに合わせる。2026-10-01 に全ページ PC / SP を確認） */
 function ni_page_map() {
 	return array(
@@ -101,6 +102,10 @@ function ni_page() {
 				'ni_logo' => true,
 			)
 		);
+		/* 下層のページ頭のロゴ: 中途 TOP と同じ WebGL のロゴを静止画の位置に出す（ni-logo.js の下層モード） */
+		if ( 'lower' === $page['type'] && $page['ni_logo'] && ! in_array( 'ni-logo', $page['modules'], true ) ) {
+			$page['modules'][] = 'ni-logo';
+		}
 	}
 	return $page;
 }

@@ -27,6 +27,12 @@
    - 回転はデモの「定位置に着いた後」と同じ式（デザイナー確認済み: 動画の元データは無く、デモの通りで OK）:
      縦軸（Y）まわりに一定速度 P.spinRate（0.18 rad/s ≒ 35 秒で 1 周、左端が手前に来る向き）で回り続け、
      傾き（tilt）は P.tiltAuto の揺れ（X: tilt ± tiltAmp、Z: ± tiltAmp*tiltOrbit、周期 tiltPeriod 秒）を重ねる
+
+   下層モード（.hero が無く、ページ頭の背景のロゴ .page-ni__img があるページ）: 中途トップと同じロゴ（材質・回転とも定位置固定モードと同じ）を、
+   静止画（lower/pagehead_ni.png）の位置・大きさに出す。静止画は残したまま visibility で隠し、その枠を位置の基準に使う（P.lower）。
+   - canvas は画面固定ではなく文書の先頭に absolute で置く（ページと一緒にブラウザがスクロールさせる。JS で追いかけないので iOS でも跳ねない）。
+     高さは「1 画面」と「静止画の下端」の大きいほう。ロゴが画面の上へ抜けたら描画を止める
+   - WebGL が動かない環境・動き抑制時は静止画のまま（<html> の is-ni-logo = inc/assets.php が <head> で付ける。動かせなかったらここで外す）
    ========================================================================== */
 import * as THREE from 'three';
 import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
@@ -83,6 +89,8 @@ const P = {
      中心 x 1047 = カード幅 1392 - 345、y 170）。PC はロゴを画面に固定しておき、スクロールでカードのこの位置がロゴまで上がってきたら
      カードに乗り換えて一緒に上へ抜ける。blend はその手前で x をカードの位置へ寄せるスクロール量 (px)。SP は Figma にカード上のロゴが無く、
      Hero の位置のまま最初からカードに重なっているので dock なし = 最初から文書に固定 */
+  /* 下層モード: 静止画（.page-ni__img、988x936 のポスター）の枠に対するロゴの中心と高さ（ポスター内のロゴ外接矩形 x 214〜775 / y 141〜729 から） */
+  lower: { cx: 494.5 / 988, cy: 435 / 936, h: 588 / 936 },
   spinRate: 0.18,     /* 定位置固定モード: Y 回転の速さ (rad/s)。デモの定位置での回転 g*(now/1000)*0.18 の係数と同値（≒ 35 秒で 1 周） */
   /* 描画 */
   maxPixelRatio: 2, bgMaxWidth: 1600
@@ -181,12 +189,16 @@ function buildTransmissionChunks() {
 
 function init() {
   const hero = document.querySelector('.hero[data-anim="fv"]');
-  if (!hero) return;
+  /* 下層モード: FV が無く、ページ頭の背景のロゴ（静止画）が表示されているページ（SP だけ出すページの PC は幅 0 = 何もしない） */
+  const lowerImg = hero ? null : document.querySelector('.page-ni__img');
+  const lowerMode = !!(lowerImg && lowerImg.offsetWidth);
+  const keepStill = () => document.documentElement.classList.remove('is-ni-logo');   /* 下層: 動かせないときは静止画を見せる */
+  if (!hero && !lowerMode) return;
   if (/[?&]nowebgl/.test(window.location.search) || /[?&]off=[^&]*\blogo\b/.test(window.location.search)) return;   /* ?off=logo でこのモジュールだけ止める（実機の切り分け用） */
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   /* 定位置固定モード（中途）: Hero 座標に固定してその場で回る。基準は .hero__stage（なければ .hero） */
-  const staticMode = hero.hasAttribute('data-fv-static');
-  const stage = hero.querySelector('.hero__stage') || hero;
+  const staticMode = !lowerMode && hero.hasAttribute('data-fv-static');
+  const stage = lowerMode ? null : (hero.querySelector('.hero__stage') || hero);
   const dockEl = document.querySelector('[data-logo-dock]');
   const mqPc = window.matchMedia('(min-width: 768px)');
   /* 波の動画背景が見える範囲の終わり = 不透明な背景を持つ最初のセクション（About）。
@@ -194,13 +206,14 @@ function init() {
   const logoEnd = document.querySelector('[data-logo-end]') || document.querySelector('.about');
 
   const canvas = document.createElement('canvas');
-  canvas.className = 'ni-logo';
+  canvas.className = lowerMode ? 'ni-logo ni-logo--lower' : 'ni-logo';
   canvas.setAttribute('aria-hidden', 'true');
 
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   } catch (e) {
+    keepStill();
     return;
   }
   renderer.setClearColor(0x000000, 0);
@@ -492,6 +505,11 @@ function init() {
   function resize() {
     W = Math.max(1, Math.round(document.documentElement.clientWidth));
     H = Math.max(1, Math.round(window.innerHeight));
+    if (lowerMode) {
+      /* 下層: canvas は文書の先頭に absolute。1 画面より下まで静止画があるとき（低い画面）はそこまで伸ばす */
+      H = Math.max(H, Math.ceil(lowerImg.getBoundingClientRect().bottom + window.scrollY));
+      canvas.style.height = H + 'px';
+    }
     renderer.setSize(W, H, false);
     composer.setSize(W, H);
     camera.aspect = W / H;
@@ -601,6 +619,17 @@ function init() {
     setRotation(t, t * P.spinRate);
   }
 
+  /* ---------- 配置（下層モード）: 静止画の枠（文書座標 = canvas 座標）の中のロゴの位置・大きさ。回転は定位置固定モードと同じ ---------- */
+  function placeLower(t) {
+    const r = lowerImg.getBoundingClientRect();
+    const px = r.left + window.scrollX + r.width * P.lower.cx;
+    const py = r.top + window.scrollY + r.height * P.lower.cy;
+    const unitX = VIEW_H * (W / H);
+    group.position.set((px / W * 2 - 1) * unitX / 2, (1 - py / H * 2) * VIEW_H / 2, 0);
+    group.scale.setScalar((r.height * P.lower.h / H) * VIEW_H / LOGO_H);
+    setRotation(t, t * P.spinRate);
+  }
+
   /* ---------- 背景の合成（白 → 動画 cover → 青ベール。base.css の .page-bg と同じ見た目） ---------- */
   let veil = P.blueVeil;
   function drawBg() {
@@ -691,7 +720,7 @@ function init() {
     t += dt;
     fv.tick(performance.now());   /* 進行度（慣性つき）とイントロ */
 
-    const off = clipToVideoArea();
+    const off = lowerMode ? window.scrollY >= H : clipToVideoArea();   /* 下層: canvas ごと画面の上へ抜けたら描かない */
     canvas.classList.toggle('is-off', off);
     if (off) return;
 
@@ -702,7 +731,8 @@ function init() {
     renderer.toneMappingExposure = expo;
     uExposure.value = expo;
 
-    if (staticMode) placeStatic(t);
+    if (lowerMode) placeLower(t);
+    else if (staticMode) placeStatic(t);
     else place(t, fv.p, fv.introK);
     for (const h of hooks) h(t);
     if (halfRate && (renderNo++ & 1)) return;   /* SP: 描画は 2 フレームに 1 回 */
@@ -772,13 +802,15 @@ function init() {
     e.preventDefault();
     running = false;
     canvas.classList.add('is-off');
+    keepStill();
   });
 
   /* 波背景（.page-bg）の直後に置く: 重なり順は背景の一つ上・本文の下 */
   const pageBg = document.querySelector('.page-bg');
   if (pageBg && pageBg.parentNode) pageBg.parentNode.insertBefore(canvas, pageBg.nextSibling);
   else document.body.appendChild(canvas);
-  window.addEventListener('resize', resize);
+  /* 下層の SP は幅が変わったときだけ作り直す（スクロールでアドレスバーが出入りするたびに高さが変わるため） */
+  window.addEventListener('resize', lowerMode ? () => { if (mqPc.matches || Math.round(document.documentElement.clientWidth) !== W) resize(); } : resize);
   resize();
   sync();
 

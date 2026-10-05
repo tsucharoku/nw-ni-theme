@@ -92,6 +92,13 @@ function ni_print_head_scripts() {
 (function(){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;if(/[?&]capture/.test(location.search))return;document.documentElement.classList.add('is-fv-unfold');})();
 </script>
 		<?php
+	elseif ( 'lower' === $page['type'] && $page['ni_logo'] ) :
+		?>
+<script>
+/* 下層のページ頭のロゴ（ni-logo.js の下層モード）: WebGL のロゴに置き換えるので、静止画を先に隠しておく（ちらつき防止）。動き抑制・?nowebgl は付けない = 静止画のまま */
+(function(){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;if(/[?&]nowebgl/.test(location.search)||/[?&]off=[^&]*\blogo\b/.test(location.search))return;document.documentElement.classList.add('is-ni-logo');})();
+</script>
+		<?php
 	endif;
 
 	if ( $page['modules'] ) {

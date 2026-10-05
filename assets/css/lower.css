@@ -7,7 +7,8 @@
 
 /* ==========================================================================
    Page head
-   背景のガラスの NI ロゴは Figma では動画ノード（ni-logo-only）を薄く敷いたもの。下層では静止画で置く。
+   背景のガラスの NI ロゴは Figma では動画ノード（ni-logo-only）を薄く敷いたもの。中途 TOP と同じ WebGL のロゴ（ni-logo.js の下層モード）を
+   静止画の位置に出す。静止画は WebGL が動かない環境・動き抑制時の代替と、位置・大きさの基準として残す。
    id="js-fv" を付けると common.js が通過後に .header へ is-fixed を付ける（ハンバーガーに白い箱）
    ========================================================================== */
 .page-head {
@@ -37,6 +38,17 @@
   width: 254px;
   max-width: none;
   height: auto;
+}
+
+/* WebGL のロゴが出るページでは静止画を隠す（枠は位置の基準に使うので display ではなく visibility。is-ni-logo は inc/assets.php） */
+.is-ni-logo .page-ni__img {
+  visibility: hidden;
+}
+
+/* 下層の WebGL のロゴ: 画面固定（components.css の .ni-logo）ではなく文書の先頭に置き、ページと一緒にスクロールさせる。高さは ni-logo.js */
+.ni-logo--lower {
+  position: absolute;
+  inset: 0 auto auto 0;
 }
 
 .breadcrumb {
