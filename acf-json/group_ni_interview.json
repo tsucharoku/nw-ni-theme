@@ -46,6 +46,205 @@
             "max_size": "",
             "mime_types": "",
             "preview_size": "medium"
+        },
+        {
+            "key": "field_ni_interview_side_image",
+            "label": "サイド追従画像",
+            "name": "interview_side_image",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "詳細ページの本文の左に出て、スクロールに追従する写真です（PC のみ。SP では出ません）。縦長のポートレート推奨（例: 600×800px）。アイキャッチ（横長）とは別の写真を使います。",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_ni_interview_body",
+            "label": "本文",
+            "name": "interview_body",
+            "aria-label": "",
+            "type": "flexible_content",
+            "instructions": "「質問・回答」と「画像」を上から順に並べます。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layouts": {
+                "layout_ni_interview_qa": {
+                    "key": "layout_ni_interview_qa",
+                    "name": "qa",
+                    "label": "質問・回答",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_ni_interview_body_question",
+                            "label": "質問",
+                            "name": "question",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "「Question 01」などの番号は、上から順に自動で付きます。",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "rows": 2,
+                            "placeholder": "",
+                            "new_lines": "",
+                            "parent_layout": "layout_ni_interview_qa"
+                        },
+                        {
+                            "key": "field_ni_interview_body_answer",
+                            "label": "回答",
+                            "name": "answer",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "改行はそのまま出ます。",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "rows": 6,
+                            "placeholder": "",
+                            "new_lines": "",
+                            "parent_layout": "layout_ni_interview_qa"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_ni_interview_image": {
+                    "key": "layout_ni_interview_image",
+                    "name": "image",
+                    "label": "画像",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_ni_interview_body_image",
+                            "label": "画像",
+                            "name": "image",
+                            "aria-label": "",
+                            "type": "image",
+                            "instructions": "横長の写真（例: 1600×1066px）。",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array",
+                            "library": "all",
+                            "min_width": "",
+                            "min_height": "",
+                            "min_size": "",
+                            "max_width": "",
+                            "max_height": "",
+                            "max_size": "",
+                            "mime_types": "",
+                            "preview_size": "medium",
+                            "parent_layout": "layout_ni_interview_image"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                }
+            },
+            "min": "",
+            "max": "",
+            "button_label": "ブロックを追加"
+        },
+        {
+            "key": "field_ni_interview_schedule",
+            "label": "スケジュール",
+            "name": "interview_schedule",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "「仕事がある日のスケジュール」に出ます。PC では 2 列に分かれます（推奨 6〜10 件、偶数が望ましい）。1 件も無ければセクションごと出ません。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "行を追加",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_ni_interview_schedule_time",
+                    "label": "時間",
+                    "name": "schedule_time",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "例: 9:00",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": 20,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_ni_interview_schedule"
+                },
+                {
+                    "key": "field_ni_interview_schedule_body",
+                    "label": "本文",
+                    "name": "schedule_body",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "例: メールチェック・当日案件の段取り確認",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "rows": 2,
+                    "placeholder": "",
+                    "new_lines": "",
+                    "parent_repeater": "field_ni_interview_schedule"
+                }
+            ]
         }
     ],
     "location": [
@@ -66,5 +265,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1790890000
+    "modified": 1791177041
 }

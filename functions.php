@@ -19,7 +19,7 @@ function ni_setup() {
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'html5', array( 'script', 'style' ) );
 	add_theme_support( 'responsive-embeds' );   /* 本文の埋め込み（YouTube など）を WP 標準の縦横比で出す */
-	add_theme_support( 'post-thumbnails', array( 'cross-talk', 'member' ) );   /* 座談会のメインビジュアル（詳細の上の写真・「その他の記事」のカード）と、メンバーの写真 */
+	add_theme_support( 'post-thumbnails', array( 'interview', 'cross-talk', 'member' ) );   /* 社員インタビュー・座談会のメインビジュアルと、メンバーの写真 */
 }
 add_action( 'after_setup_theme', 'ni_setup' );
 

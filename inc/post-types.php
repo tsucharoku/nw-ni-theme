@@ -6,11 +6,10 @@
  *   座談会           cross-talk   /cross-talk/   /cross-talk/{パーマリンク}/
  *   募集要項         job-opening  /job-opening/  /job-opening/{パーマリンク}/  /job-opening/{カテゴリのスラッグ}/
  *
- * 社員インタビューの詳細は、まだ URL とテンプレート（single-interview.php）を出すための最小限の登録。
- * 入力項目（supports・カスタムフィールド）は仕様を見て後から足す。
  * 座談会は一覧・詳細が WP の内容を出している（メインビジュアルはアイキャッチ、参加メンバー・本文は ACF: acf-json/group_ni_cross_talk.json、
  * メンバーは投稿タイプ member）。
- * 社員インタビューは一覧が WP の内容を出している（タクソノミー 3 つ = 入社区分・職種・タグ、氏名・サムネイル用画像は ACF: acf-json/）。
+ * 社員インタビューは一覧・詳細が WP の内容を出している（タクソノミー 3 つ = 入社区分・職種・タグ、メインビジュアルはアイキャッチ、
+ * 氏名・サムネイル用画像・サイド追従画像・本文・スケジュールは ACF: acf-json/group_ni_interview.json）。
  * 募集要項は一覧・カテゴリ一覧・詳細が WP の内容を出している（カテゴリの英語表記・詳細のリード文は ACF: acf-json/）。
  */
 
@@ -29,8 +28,8 @@ function ni_register_post_types() {
 				'has_archive'   => true,
 				'show_in_rest'  => true,
 				'menu_position' => 5,
-				/* 座談会の本文は ACF（フレキシブルコンテンツ）で入力するので、エディターは出さない。メインビジュアルはアイキャッチ */
-				'supports'      => 'cross-talk' === $post_type ? array( 'title', 'thumbnail' ) : array( 'title', 'editor' ),
+				/* 座談会と社員インタビューの本文は ACF（フレキシブルコンテンツ）で入力するので、エディターは出さない。メインビジュアルはアイキャッチ */
+				'supports'      => 'job-opening' === $post_type ? array( 'title', 'editor' ) : array( 'title', 'thumbnail' ),
 			)
 		);
 	}
@@ -86,6 +85,49 @@ function ni_register_post_types() {
 	}
 }
 add_action( 'init', 'ni_register_post_types' );
+
+/* 関連インタビュー: この記事と同じタクソノミーが付いた記事を 3 件まで（仕様書 Figma 36:2293 の注釈）。
+   優先順位 = 1. 入社区分と職種の両方が同じ → 2. 入社区分が同じ → 3. 職種が同じ → 4. 同じタグが 1 つでもある。
+   同じ順位の中は新しい順（仕様書に指定なし）。この記事自身は除く。どれにも当たらない記事は出さない。投稿（WP_Post）の配列を返す */
+function ni_interview_related( $post_id, $limit = 3 ) {
+	$own = array();
+	foreach ( array( 'interview_entry_type', 'interview_job_type', 'interview_tag' ) as $taxonomy ) {
+		$own[ $taxonomy ] = wp_list_pluck( ni_interview_terms( $taxonomy, $post_id ), 'term_id' );
+	}
+	$scored = array();
+	$posts  = get_posts(
+		array(
+			'post_type'      => 'interview',
+			'posts_per_page' => -1,
+			'post__not_in'   => array( $post_id ),
+		)
+	);
+	foreach ( $posts as $i => $post ) {
+		$same = array();
+		foreach ( $own as $taxonomy => $ids ) {
+			$same[ $taxonomy ] = (bool) array_intersect( $ids, wp_list_pluck( ni_interview_terms( $taxonomy, $post->ID ), 'term_id' ) );
+		}
+		if ( $same['interview_entry_type'] && $same['interview_job_type'] ) {
+			$rank = 1;
+		} elseif ( $same['interview_entry_type'] ) {
+			$rank = 2;
+		} elseif ( $same['interview_job_type'] ) {
+			$rank = 3;
+		} elseif ( $same['interview_tag'] ) {
+			$rank = 4;
+		} else {
+			continue;
+		}
+		$scored[] = array( $rank, $i, $post );   /* $i = 新しい順での位置 */
+	}
+	usort(
+		$scored,
+		function ( $a, $b ) {
+			return $a[0] === $b[0] ? $a[1] - $b[1] : $a[0] - $b[0];
+		}
+	);
+	return array_column( array_slice( $scored, 0, $limit ), 2 );
+}
 
 /* 座談会の番号（#01 など）。公開中の記事を古い順に並べたときの順番で、2 桁（仕様書「投稿順を 2 桁で自動付与」）。
    記事ごとには入力しない。公開日を変えたり古い記事を消したりすると、それより新しい記事の番号は繰り上がる */
