@@ -6,6 +6,7 @@
  * - editor-style.css を募集要項の編集画面に読み込む。
  *   ファイルは全セレクタが .entry-content 始まりなので、エディタ用に置き換えてから渡す（add_editor_style だと
  *   .editor-styles-wrapper .entry-content … になって当たらないため）。エディタは渡したセレクタの頭に .editor-styles-wrapper を付ける
+ * - エディタの背景を、フロントの本文の箱と同じ水色にする
  */
 
 function ni_register_block_styles() {
@@ -45,6 +46,9 @@ function ni_block_editor_styles( $settings, $context ) {
 		array( 'body', '.is-root-container > ', '' ),
 		$css
 	);
+	/* 本文の箱の水色（job-opening.css の .job-detail__body = rgba(199, 219, 236, 0.4) をページ地色 #f6f9fc に重ねた色）。
+	   白ベタの部品（h3・引用・表・コメントB・FAQ など）がフロントと同じに見えるように、エディタの背景に敷く */
+	$css .= 'body { background: #e3edf6; }';
 	$settings['styles'][] = array(
 		'css'     => $css,
 		'baseURL' => get_theme_file_uri( $path ),   /* url(../img/…) をテーマの assets/img/ に解決させる */
