@@ -1,0 +1,45 @@
+{
+    "key": "group_ni_block_question",
+    "title": "ブロック: インタビュー",
+    "fields": [
+        {
+            "key": "field_ni_block_question_question",
+            "label": "質問",
+            "name": "question",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "「Question 01」の番号は、本文の上から順に自動で付きます。",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "rows": 2,
+            "placeholder": "",
+            "new_lines": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf/ni-question"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1791200000
+}

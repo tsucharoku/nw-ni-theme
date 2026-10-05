@@ -1,0 +1,58 @@
+{
+    "key": "group_ni_block_gallery",
+    "title": "ブロック: 社員インタビューギャラリー",
+    "fields": [
+        {
+            "key": "field_ni_block_gallery_posts",
+            "label": "社員インタビューの記事",
+            "name": "posts",
+            "aria-label": "",
+            "type": "relationship",
+            "instructions": "カードにして出す記事を選びます。選んだ順に並びます（PC は 3 列）。公開中の記事だけ出ます。",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "interview"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "filters": [
+                "search"
+            ],
+            "return_format": "id",
+            "min": "",
+            "max": "",
+            "elements": [
+                "featured_image"
+            ],
+            "bidirectional": 0,
+            "bidirectional_target": []
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf/ni-gallery"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1791200000
+}

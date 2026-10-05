@@ -5,8 +5,8 @@
    規約
    - このファイル単体で完結する（base.css / common.css / lower.css のクラスに依存しない）。
      WP では add_editor_style() でも読み込む
-   - レイアウトの仕組み（画像＋テキストのグリッド、カラム・ボタンの並び、各ブロックの幅・寄せ・縦位置の設定）は
-     WP 標準のブロック CSS に任せ、ここでは上書きしない。ここで扱うのは見た目（色・文字・角丸・部品の中の余白）だけ
+   - WP 標準のブロックは、レイアウトの仕組み（画像＋テキストのグリッド、カラム・ボタンの並び、各ブロックの幅・寄せ・縦位置の設定）を
+     標準のブロック CSS に任せ、ここでは上書きしない。ここで扱うのは見た目（色・文字・角丸・部品の中の余白）だけ
    - :root 以外の全ルールのセレクタは .entry-content で始める
      （エディタ側では .entry-content → .editor-styles-wrapper に機械的に置換できる）
    - SP（〜767px、375 基準）を先に書き、@media (min-width: 768px) で PC を上書き
@@ -15,18 +15,15 @@
 
    ブロックスタイル（WP では register_block_style で登録する）
    - core/button   is-style-external   外部リンク（矢印の代わりに別窓アイコン）
-   - core/columns  is-style-cards      社員カード 3 列
-   - core/columns  is-style-profile    プロフィール行（丸写真 + 氏名 | 本文）
-   - core/media-text is-style-comment  コメント（丸写真 | 本文 + 肩書き）
-   - core/paragraph  is-style-byline   コメントの肩書き行（太字 = 紺のバッジ）
-   - core/paragraph  is-style-name     社員カードの氏名
-   - core/paragraph  is-style-en-label 英字ラベル（Question 01 など。グラデ文字）
-   - core/list     is-style-pills      白い丸タグ
-   - core/list     is-style-hashtags   # タグ
-   - core/group    is-style-question   質問見出し（左に罫線、ラベル + 見出し）
    - core/group    is-style-steps      選考ステップの親（番号は CSS カウンター）
    - core/group    is-style-step       選考ステップ 1 件（見出し + 説明。最後以外に ▼）
-   - core/details  （スタイル指定なし）  FAQ。Q. / A. と開閉アイコンは CSS
+
+   ACF のカスタムブロック（blocks/。標準ブロックの組み合わせではなく、入力欄から出す部品。レイアウトもここに書く）
+   - acf/ni-gallery   .ni-gallery    社員インタビューギャラリー
+   - acf/ni-comment-a .ni-comment-a  コメントA（丸写真 + 氏名 | 本文）
+   - acf/ni-comment-b .ni-comment-b  コメントB（白い箱: 丸写真 | 本文 + 肩書き）
+   - acf/ni-faq       .ni-faq        FAQ（Q. / A. と開閉アイコンは CSS）
+   - acf/ni-question  .ni-question   インタビュー（質問の見出し。Question 01 は CSS カウンター）
    ========================================================================== */
 
 /* ---------- Tokens（base.css と同期。変数名・値とも base.css の :root と同じ） ---------- */
@@ -462,28 +459,41 @@
 }
 
 /* ==========================================================================
-   社員カード core/columns + is-style-cards（567:17776 / SP 1140:16530）
-   列の中: core/image → core/paragraph（2 行で切る）→ paragraph.is-style-name
-          → list.is-style-pills → list.is-style-hashtags
+   ACF ブロック: 社員インタビューギャラリー .ni-gallery（567:17776 / SP 1140:16530）
+   カード = 写真 → 一言（2 行で切る）→ 氏名（PC のみ。SP のデザインには無い）→ 丸タグ → # タグ
+   PC は 3 列・間 32、SP は 1 列・間 24
    ========================================================================== */
-.entry-content .is-style-cards .wp-block-column > * + * {
-  margin-top: 0;
+.entry-content .ni-gallery {
+  display: grid;
+  gap: 24px;
 }
 
-.entry-content .is-style-cards .wp-block-image {
+.entry-content .ni-gallery__card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.entry-content .ni-gallery__card > span {
+  display: block;
+}
+
+.entry-content .ni-gallery__img {
   overflow: hidden;
+  aspect-ratio: 1 / 1;      /* SP 335×335 */
   border-radius: var(--radius);
   background: #c9d7e8;
 }
 
-.entry-content .is-style-cards .wp-block-image img {
-  aspect-ratio: 1 / 1;      /* SP 335×335 */
-  border-radius: 0;
+.entry-content .ni-gallery__img img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center top;
+  transition: opacity 0.2s ease;
 }
 
-.entry-content .is-style-cards .wp-block-image + p {
+.entry-content .ni-gallery__card > .ni-gallery__quote {
   display: -webkit-box;
   margin-top: 16px;
   overflow: hidden;
@@ -491,115 +501,129 @@
   -webkit-line-clamp: 2;
 }
 
-.entry-content .is-style-name {
+.entry-content .ni-gallery__card > .ni-gallery__name {
+  display: none;
+  margin-top: 6px;
   font-weight: 400;
   line-height: 1.4;
 }
 
-.entry-content .is-style-cards .is-style-name {
-  margin-top: 6px;
-}
-
 /* 白い丸タグ: 高さ 24、左右 12、青 #6378ae、間 4 */
-.entry-content .wp-block-list.is-style-pills,
-.entry-content .wp-block-list.is-style-hashtags {
+.entry-content .ni-gallery__card > .ni-gallery__chips,
+.entry-content .ni-gallery__card > .ni-gallery__tags {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-}
-
-.entry-content .wp-block-list.is-style-pills > li + li,
-.entry-content .wp-block-list.is-style-hashtags > li + li {
-  margin-top: 0;
-}
-
-.entry-content .wp-block-list.is-style-pills {
-  gap: 4px;
-}
-
-.entry-content .wp-block-list.is-style-pills > li,
-.entry-content .wp-block-list.is-style-hashtags > li {
-  padding: 0;
   color: var(--c-blue);
   font-size: var(--fs-tight-2xs);
   line-height: 1.4;
 }
 
-.entry-content .wp-block-list.is-style-pills > li::before,
-.entry-content .wp-block-list.is-style-hashtags > li::before {
-  content: none;
+.entry-content .ni-gallery__card > .ni-gallery__chips {
+  gap: 4px;
+  margin-top: 16px;
+  font-weight: 400;
 }
 
-.entry-content .wp-block-list.is-style-pills > li {
+.entry-content .ni-gallery__chips > span {
   display: flex;
   align-items: center;
   height: 24px;
   padding: 1px 12px 0;
   border-radius: 100px;
   background: var(--c-white);
-  font-weight: 400;
 }
 
-.entry-content .wp-block-list.is-style-hashtags {
+.entry-content .ni-gallery__card > .ni-gallery__tags {
   gap: 0 8px;
-}
-
-.entry-content .is-style-cards .is-style-pills {
-  margin-top: 16px;
-}
-
-.entry-content .is-style-cards .is-style-hashtags {
   margin-top: 10px;
 }
 
+@media (hover: hover) {
+  .entry-content a.ni-gallery__card:hover .ni-gallery__img img {
+    opacity: 0.8;
+  }
+}
+
 /* ==========================================================================
-   プロフィール行 core/columns + is-style-profile（968:10580 / SP 1140:16534）
-   1 列目: core/image（丸写真 SP 64 / PC 80）+ キャプション = 氏名（12px）。2 列目: 本文
-   並びと列の幅はブロックの設定で決める（入稿時: 「モバイルでは縦に並べる」をオフ、1 列目の幅 80px、縦位置は上）
+   ACF ブロック: コメントA .ni-comment-a（968:10580 / SP 1140:16534）
+   左 = 丸写真（SP 64 / PC 80）+ 氏名 12px（列の幅 SP 75 / PC 80）、右 = 本文。間 SP 16 / PC 32
    ========================================================================== */
-.entry-content .is-style-profile .wp-block-image img {
+.entry-content .ni-comment-a {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.entry-content .ni-comment-a__person {
+  flex: none;
+  width: 75px;
+}
+
+.entry-content .ni-comment-a__person img {
   width: 64px;
   height: 64px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.entry-content .is-style-profile .wp-block-image figcaption {
+.entry-content .ni-comment-a__person figcaption {
   margin-top: 6px;
-  color: var(--c-black);
   font-size: 12px;
   line-height: 1.4;
 }
 
+.entry-content .ni-comment-a__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.entry-content .ni-comment-a__body > p + p {
+  margin-top: 12px;
+}
+
 /* ==========================================================================
-   コメント core/media-text + is-style-comment（565:17733 / SP 1140:16535）
-   白ベタ、内側 24 / 28、丸写真。本文 80% 黒、肩書きまで 8
-   並び・写真の幅（メディアの幅）・縦位置は画像＋テキストと同じく WP 標準（ブロックの設定）に任せる
+   ACF ブロック: コメントB .ni-comment-b（565:17733 / SP 1140:16535）
+   白ベタ、内側 24 / 28。丸写真（SP 64 / PC 88）| 本文 80% 黒 → 8 → 肩書きの行。間 SP 24 / PC 32
+   肩書きの行: 紺のラベル（13/14px、3 / 8・PC 6 / 10、角丸 3）+ 紺の文字（SP 13 / PC 16）
    ========================================================================== */
-.entry-content .wp-block-media-text.is-style-comment {
+.entry-content .ni-comment-b {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
   padding: 24px 28px;
   border-radius: var(--radius);
   background: var(--c-white);
 }
 
-.entry-content .is-style-comment .wp-block-media-text__media {
+.entry-content .ni-comment-b__img {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
   border-radius: 50%;
 }
 
-.entry-content .is-style-comment .wp-block-media-text__media img {
-  aspect-ratio: 1 / 1;
+.entry-content .ni-comment-b__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.entry-content .is-style-comment .wp-block-media-text__content > p {
+.entry-content .ni-comment-b__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.entry-content .ni-comment-b__body > p {
   color: rgba(0, 0, 0, 0.8);
 }
 
-.entry-content .is-style-comment .wp-block-media-text__content > * + * {
+.entry-content .ni-comment-b__body > * + * {
   margin-top: 8px;
 }
 
-/* 肩書き行: 太字 = 紺のバッジ（13/14px、6 / SP 8・PC 10、角丸 3）、続く文字は紺 16px */
-.entry-content .is-style-byline {
+.entry-content .ni-comment-b__body > .ni-comment-b__byline {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -610,40 +634,35 @@
   line-height: 1.4;
 }
 
-.entry-content .is-style-comment .wp-block-media-text__content > .is-style-byline {
-  color: var(--c-navy);
-}
-
-.entry-content .is-style-byline strong {
+.entry-content .ni-comment-b__badge {
   padding: 3px 8px;
   border-radius: 3px;
   background: var(--c-navy);
   color: var(--c-white);
   font-size: var(--fs-tight-2xs);
-  font-weight: 400;
 }
 
 /* ==========================================================================
-   FAQ core/details（565:17749 / SP 1140:16547）
+   ACF ブロック: FAQ .ni-faq（565:17749 / SP 1140:16547）
    白ベタ。閉: 上下 22 / 左右 26、開: 上下 32。項目の間 12
-   summary = 「Q.」+ 質問（紺 16px Medium）+ 右に [罫線 | 山形]。中身の先頭に「A.」
+   summary = 「Q.」+ 質問（紺 16px Medium）+ 右に [罫線 | 山形]。回答の先頭に「A.」
    Figma は開いたとき左右 20 / Q. との間 6 だが、開閉で文字が横に動くので左右は 26 / 2 に統一
    ========================================================================== */
-.entry-content .wp-block-details {
+.entry-content .ni-faq__item {
   padding: 22px 26px;
   border-radius: var(--radius);
   background: var(--c-white);
 }
 
-.entry-content .wp-block-details[open] {
+.entry-content .ni-faq__item[open] {
   padding-block: 32px;
 }
 
-.entry-content > .wp-block-details + .wp-block-details {
+.entry-content .ni-faq__item + .ni-faq__item {
   margin-top: 12px;
 }
 
-.entry-content .wp-block-details summary {
+.entry-content .ni-faq__item summary {
   display: flex;
   align-items: center;
   gap: 2px;
@@ -655,11 +674,11 @@
   cursor: pointer;
 }
 
-.entry-content .wp-block-details summary::-webkit-details-marker {
+.entry-content .ni-faq__item summary::-webkit-details-marker {
   display: none;
 }
 
-.entry-content .wp-block-details summary::before {
+.entry-content .ni-faq__item summary::before {
   content: "Q.";
   flex: none;
   align-self: flex-start;
@@ -667,7 +686,7 @@
   font-size: var(--fs-tight-ss);   /* 18 × 1.4 = 25.2 が 1 行のときの summary の高さ（Figma: 閉 69 = 22 + 25 + 22） */
 }
 
-.entry-content .wp-block-details summary::after {
+.entry-content .ni-faq__item summary::after {
   content: "";
   flex: none;
   width: 29.75px;
@@ -676,20 +695,17 @@
   background: url("../img/editor/icon_details_close.svg") center / 100% 100% no-repeat;
 }
 
-.entry-content .wp-block-details[open] summary::after {
+.entry-content .ni-faq__item[open] summary::after {
   background-image: url("../img/editor/icon_details_open.svg");
 }
 
-.entry-content .wp-block-details > :not(summary) {
-  margin: 10px 0 0;
+.entry-content .ni-faq__answer {
+  position: relative;
+  margin-top: 10px;
   padding-left: 22px;
 }
 
-.entry-content .wp-block-details > summary + * {
-  position: relative;
-}
-
-.entry-content .wp-block-details > summary + *::before {
+.entry-content .ni-faq__answer::before {
   content: "A.";
   position: absolute;
   top: 0;
@@ -699,11 +715,28 @@
   line-height: 26.4px;
 }
 
+.entry-content .ni-faq__answer > * + * {
+  margin-top: 12px;
+}
+
 /* ==========================================================================
-   英字ラベル / 質問見出し core/group + is-style-question（968:10587 / SP 1140:16551）
-   左に 1px（accent）、左余白 SP 16 / PC 32、ラベル 18px グラデ → 12 → 見出し 20px Medium
+   ACF ブロック: インタビュー（質問の見出し）.ni-question（968:10587 / SP 1140:16551）
+   左に 1px（accent）、左余白 SP 16 / PC 32、「Question 01」18px グラデ → 12 → 質問 SP 18 / PC 20 Medium
+   番号は本文の上から順（CSS カウンター）
    ========================================================================== */
-.entry-content .is-style-en-label {
+.entry-content {
+  counter-reset: entry-question;
+}
+
+.entry-content .ni-question {
+  padding-left: 16px;
+  border-left: 1px solid var(--c-accent);
+  counter-increment: entry-question;
+}
+
+.entry-content .ni-question::before {
+  content: "Question " counter(entry-question, decimal-leading-zero);
+  display: block;
   width: fit-content;
   background: var(--grd-text);
   -webkit-background-clip: text;
@@ -714,19 +747,20 @@
   line-height: 1.4;
 }
 
-.entry-content .wp-block-group.is-style-question {
-  padding-left: 16px;
-  border-left: 1px solid var(--c-accent);
+.entry-content .ni-question__title {
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
-.entry-content .is-style-question .wp-block-heading {
-  margin-top: 12px;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: none;
-  color: var(--c-black);
-  font-size: 18px;
+/* 編集画面で、まだ何も入力していない ACF ブロックに出す案内 */
+.entry-content .ni-block-empty {
+  padding: 16px;
+  border: 1px dashed var(--c-border);
+  border-radius: var(--radius);
+  color: var(--c-gray);
+  font-size: var(--fs-body-2xs);
 }
 
 /* ==========================================================================
@@ -799,8 +833,7 @@
   }
 
   .entry-content h3.wp-block-heading,
-  .entry-content h4.wp-block-heading,
-  .entry-content .is-style-question .wp-block-heading {
+  .entry-content h4.wp-block-heading {
     font-size: var(--fs-tight-s);
   }
 
@@ -829,29 +862,59 @@
     width: 44.31px;
   }
 
-  .entry-content .is-style-cards .wp-block-image img {
+  .entry-content .ni-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+  }
+
+  .entry-content .ni-gallery__img {
     aspect-ratio: 289 / 291;
   }
 
-  .entry-content .is-style-cards .wp-block-image + p {
+  .entry-content .ni-gallery__card > .ni-gallery__quote {
     margin-top: 24px;
   }
 
-  .entry-content .is-style-profile .wp-block-image img {
+  .entry-content .ni-gallery__card > .ni-gallery__name {
+    display: block;
+  }
+
+  .entry-content .ni-comment-a {
+    gap: 32px;
+  }
+
+  .entry-content .ni-comment-a__person {
+    width: 80px;
+  }
+
+  .entry-content .ni-comment-a__person img {
     width: 80px;
     height: 80px;
   }
 
-  .entry-content .is-style-byline {
+  .entry-content .ni-comment-b {
+    gap: 32px;
+  }
+
+  .entry-content .ni-comment-b__img {
+    width: 88px;
+    height: 88px;
+  }
+
+  .entry-content .ni-comment-b__body > .ni-comment-b__byline {
     font-size: var(--fs-tight-xs);
   }
 
-  .entry-content .is-style-byline strong {
+  .entry-content .ni-comment-b__badge {
     padding: 6px 10px;
   }
 
-  .entry-content .wp-block-group.is-style-question {
+  .entry-content .ni-question {
     padding-left: 32px;
+  }
+
+  .entry-content .ni-question__title {
+    font-size: var(--fs-tight-s);
   }
 }
 
@@ -870,7 +933,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .entry-content .wp-block-button__link {
+  .entry-content .wp-block-button__link,
+  .entry-content .ni-gallery__img img {
     transition: none;
   }
 }

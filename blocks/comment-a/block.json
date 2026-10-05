@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "acf/ni-comment-a",
+    "title": "コメントA",
+    "description": "丸い写真と氏名の横に、コメントを出します。",
+    "category": "ni",
+    "icon": "format-chat",
+    "acf": {
+        "blockVersion": 3,
+        "mode": "preview",
+        "renderTemplate": "render.php",
+        "postTypes": [
+            "job-opening"
+        ]
+    },
+    "supports": {
+        "align": false,
+        "html": false,
+        "customClassName": false,
+        "anchor": false
+    }
+}

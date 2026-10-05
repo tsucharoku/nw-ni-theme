@@ -10,25 +10,10 @@
 
 function ni_register_block_styles() {
 	$styles = array(
-		'core/button'     => array( 'external' => '外部リンク' ),
-		'core/columns'    => array(
-			'cards'   => '社員カード',
-			'profile' => 'プロフィール',
-		),
-		'core/media-text' => array( 'comment' => 'コメント' ),
-		'core/paragraph'  => array(
-			'byline'   => 'コメントの肩書き',
-			'name'     => '社員カードの氏名',
-			'en-label' => '英字ラベル',
-		),
-		'core/list'       => array(
-			'pills'    => '丸タグ',
-			'hashtags' => '# タグ',
-		),
-		'core/group'      => array(
-			'question' => '質問見出し',
-			'steps'    => '選考ステップ（全体）',
-			'step'     => '選考ステップ（1 件）',
+		'core/button' => array( 'external' => '外部リンク' ),
+		'core/group'  => array(
+			'steps' => '選考ステップ（全体）',
+			'step'  => '選考ステップ（1 件）',
 		),
 	);
 	foreach ( $styles as $block => $names ) {

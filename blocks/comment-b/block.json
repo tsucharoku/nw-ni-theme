@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "acf/ni-comment-b",
+    "title": "コメントB",
+    "description": "白い箱の中に、丸い写真・コメント・年次や職種を出します。",
+    "category": "ni",
+    "icon": "testimonial",
+    "acf": {
+        "blockVersion": 3,
+        "mode": "preview",
+        "renderTemplate": "render.php",
+        "postTypes": [
+            "job-opening"
+        ]
+    },
+    "supports": {
+        "align": false,
+        "html": false,
+        "customClassName": false,
+        "anchor": false
+    }
+}

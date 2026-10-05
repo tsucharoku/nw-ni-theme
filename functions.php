@@ -6,6 +6,7 @@
  * inc/page.php       いま表示しているページの種類（TOP 扉 / 新卒 TOP / 中途 TOP / 下層）と、ページごとの CSS・JS の対応表
  * inc/assets.php     CSS・JS の読み込み（静的 HTML の <link> / <script> の置き換え）
  * inc/editor.php     ブロックエディタ（募集要項の本文のブロックスタイル・エディタ用 CSS）
+ * inc/blocks.php     ACF のカスタムブロック（募集要項の本文で使う。定義と出力は blocks/）
  * inc/cf7.php        Contact Form 7 の設定（フォームの中身とメール本文は cf7/）
  */
 
@@ -13,6 +14,7 @@ require get_theme_file_path( 'inc/post-types.php' );
 require get_theme_file_path( 'inc/page.php' );
 require get_theme_file_path( 'inc/assets.php' );
 require get_theme_file_path( 'inc/editor.php' );
+require get_theme_file_path( 'inc/blocks.php' );
 require get_theme_file_path( 'inc/cf7.php' );
 
 function ni_setup() {

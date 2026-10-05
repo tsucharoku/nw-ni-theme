@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "acf/ni-gallery",
+    "title": "社員インタビューギャラリー",
+    "description": "社員インタビューの記事を選ぶと、記事のカード（写真・一言・氏名・入社区分・職種・タグ）を並べて出します。",
+    "category": "ni",
+    "icon": "groups",
+    "acf": {
+        "blockVersion": 3,
+        "mode": "preview",
+        "renderTemplate": "render.php",
+        "postTypes": [
+            "job-opening"
+        ]
+    },
+    "supports": {
+        "align": false,
+        "html": false,
+        "customClassName": false,
+        "anchor": false
+    }
+}

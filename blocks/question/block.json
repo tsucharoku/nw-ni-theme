@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "acf/ni-question",
+    "title": "インタビュー",
+    "description": "質問の見出しです。「Question 01」の番号は、本文の上から順に自動で付きます。",
+    "category": "ni",
+    "icon": "microphone",
+    "acf": {
+        "blockVersion": 3,
+        "mode": "preview",
+        "renderTemplate": "render.php",
+        "postTypes": [
+            "job-opening"
+        ]
+    },
+    "supports": {
+        "align": false,
+        "html": false,
+        "customClassName": false,
+        "anchor": false
+    }
+}
