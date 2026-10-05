@@ -36,7 +36,7 @@ function ni_register_post_types() {
 	}
 
 	/* メンバー（座談会の参加メンバー・話者）。座談会の記事から選ぶためのもので、個別ページは無い（public => false）。
-	   管理画面では「座談会」のメニューの中に出す。氏名 = タイトル、写真・入社年・部署は ACF（acf-json/group_ni_member.json） */
+	   管理画面では「座談会」のメニューの中に出す。氏名 = タイトル、写真 = アイキャッチ、入社年・部署は ACF（acf-json/group_ni_member.json） */
 	register_post_type(
 		'member',
 		array(
@@ -44,7 +44,7 @@ function ni_register_post_types() {
 			'public'       => false,
 			'show_ui'      => true,
 			'show_in_menu' => 'edit.php?post_type=cross-talk',
-			'supports'     => array( 'title' ),
+			'supports'     => array( 'title', 'thumbnail' ),
 		)
 	);
 

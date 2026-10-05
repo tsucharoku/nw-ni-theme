@@ -3,7 +3,7 @@
  * 座談会詳細（カスタム投稿 cross-talk の詳細 /cross-talk/{パーマリンク}/）
  *
  * タイトル = 投稿タイトル、メインビジュアル = アイキャッチ。参加メンバー・本文は ACF「座談会」（acf-json/group_ni_cross_talk.json）。
- * 参加メンバーと回答の話者は、投稿タイプ member（メンバー。氏名 = タイトル、写真・入社年・部署は ACF）から選ぶ。
+ * 参加メンバーと回答の話者は、投稿タイプ member（メンバー。氏名 = タイトル、写真 = アイキャッチ、入社年・部署は ACF）から選ぶ。
  * 本文はフレキシブルコンテンツ（見出し / 画像 / 質問 / 回答）で、Question の番号は上から順に自動で付ける。
  * 先方の仕様（本文はブロックエディタ）から変えている（2026-10-05 ユーザー指示）。入力した内容だけ出す。
  */
@@ -30,9 +30,9 @@ function ni_ct_thumb( $post_id, $size, $atts = '' ) {
 	}
 }
 
-/* メンバーの写真（ACF member_photo） */
+/* メンバーの写真（アイキャッチ）の URL。未設定なら空 */
 function ni_ct_member_photo( $member_id ) {
-	return function_exists( 'get_field' ) ? get_field( 'member_photo', $member_id ) : null;
+	return (string) get_the_post_thumbnail_url( $member_id, 'medium' );
 }
 
 /* その他の記事: この記事以外の公開中の座談会を新しい順に 4 件（PC は 3 件まで表示） */
@@ -91,8 +91,8 @@ get_header();
           	?>
           <li class="ct-member">
             <?php
-            if ( is_array( $ni_img ) && ! empty( $ni_img['url'] ) ) {
-            	printf( '<img class="ct-member__img" src="%s" alt="" width="88" height="88">', esc_url( $ni_img['sizes']['medium'] ?? $ni_img['url'] ) );
+            if ( '' !== $ni_img ) {
+            	printf( '<img class="ct-member__img" src="%s" alt="" width="88" height="88">', esc_url( $ni_img ) );
             }
             ?>
             <div class="ct-member__body">
@@ -141,12 +141,12 @@ get_header();
         			break;
         		case 'answer':
         			$ni_speaker = (int) $ni_row['speaker'];
-        			$ni_img     = $ni_speaker ? ni_ct_member_photo( $ni_speaker ) : null;
+        			$ni_img     = $ni_speaker ? ni_ct_member_photo( $ni_speaker ) : '';
         			?>
         <div class="speech speech--left">
           <div class="speech__who"><?php
-          if ( is_array( $ni_img ) && ! empty( $ni_img['url'] ) ) {
-          	printf( '<img class="speech__avatar" src="%s" alt="" width="80" height="80" loading="lazy">', esc_url( $ni_img['sizes']['medium'] ?? $ni_img['url'] ) );
+          if ( '' !== $ni_img ) {
+          	printf( '<img class="speech__avatar" src="%s" alt="" width="80" height="80" loading="lazy">', esc_url( $ni_img ) );
           }
           ?><span class="speech__name"><?php echo esc_html( $ni_speaker ? get_the_title( $ni_speaker ) : '' ); ?></span></div>
           <div class="speech__text"><?php echo wpautop( esc_html( trim( (string) $ni_row['answer'] ) ) ); ?></div>

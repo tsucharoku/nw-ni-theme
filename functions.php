@@ -19,7 +19,7 @@ function ni_setup() {
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'html5', array( 'script', 'style' ) );
 	add_theme_support( 'responsive-embeds' );   /* 本文の埋め込み（YouTube など）を WP 標準の縦横比で出す */
-	add_theme_support( 'post-thumbnails', array( 'cross-talk' ) );   /* 座談会のメインビジュアル（詳細の上の写真・「その他の記事」のカード） */
+	add_theme_support( 'post-thumbnails', array( 'cross-talk', 'member' ) );   /* 座談会のメインビジュアル（詳細の上の写真・「その他の記事」のカード）と、メンバーの写真 */
 }
 add_action( 'after_setup_theme', 'ni_setup' );
 
@@ -143,24 +143,56 @@ add_action( 'acf/input/admin_head', 'ni_acf_accordion_style' );
 /* 座談会の編集画面: 回答の「話者」の候補を、その記事の「参加メンバー」に絞る。
    保存済みの値ではなく、画面でいま選んでいる参加メンバーで絞る（保存しなくても、足した直後から候補に出る）。
    話者の候補を取りに行くとき（ACF の select2 の ajax）に、参加メンバーの ID を ni_members として一緒に送る。
-   参加メンバーを 1 人も選んでいなければ絞らない（全員から選べる） */
+   参加メンバーを 1 人も選んでいなければ絞らない（全員から選べる）。
+   あわせて、話者の候補と選択中の表示に、メンバーの写真（アイキャッチ）を氏名の左に丸く出す
+   （参加メンバーの欄は ACF の設定「アイキャッチを表示」で出していて、ここでは丸くするだけ） */
 function ni_cross_talk_speaker_script() {
 	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 	if ( ! $screen || 'cross-talk' !== $screen->post_type ) {
 		return;
 	}
+	$photos = array();
+	foreach ( get_posts( array( 'post_type' => 'member', 'posts_per_page' => -1, 'fields' => 'ids' ) ) as $member_id ) {
+		$url = get_the_post_thumbnail_url( $member_id, 'thumbnail' );
+		if ( $url ) {
+			$photos[ $member_id ] = $url;
+		}
+	}
 	?>
+<style>
+.ni-member-opt { display: inline-flex; align-items: center; gap: 8px; vertical-align: middle; }
+.ni-member-opt img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+.acf-field[data-key="field_ni_cross_talk_members"] .acf-rel-item .thumbnail { width: 24px; height: 24px; border-radius: 50%; overflow: hidden; }
+.acf-field[data-key="field_ni_cross_talk_members"] .acf-rel-item .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+.acf-field[data-key="field_ni_cross_talk_members"] .acf-rel-item-add,
+.acf-field[data-key="field_ni_cross_talk_members"] .acf-rel-item-remove { min-height: 24px; line-height: 24px; }
+</style>
 <script>
 ( function () {
 	if ( typeof acf === 'undefined' ) {
 		return;
 	}
+	var photos = <?php echo wp_json_encode( (object) $photos ); ?>;
 	acf.addFilter( 'select2_ajax_data', function ( data ) {
 		if ( data.field_key === 'field_ni_cross_talk_speaker' ) {
 			var members = acf.getField( 'field_ni_cross_talk_members' );
 			data.ni_members = members ? ( members.val() || [] ) : [];
 		}
 		return data;
+	} );
+	/* 話者の候補・選択中の表示: 写真 + 氏名 */
+	function memberOption( item ) {
+		if ( ! item.id || ! photos[ item.id ] ) {
+			return item.text;
+		}
+		return jQuery( '<span class="ni-member-opt"></span>' ).append( jQuery( '<img alt="">' ).attr( 'src', photos[ item.id ] ), document.createTextNode( item.text ) );
+	}
+	acf.addFilter( 'select2_args', function ( args, $select, settings, field ) {
+		if ( field && field.get( 'key' ) === 'field_ni_cross_talk_speaker' ) {
+			args.templateResult    = memberOption;
+			args.templateSelection = memberOption;
+		}
+		return args;
 	} );
 } )();
 </script>

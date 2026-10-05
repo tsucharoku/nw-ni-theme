@@ -29,7 +29,9 @@
             "return_format": "id",
             "min": "",
             "max": "",
-            "elements": "",
+            "elements": [
+                "featured_image"
+            ],
             "bidirectional": 0,
             "bidirectional_target": []
         },
@@ -230,5 +232,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1791168595
+    "modified": 1791168869
 }
