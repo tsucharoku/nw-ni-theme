@@ -3,7 +3,7 @@
     "apiVersion": 3,
     "name": "acf/ni-question",
     "title": "インタビュー",
-    "description": "質問の見出しです。「Question 01」の番号は、本文の上から順に自動で付きます。",
+    "description": "質問の見出しです。上に英字のラベル（Question 01 など）を付けられます。",
     "category": "ni",
     "icon": "microphone",
     "acf": {

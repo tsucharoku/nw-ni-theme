@@ -23,7 +23,7 @@
    - acf/ni-comment-a .ni-comment-a  コメントA（丸写真 + 氏名 | 本文）
    - acf/ni-comment-b .ni-comment-b  コメントB（白い箱: 丸写真 | 本文 + 肩書き）
    - acf/ni-faq       .ni-faq        FAQ（Q. / A. と開閉アイコンは CSS）
-   - acf/ni-question  .ni-question   インタビュー（質問の見出し。Question 01 は CSS カウンター）
+   - acf/ni-question  .ni-question   インタビュー（質問の見出し。上の英字ラベルは入力欄）
    ========================================================================== */
 
 /* ---------- Tokens（base.css と同期。変数名・値とも base.css の :root と同じ） ---------- */
@@ -721,22 +721,15 @@
 
 /* ==========================================================================
    ACF ブロック: インタビュー（質問の見出し）.ni-question（968:10587 / SP 1140:16551）
-   左に 1px（accent）、左余白 SP 16 / PC 32、「Question 01」18px グラデ → 12 → 質問 SP 18 / PC 20 Medium
-   番号は本文の上から順（CSS カウンター）
+   左に 1px（accent）、左余白 SP 16 / PC 32、ラベル 18px グラデ → 12 → 質問 SP 18 / PC 20 Medium
+   ラベル（Question 01 など）は入力欄。空なら質問だけ
    ========================================================================== */
-.entry-content {
-  counter-reset: entry-question;
-}
-
 .entry-content .ni-question {
   padding-left: 16px;
   border-left: 1px solid var(--c-accent);
-  counter-increment: entry-question;
 }
 
-.entry-content .ni-question::before {
-  content: "Question " counter(entry-question, decimal-leading-zero);
-  display: block;
+.entry-content .ni-question__label {
   width: fit-content;
   background: var(--grd-text);
   -webkit-background-clip: text;
@@ -747,8 +740,11 @@
   line-height: 1.4;
 }
 
-.entry-content .ni-question__title {
+.entry-content .ni-question__label + .ni-question__title {
   margin-top: 12px;
+}
+
+.entry-content .ni-question__title {
   font-size: 18px;
   font-weight: 500;
   line-height: 1.4;

@@ -7,7 +7,7 @@
  *   comment-a コメントA（写真・氏名・コメント）
  *   comment-b コメントB（写真・コメント・年次や職種）
  *   faq       FAQ（質問と回答の繰り返し）
- *   question  インタビュー（質問の見出し。番号は自動）
+ *   question  インタビュー（質問の見出し。上の英字ラベルは入力）
  */
 
 function ni_register_blocks() {

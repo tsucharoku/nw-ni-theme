@@ -3,12 +3,32 @@
     "title": "ブロック: インタビュー",
     "fields": [
         {
+            "key": "field_ni_block_question_label",
+            "label": "ラベル（英字）",
+            "name": "label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "質問の上に出る英字です。番号は手で変えます（Question 02 など）。空ならラベルは出ません。",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Question 01",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_ni_block_question_question",
             "label": "質問",
             "name": "question",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "「Question 01」の番号は、本文の上から順に自動で付きます。",
+            "instructions": "",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -41,5 +61,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1791200000
+    "modified": 1791203600
 }
