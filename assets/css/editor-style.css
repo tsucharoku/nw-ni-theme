@@ -15,8 +15,6 @@
 
    ブロックスタイル（WP では register_block_style で登録する）
    - core/button   is-style-external   外部リンク（矢印の代わりに別窓アイコン）
-   - core/group    is-style-steps      選考ステップの親（番号は CSS カウンター）
-   - core/group    is-style-step       選考ステップ 1 件（見出し + 説明。最後以外に ▼）
 
    ACF のカスタムブロック（blocks/。標準ブロックの組み合わせではなく、入力欄から出す部品。レイアウトもここに書く）
    - acf/ni-gallery   .ni-gallery    社員インタビューギャラリー
@@ -24,6 +22,7 @@
    - acf/ni-comment-b .ni-comment-b  コメントB（白い箱: 丸写真 | 本文 + 肩書き）
    - acf/ni-faq       .ni-faq        FAQ（Q. / A. と開閉アイコンは CSS）
    - acf/ni-question  .ni-question   インタビュー（質問の見出し。上の英字ラベルは入力欄）
+   - acf/ni-steps     .ni-steps      選考ステップ（ステップ名 + 説明の繰り返し。番号と ▼ は CSS）
    ========================================================================== */
 
 /* ---------- Tokens（base.css と同期。変数名・値とも base.css の :root と同じ） ---------- */
@@ -784,33 +783,35 @@
 }
 
 /* ==========================================================================
-   選考ステップ core/group is-style-steps > core/group is-style-step（1069:14753 / SP 1140:16552）
-   step = 見出し（白ベタの帯、左に 36px の番号）+ 12 + 説明 + 12 + ▼(18×10) + 24。最後は ▼ なしで下 12
+   ACF ブロック: 選考ステップ .ni-steps（1069:14753 / SP 1140:16552）
+   item = ステップ名（白ベタの帯、左に 36px の番号）+ 12 + 説明 + 12 + ▼(18×10) + 24。最後は ▼ なしで下 12
+   番号は CSS カウンター（上から順に 01・02 …）
    ========================================================================== */
-.entry-content .is-style-steps {
-  counter-reset: entry-step;
+.entry-content .ni-steps {
+  padding: 0;
+  list-style: none;
+  counter-reset: ni-step;
 }
 
-.entry-content .is-style-step {
+.entry-content .ni-steps__item {
   padding-bottom: 12px;
-  counter-increment: entry-step;
+  counter-increment: ni-step;
 }
 
-.entry-content .is-style-step .wp-block-heading {
+.entry-content .ni-steps__title {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin: 0;
   padding: 8px 32px 8px 8px;
-  border: 0;
   border-radius: var(--radius);
   background: var(--c-white);
-  color: var(--c-black);
   font-size: var(--fs-tight-ss);
+  font-weight: 500;
+  line-height: 1.4;
 }
 
-.entry-content .is-style-step .wp-block-heading::before {
-  content: counter(entry-step, decimal-leading-zero);
+.entry-content .ni-steps__title::before {
+  content: counter(ni-step, decimal-leading-zero);
   display: flex;
   flex: none;
   align-items: center;
@@ -823,11 +824,15 @@
   font-size: var(--fs-tight-xs);
 }
 
-.entry-content .is-style-step p {
+.entry-content .ni-steps__text {
   margin-top: 12px;
 }
 
-.entry-content .is-style-step:not(:last-child)::after {
+.entry-content .ni-steps__text > * + * {
+  margin-top: 12px;
+}
+
+.entry-content .ni-steps__item:not(:last-child)::after {
   content: "";
   display: block;
   width: 18px;

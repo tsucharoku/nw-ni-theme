@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "acf/ni-steps",
+    "title": "選考ステップ",
+    "description": "選考の流れを、番号つきのステップでいくつでも並べます。番号と ▼ は自動で付きます。",
+    "category": "ni",
+    "icon": "editor-ol",
+    "acf": {
+        "blockVersion": 3,
+        "mode": "preview",
+        "renderTemplate": "render.php",
+        "postTypes": [
+            "job-opening"
+        ]
+    },
+    "supports": {
+        "align": false,
+        "html": false,
+        "customClassName": false,
+        "anchor": false
+    }
+}

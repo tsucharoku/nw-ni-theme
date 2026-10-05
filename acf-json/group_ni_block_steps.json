@@ -1,0 +1,91 @@
+{
+    "key": "group_ni_block_steps",
+    "title": "ブロック: 選考ステップ",
+    "fields": [
+        {
+            "key": "field_ni_block_steps_items",
+            "label": "ステップ",
+            "name": "items",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "上から順に 01・02 … と番号が付きます。並べ替えは行の左端をドラッグします。",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "pagination": 0,
+            "min": 1,
+            "max": 0,
+            "collapsed": "field_ni_block_steps_title",
+            "button_label": "ステップを追加",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_ni_block_steps_title",
+                    "label": "ステップ名",
+                    "name": "title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "先頭の番号は自動で付きます。",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_ni_block_steps_items"
+                },
+                {
+                    "key": "field_ni_block_steps_text",
+                    "label": "説明",
+                    "name": "text",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "tabs": "visual",
+                    "toolbar": "basic",
+                    "media_upload": 0,
+                    "delay": 0,
+                    "parent_repeater": "field_ni_block_steps_items"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf/ni-steps"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1791300000
+}

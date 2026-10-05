@@ -12,10 +12,6 @@
 function ni_register_block_styles() {
 	$styles = array(
 		'core/button' => array( 'external' => '外部リンク' ),
-		'core/group'  => array(
-			'steps' => '選考ステップ（全体）',
-			'step'  => '選考ステップ（1 件）',
-		),
 	);
 	foreach ( $styles as $block => $names ) {
 		foreach ( $names as $name => $label ) {
