@@ -140,6 +140,44 @@ function ni_acf_accordion_style() {
 }
 add_action( 'acf/input/admin_head', 'ni_acf_accordion_style' );
 
+/* 座談会の編集画面: 回答の「話者」の候補を、その記事の「参加メンバー」に絞る。
+   保存済みの値ではなく、画面でいま選んでいる参加メンバーで絞る（保存しなくても、足した直後から候補に出る）。
+   話者の候補を取りに行くとき（ACF の select2 の ajax）に、参加メンバーの ID を ni_members として一緒に送る。
+   参加メンバーを 1 人も選んでいなければ絞らない（全員から選べる） */
+function ni_cross_talk_speaker_script() {
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( ! $screen || 'cross-talk' !== $screen->post_type ) {
+		return;
+	}
+	?>
+<script>
+( function () {
+	if ( typeof acf === 'undefined' ) {
+		return;
+	}
+	acf.addFilter( 'select2_ajax_data', function ( data ) {
+		if ( data.field_key === 'field_ni_cross_talk_speaker' ) {
+			var members = acf.getField( 'field_ni_cross_talk_members' );
+			data.ni_members = members ? ( members.val() || [] ) : [];
+		}
+		return data;
+	} );
+} )();
+</script>
+	<?php
+}
+add_action( 'acf/input/admin_footer', 'ni_cross_talk_speaker_script' );
+
+function ni_cross_talk_speaker_query( $args ) {
+	$ids = isset( $_POST['ni_members'] ) && is_array( $_POST['ni_members'] ) ? array_filter( array_map( 'absint', wp_unslash( $_POST['ni_members'] ) ) ) : array();
+	if ( $ids ) {
+		$args['post__in'] = $ids;
+		$args['orderby']  = 'post__in';   /* 参加メンバーの並び順で出す */
+	}
+	return $args;
+}
+add_filter( 'acf/fields/post_object/query/key=field_ni_cross_talk_speaker', 'ni_cross_talk_speaker_query' );
+
 /* SVG のアップロードを管理者（manage_options）だけ許可する（3分でわかるNI のアイコン・イラストなど。設計書「SVG 可」）。
    SVG は中にスクリプトを書けるので、管理者以外には許可しない */
 function ni_upload_mimes_svg( $mimes ) {
