@@ -67,7 +67,10 @@ assets/                  CSS / JS / 画像 / 動画 / vendor（静的 HTML の a
 - **メッセージ / 業界の未来 / プロジェクトストーリーは静的**（2026-10-05。文言・画像はテンプレートに固定で、WP の投稿内容は出していない）。
   - プロジェクトストーリーは `/beginner/story-1/` と `/career/story-1/` が同じスラッグなので、`page-story-1.php` / `page-story-2.php` が親ページのスラッグで `template-parts/story/beginner-1.php` / `beginner-2.php` / `career-1.php` に振り分ける。3 ページは同じ部品（クラスは `ps-`。`.story` は TOP の節が使っている）で、工程の図だけ種類が違う（#01 = タイムライン / #02 = 漏斗 / 中途 #01 = AI 導入の流れ）。図は HTML + CSS で、章ごとの強調は `is-on` / `is-off`。
   - プロジェクトストーリーの SP は、3 ページ共通の SP テンプレート（Figma 1137:10927。文言はダミー）に合わせている。工程の図は PC と同じ横長のまま横スクロール（CSS だけ）で、上に「横にスクロールして全ステップを見る」の行を出す。テンプレートの図はタイムラインだけなので、漏斗図（#02）と AI 導入の流れ（中途 #01）は PC の図をそのまま同じ方式で置いている。このフレームは `get_metadata` が子を返さない（中身は Container 1140:17780）。
-  - 業界の未来はページ頭のガラスの NI ロゴを出さない（`inc/page.php` の `ni_logo`）。ヒーローの立体は Figma の静止画（付箋の参考は three.js のデモ https://ni-future.pages.dev/ = `デモ/NI_CRYSTAL.html`。WebGL 化は未着手）。
+  - 業界の未来はページ頭のガラスの NI ロゴを出さない（`inc/page.php` の `ni_logo`）。**ヒーローの立体（正十二面体のガラス + 頂点の点と線）はデモの WebGL**（2026-10-06。`assets/js/future-crystal.js`。付箋 1370:17380 の参考 https://ni-future.pages.dev/ = `デモ/NI_CRYSTAL.html` の移植で、形・材質・動き・数値はデモの FIX 値そのまま。ドラッグ回転は無し、マウスが近い頂点が光るのは残している）。
+    - Figma（PC 617:6900 / SP 1140:13580）はデモの画面収録を 719×750（SP 300×313）の枠で貼ったもの。立体の大きさから、収録はフル HD の画面の中央を切り抜いたものと分かったので、カメラは 1920×1080 の画面として置き、その中央 719×750 だけを canvas に描く（`camera.setViewOffset`）。canvas は静止画と同じ枠に CSS で置く（`future.css` の `.future-hero__canvas`、`aspect-ratio: 719 / 750`）ので、構図は収録と同じ。
+    - canvas は透明で、ページの固定背景の上に重ねる。ガラスの屈折用に ni-logo.js と同じ仕組みで固定背景（動画 cover + 青ベール）を板に出す（canvas の裏にある範囲だけ。影もこの板と、見える側の透明な板の両方に描く）。
+    - 静止画 `future/hero_object.jpg` は残して、WebGL が動くときは `<html>` の `is-future-crystal`（`inc/assets.php` が `<head>` で付ける）で隠す。動かない環境・動き抑制・`?nowebgl`・`?off=crystal` では静止画のまま。ヒーローが画面の外・タブ非表示では描画を止める。SP は ni-logo.js と同じ軽量設定（canvas 1 倍、屈折の背後描画 1/2、描画は 2 フレームに 1 回）。**未確認: iPhone 実機。**
   - 書体 Shippori Antique は 中途 TOP・業界の未来・メッセージだけ読む（`inc/assets.php`）。
 - **新卒 TOP・中途 TOP の「社員インタビュー」は、固定ページで選んだ記事を出す**（2026-10-05。仕様書「固定ページから既存の社員インタビュー記事から 3 記事をピックアップ」）: 固定ページ `beginner` / `career` それぞれの ACF「社員インタビュー（ピックアップ）」（`acf-json/group_ni_top_voice.json`、関連 = `voice_pickup`、最大 3 件、選んだ順に左から）。カードは `template-parts/voice-card.php`（一言 = タイトル、写真 = `interview_thumbnail`、入社区分・職種・タグ = タクソノミー。見た目はデザインのまま = 氏名は出さない）、記事の ID は `functions.php` の `ni_voice_pickup()`。未選択ならスライダーと矢印を出さない。テストサーバーでも両ページで記事を選ぶ必要がある。
 - **社員インタビューの詳細は WP の内容を出す**（`single-interview.php`。2026-10-05。設計書「NI採用サイト_ACFフィールド設計書_社員インタビュー.xlsx」）: タイトル = 投稿タイトル、メインビジュアル = アイキャッチ（横長）、入社区分・職種・タグ = タクソノミー、ACF「社員インタビュー」（`acf-json/group_ni_interview.json`）= 氏名・サムネイル用画像（一覧やカード用）・サイド追従画像（本文の左、PC だけ）・本文・スケジュール（リピーター = 時間 / 本文。0 件ならセクションごと出さない）。
@@ -196,7 +199,7 @@ Local（Flywheel）のサイト `http://ni.localhost/`。WP-CLI は案件フォ�
 
 ## 背景動画の `<source>` の順
 
-`fv_bg.mp4`（H.264）を先、`fv_bg.webm` を後にしている（2026-09-17）。webm は VP9 Profile 1（yuv444p）で、iOS Safari（iPhone 18.7 の実機で確認）は WebM を選ぶがデコードできず readyState 1 のまま止まり、新卒・中途では 3D ロゴの canvas が背景に動画を描けず真っ白になる（TOP 扉はポスターの静止画）。webm を使いたければ Profile 0（yuv420p）で再エンコードしてから順を戻す。実機の切り分けは URL に `?diag`（右下に状態表示、fps 付き）/ `?nowebgl`（WebGL 演出を全部止める）/ `?off=blob,field,logo,havefun,copy,photos,frame`（モジュール単位で止める。frame は青いフレームの層ごと非表示）/ `?novideo`（動画を止めてポスター静止画）/ `?full=res,dpr,rate,bloom`（SP のロゴの軽量設定を項目ごとに PC と同じに戻す。`all` で全部。res = 屈折の背後描画を等倍、dpr = canvas 2 倍、rate = 毎フレーム描画）/ `?lite=back`（SP でも裏面パスを切る。2026-09-17 に一度切ったが平たく見えたので戻した）を付ける。
+`fv_bg.mp4`（H.264）を先、`fv_bg.webm` を後にしている（2026-09-17）。webm は VP9 Profile 1（yuv444p）で、iOS Safari（iPhone 18.7 の実機で確認）は WebM を選ぶがデコードできず readyState 1 のまま止まり、新卒・中途では 3D ロゴの canvas が背景に動画を描けず真っ白になる（TOP 扉はポスターの静止画）。webm を使いたければ Profile 0（yuv420p）で再エンコードしてから順を戻す。実機の切り分けは URL に `?diag`（右下に状態表示、fps 付き）/ `?nowebgl`（WebGL 演出を全部止める）/ `?off=blob,field,logo,havefun,copy,photos,frame`（モジュール単位で止める。frame は青いフレームの層ごと非表示。業界の未来の立体は `crystal`）/ `?novideo`（動画を止めてポスター静止画）/ `?full=res,dpr,rate,bloom`（SP のロゴの軽量設定を項目ごとに PC と同じに戻す。`all` で全部。res = 屈折の背後描画を等倍、dpr = canvas 2 倍、rate = 毎フレーム描画）/ `?lite=back`（SP でも裏面パスを切る。2026-09-17 に一度切ったが平たく見えたので戻した）を付ける。
 
 ## About / Entry の背景画像はソフトライト合成を焼き込み済み
 
@@ -217,6 +220,7 @@ assets/
   js/common.js       メニュー開閉 / 追従ヘッダー(IntersectionObserver) / タブ / SPフッターアコーディオン / Story・Voice スライダー（Splide） / Cross Talk の切り替え
   js/fv-scroll.js    FV のスクロール進行度（デモの __fvP）とイントロの時計。ni-logo.js / fv-copy.js で共用
   js/ni-logo.js      FV のガラス製 NI ロゴ（WebGL, ESモジュール）。下記「FV の 3D ロゴ」参照
+  js/future-crystal.js  業界の未来のページ頭の立体（正十二面体のガラス + 点と線。WebGL, ESモジュール）。デモ NI_CRYSTAL.html の移植。上記「下層ページの実装メモ」参照
   js/fv-copy.js      新卒 FV コピーの演出（流れる光 × スクロールでガラスワイプ）。下記「FV コピーの演出」参照（中途は読み込まない）
   js/fv-unfold.js    中途 FV コピーの登場（文字が横に開く）。下記「FV コピーの登場（中途）」参照
   js/fv-havefun.js   新卒 Have Fun! の演出（画面固定・流れる光・左→右のガラスワイプで出現）。SP はロゴの前に出す（先頭の `SP_FRONT`。false でロゴの背面に戻る。2026-09-17）

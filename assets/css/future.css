@@ -50,9 +50,11 @@
   position: relative;
 }
 
-/* 点と線の立体（Frame 2126: PC 617:6900 / SP 1140:13580）。Figma は画面収録の 1 コマ（758×790、地色つき）を枠で切り抜いたもの。
+/* 点と線の立体（Frame 2126: PC 617:6900 / SP 1140:13580）。Figma はデモ（デモ/NI_CRYSTAL.html）の画面収録を枠で切り抜いたもの。
+   収録と同じ枠（SP 300×313 / PC 719×750）に future-crystal.js が WebGL の canvas（.future-hero__canvas、透明）を置き、
+   同じ構図で描く。<img> は収録の 1 コマ（758×790、地色つき）で、WebGL が動くときは <html> の is-future-crystal で隠す代替。
    SP: 枠 375×307（上 70）の中に 300×313 を 左 210 / 上 -34。右にはみ出すぶんは画面の端で切れる。
-   地色の四角い縁が見えないよう、上・左・下の端だけマスクでぼかしている（Figma には無い処理） */
+   静止画は地色の四角い縁が見えないよう、上・左・下の端だけマスクでぼかしている（Figma には無い処理。canvas は透明なので不要） */
 .future-hero__obj {
   position: absolute;
   top: 70px;
@@ -63,16 +65,33 @@
   pointer-events: none;
 }
 
-.future-hero__obj img {
+.future-hero__obj img,
+.future-hero__canvas {
   position: absolute;
   top: -34px;
   right: -135px;
   width: 300px;
   max-width: none;
+}
+
+.future-hero__obj img {
   -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 16%), linear-gradient(to bottom, transparent 11%, #000 24%, #000 86%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, #000 16%), linear-gradient(to bottom, transparent 11%, #000 24%, #000 86%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
+}
+
+.future-hero__canvas {
+  display: block;
+  aspect-ratio: 719 / 750;   /* 収録の枠の比。高さはここから（JS は canvas の CSS の大きさに合わせて描く） */
+}
+
+.future-hero__canvas.is-off {
+  display: none;
+}
+
+.is-future-crystal .future-hero__obj img {
+  visibility: hidden;
 }
 
 .future-hero__body {
@@ -120,11 +139,15 @@
     height: 695px;
   }
 
-  .future-hero__obj img {
+  .future-hero__obj img,
+  .future-hero__canvas {
     top: -55.3px;
     right: auto;
     left: 0;
     width: 100%;
+  }
+
+  .future-hero__obj img {
     -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12%), linear-gradient(to bottom, transparent 7.4%, #000 18%, #000 88%, transparent 100%);
     mask-image: linear-gradient(to right, transparent 0%, #000 12%), linear-gradient(to bottom, transparent 7.4%, #000 18%, #000 88%, transparent 100%);
   }
@@ -935,7 +958,8 @@
     height: 48.26vw;
   }
 
-  .future-hero__obj img {
+  .future-hero__obj img,
+  .future-hero__canvas {
     top: -3.84vw;
   }
 

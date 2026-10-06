@@ -19,7 +19,8 @@ get_header();
 
   <!-- ===== Hero（515:6727 / SP 1140:13579）: パンくず + 見出し + リード + 点と線の立体 + 流れる英字 =====
        ほかの下層と違い、英字タイトルの .page-head__txt は無い（Figma の H2 部品はパンくずだけ）。
-       立体は Figma の付箋 1370:17380 の参考（https://ni-future.pages.dev/ = WebGL のデモ）の 1 コマ。いまは静止画 -->
+       立体は Figma の付箋 1370:17380 の参考（https://ni-future.pages.dev/ = デモ/NI_CRYSTAL.html）を WebGL で動かす（future-crystal.js が
+       この枠に canvas を足す）。<img> はその 1 コマで、WebGL が動かない環境・動き抑制・?nowebgl の代替（動くときは <html> の is-future-crystal で隠す） -->
   <div class="future-hero">
     <div class="future-hero__inner">
       <div class="future-hero__obj" aria-hidden="true"><img src="<?php echo ni_img( 'future/hero_object.jpg' ); ?>" alt="" width="758" height="790"></div>

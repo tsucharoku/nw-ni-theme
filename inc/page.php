@@ -68,7 +68,7 @@ function ni_page_map() {
 		'work-style'          => array( 'css' => array( 'work-style' ), 'js' => array( 'work-style' ) ),
 		'office'              => array( 'css' => array( 'office' ) ),
 		'message'             => array( 'css' => array( 'message' ) ),
-		'future'              => array( 'css' => array( 'future' ), 'ni_logo' => false ),
+		'future'              => array( 'css' => array( 'future' ), 'modules' => array( 'future-crystal' ), 'ni_logo' => false ),   /* ページ頭の立体（WebGL） */
 		'beginner/story-1'    => array( 'body' => 'story', 'css' => array( 'story' ) ),
 		'beginner/story-2'    => array( 'body' => 'story', 'css' => array( 'story' ) ),
 		'career/story-1'      => array( 'body' => 'story', 'css' => array( 'story' ) ),

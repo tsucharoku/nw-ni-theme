@@ -101,6 +101,15 @@ function ni_print_head_scripts() {
 		<?php
 	endif;
 
+	if ( in_array( 'future-crystal', $page['modules'], true ) ) :
+		?>
+<script>
+/* 業界の未来のページ頭の立体（future-crystal.js）: WebGL に置き換えるので、静止画を先に隠しておく（ちらつき防止）。動き抑制・?nowebgl・?off=crystal は付けない = 静止画のまま */
+(function(){if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;if(/[?&]nowebgl/.test(location.search)||/[?&]off=[^&]*\bcrystal\b/.test(location.search))return;document.documentElement.classList.add('is-future-crystal');})();
+</script>
+		<?php
+	endif;
+
 	if ( $page['modules'] ) {
 		$imports = array(
 			'three'         => get_theme_file_uri( 'assets/vendor/three/three.module.min.js' ),
